@@ -62,7 +62,6 @@ class _BodyState extends State<Body> {
                 ),
                 SizedBox(height: 16.h),
                 DefaultCheckboxListTileWithSubtitle(
-                  checkboxValue: false,
                   onTap: null,
                   isChecked: false,
                   title: "영어공부하기",
@@ -74,7 +73,6 @@ class _BodyState extends State<Body> {
                   ),
                 ),
                 DefaultCheckboxListTileWithSubtitle(
-                  checkboxValue: false,
                   onTap: null,
                   isChecked: false,
                   backgroundColor: AppColors.gray10,
@@ -87,7 +85,6 @@ class _BodyState extends State<Body> {
                   ),
                 ),
                 DefaultCheckboxListTileWithSubtitle(
-                  checkboxValue: false,
                   onTap: null,
                   isChecked: true,
                   title: "영어단어 외우기",
@@ -102,7 +99,7 @@ class _BodyState extends State<Body> {
             ),
             DefaultFlatButton(
               onPressed: () {
-                context.router.push(const SetNicknameRoute());
+                context.router.replace(const SetNicknameRoute());
               },
               child: AutoSizeText(
                 "시작하기",

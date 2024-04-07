@@ -96,7 +96,7 @@ class _BodyState extends State<Body> {
                 onPressed: !_setNicknameStore.isNicknmeValid
                     ? null
                     : () {
-                        context.router.push(const HomeRoute());
+                        context.router.replace(const HomeRoute());
                       },
                 child: AutoSizeText(
                   "시작하기",

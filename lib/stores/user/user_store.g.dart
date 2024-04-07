@@ -25,12 +25,76 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$categoriesAtom =
+      Atom(name: '_UserStore.categories', context: context);
+
+  @override
+  List<String> get categories {
+    _$categoriesAtom.reportRead();
+    return super.categories;
+  }
+
+  @override
+  set categories(List<String> value) {
+    _$categoriesAtom.reportWrite(value, super.categories, () {
+      super.categories = value;
+    });
+  }
+
+  late final _$bucketListAtom =
+      Atom(name: '_UserStore.bucketList', context: context);
+
+  @override
+  List<Bucket> get bucketList {
+    _$bucketListAtom.reportRead();
+    return super.bucketList;
+  }
+
+  @override
+  set bucketList(List<Bucket> value) {
+    _$bucketListAtom.reportWrite(value, super.bucketList, () {
+      super.bucketList = value;
+    });
+  }
+
+  late final _$filteredBucketListAtom =
+      Atom(name: '_UserStore.filteredBucketList', context: context);
+
+  @override
+  List<Bucket> get filteredBucketList {
+    _$filteredBucketListAtom.reportRead();
+    return super.filteredBucketList;
+  }
+
+  @override
+  set filteredBucketList(List<Bucket> value) {
+    _$filteredBucketListAtom.reportWrite(value, super.filteredBucketList, () {
+      super.filteredBucketList = value;
+    });
+  }
+
   late final _$getUserNicknameAsyncAction =
       AsyncAction('_UserStore.getUserNickname', context: context);
 
   @override
   Future<void> getUserNickname() {
     return _$getUserNicknameAsyncAction.run(() => super.getUserNickname());
+  }
+
+  late final _$getCategoriesAsyncAction =
+      AsyncAction('_UserStore.getCategories', context: context);
+
+  @override
+  Future<void> getCategories() {
+    return _$getCategoriesAsyncAction.run(() => super.getCategories());
+  }
+
+  late final _$getBucketListAsyncAction =
+      AsyncAction('_UserStore.getBucketList', context: context);
+
+  @override
+  Future<void> getBucketList() {
+    return _$getBucketListAsyncAction.run(() => super.getBucketList());
   }
 
   late final _$_UserStoreActionController =
@@ -48,9 +112,23 @@ mixin _$UserStore on _UserStore, Store {
   }
 
   @override
+  void filterBucketList(String category, int status) {
+    final _$actionInfo = _$_UserStoreActionController.startAction(
+        name: '_UserStore.filterBucketList');
+    try {
+      return super.filterBucketList(category, status);
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-nickname: ${nickname}
+nickname: ${nickname},
+categories: ${categories},
+bucketList: ${bucketList},
+filteredBucketList: ${filteredBucketList}
     ''';
   }
 }

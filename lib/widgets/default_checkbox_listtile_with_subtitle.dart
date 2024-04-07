@@ -7,24 +7,26 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../constants/colors.dart';
 
 class DefaultCheckboxListTileWithSubtitle extends StatefulWidget {
-  final bool checkboxValue;
   final VoidCallback? onTap;
   final String title;
   final String subTitle;
   final bool isChecked;
   final Widget? trailing;
   final Color? backgroundColor;
+  final bool hasUnderline;
+  final EdgeInsets? contentPadding;
 
-  const DefaultCheckboxListTileWithSubtitle(
-      {Key? key,
-      required this.checkboxValue,
-      this.onTap,
-      required this.title,
-      required this.subTitle,
-      this.isChecked = false,
-      this.trailing,
-      this.backgroundColor})
-      : super(key: key);
+  const DefaultCheckboxListTileWithSubtitle({
+    Key? key,
+    this.onTap,
+    required this.title,
+    required this.subTitle,
+    this.isChecked = false,
+    this.trailing,
+    this.backgroundColor,
+    this.hasUnderline = false,
+    this.contentPadding,
+  }) : super(key: key);
 
   @override
   State<DefaultCheckboxListTileWithSubtitle> createState() =>
@@ -37,11 +39,21 @@ class _DefaultCheckboxListTileWithSubtitleState
   Widget build(BuildContext context) {
     return widget.onTap == null
         ? Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 20.w,
-              vertical: 12.w,
+            padding: widget.contentPadding ??
+                EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                  vertical: 12.w,
+                ),
+            decoration: BoxDecoration(
+              color: widget.backgroundColor ?? Colors.transparent,
+              border: Border(
+                bottom: BorderSide(
+                  color: widget.hasUnderline
+                      ? AppColors.gray30
+                      : Colors.transparent,
+                ),
+              ),
             ),
-            color: widget.backgroundColor ?? Colors.transparent,
             child: Row(
               children: [
                 CustomCircleCheckbox(
@@ -97,9 +109,20 @@ class _DefaultCheckboxListTileWithSubtitleState
         : InkWell(
             onTap: widget.onTap,
             child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 20.w,
-                vertical: 12.w,
+              padding: widget.contentPadding ??
+                  EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 12.w,
+                  ),
+              decoration: BoxDecoration(
+                color: widget.backgroundColor ?? Colors.transparent,
+                border: Border(
+                  bottom: BorderSide(
+                    color: widget.hasUnderline
+                        ? AppColors.gray30
+                        : Colors.transparent,
+                  ),
+                ),
               ),
               child: Row(
                 children: [

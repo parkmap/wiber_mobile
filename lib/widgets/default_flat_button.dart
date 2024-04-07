@@ -35,7 +35,7 @@ class DefaultFlatButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: onPressed == null
-              ? AppColors.gray20
+              ? AppColors.gray40
               : buttonColor ?? AppColors.primary2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius ?? 12.r),
