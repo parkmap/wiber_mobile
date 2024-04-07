@@ -1,0 +1,16 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+    rules:
+      - parameter_assignments
+  
+analyzer:
+    exclude:
+        - "**/*.g.dart"
+        - "**/*.gr.dart"
+        - "**/*.freezed.dart"
+    errors:
+        missing_required_param: error
+        parameter_assignments: error
+        missing_return: error
+        invalid_annotation_target: ignore
