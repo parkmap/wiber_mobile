@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wiber_mobile/constants/colors.dart';
+import 'package:wiber_mobile/router/router.gr.dart';
 import 'package:wiber_mobile/stores/set_nickname/set_nickname_store.dart';
 import 'package:wiber_mobile/widgets/default_flat_button.dart';
 import 'package:wiber_mobile/widgets/text_form_field_widget.dart';
@@ -82,17 +83,21 @@ class _BodyState extends State<Body> {
                         _setNicknameStore.resetNickname();
                         _nicknameController.clear();
                       },
-                      child: FaIcon(
-                        FontAwesomeIcons.circleXmark,
-                        size: 20.sp,
-                        color: AppColors.gray50,
+                      child: Image.asset(
+                        'assets/icons/close_icon.png',
+                        width: 20.w,
+                        height: 20.h,
                       ),
                     ),
                   ),
                 ],
               ),
               DefaultFlatButton(
-                onPressed: !_setNicknameStore.isNicknmeValid ? null : () {},
+                onPressed: !_setNicknameStore.isNicknmeValid
+                    ? null
+                    : () {
+                        context.router.push(const HomeRoute());
+                      },
                 child: AutoSizeText(
                   "시작하기",
                   style: TextStyle(

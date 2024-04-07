@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:wiber_mobile/constants/colors.dart';
-import 'package:wiber_mobile/constants/textStyle.dart';
 import 'package:wiber_mobile/router/router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
+import 'package:wiber_mobile/stores/user/user_store.dart';
 
 @RoutePage()
 class SplashScreen extends StatefulWidget {
@@ -19,14 +18,26 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  UserStore? _userStore;
+
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     super.didChangeDependencies();
+
+    final userStore = context.read<UserStore>();
+
+    if (_userStore != userStore) {
+      _userStore = userStore;
+    }
 
     Timer(
       const Duration(milliseconds: 1500),
       () async {
-        context.router.replace(const InitialRoute());
+        if (_userStore?.getAuthToken() == null) {
+          context.router.replace(const InitialRoute());
+        } else {
+          context.router.replace(const HomeRoute());
+        }
       },
     );
   }
@@ -34,7 +45,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: AppColors.mainBlack,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

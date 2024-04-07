@@ -38,6 +38,7 @@ dependencies:
   auto_route_generator: ^6.2.0
   font_awesome_flutter: ^10.4.0
   easy_mask: ^2.0.1
+  secure_storage_helper: ^0.1.1
   
 
 dev_dependencies:

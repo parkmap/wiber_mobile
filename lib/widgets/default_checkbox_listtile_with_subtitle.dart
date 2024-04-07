@@ -8,21 +8,23 @@ import '../constants/colors.dart';
 
 class DefaultCheckboxListTileWithSubtitle extends StatefulWidget {
   final bool checkboxValue;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final String title;
   final String subTitle;
   final bool isChecked;
   final Widget? trailing;
+  final Color? backgroundColor;
 
-  const DefaultCheckboxListTileWithSubtitle({
-    Key? key,
-    required this.checkboxValue,
-    required this.onTap,
-    required this.title,
-    required this.subTitle,
-    this.isChecked = false,
-    this.trailing,
-  }) : super(key: key);
+  const DefaultCheckboxListTileWithSubtitle(
+      {Key? key,
+      required this.checkboxValue,
+      this.onTap,
+      required this.title,
+      required this.subTitle,
+      this.isChecked = false,
+      this.trailing,
+      this.backgroundColor})
+      : super(key: key);
 
   @override
   State<DefaultCheckboxListTileWithSubtitle> createState() =>
@@ -33,65 +35,124 @@ class _DefaultCheckboxListTileWithSubtitleState
     extends State<DefaultCheckboxListTileWithSubtitle> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: widget.onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: 20.w,
-          vertical: 12.w,
-        ),
-        child: Row(
-          children: [
-            CustomCircleCheckbox(
-              isChecked: widget.isChecked,
+    return widget.onTap == null
+        ? Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: 20.w,
+              vertical: 12.w,
             ),
-            SizedBox(width: 13.w),
-            Flexible(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            color: widget.backgroundColor ?? Colors.transparent,
+            child: Row(
+              children: [
+                CustomCircleCheckbox(
+                  isChecked: widget.isChecked,
+                ),
+                SizedBox(width: 13.w),
+                Flexible(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      AutoSizeText(
-                        widget.title,
-                        style: widget.isChecked
-                            ? TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w600,
-                                decoration: TextDecoration.lineThrough,
-                                color: AppColors.tertiaryBlack,
-                              )
-                            : TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.primaryBlack,
-                              ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AutoSizeText(
+                            widget.title,
+                            style: widget.isChecked
+                                ? TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w600,
+                                    decoration: TextDecoration.lineThrough,
+                                    color: AppColors.tertiaryBlack,
+                                  )
+                                : TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.primaryBlack,
+                                  ),
+                          ),
+                          SizedBox(height: 4.h),
+                          AutoSizeText(
+                            widget.subTitle,
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.tertiaryBlack,
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 4.h),
-                      AutoSizeText(
-                        widget.subTitle,
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.tertiaryBlack,
-                        ),
-                      ),
+                      widget.trailing ??
+                          FaIcon(
+                            FontAwesomeIcons.ellipsis,
+                            color: AppColors.gray70,
+                            size: 13.sp,
+                          ),
                     ],
                   ),
-                  widget.trailing ??
-                      FaIcon(
-                        FontAwesomeIcons.ellipsis,
-                        color: AppColors.gray70,
-                        size: 13.sp,
-                      ),
+                ),
+              ],
+            ),
+          )
+        : InkWell(
+            onTap: widget.onTap,
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 20.w,
+                vertical: 12.w,
+              ),
+              child: Row(
+                children: [
+                  CustomCircleCheckbox(
+                    isChecked: widget.isChecked,
+                  ),
+                  SizedBox(width: 13.w),
+                  Flexible(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AutoSizeText(
+                              widget.title,
+                              style: widget.isChecked
+                                  ? TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w600,
+                                      decoration: TextDecoration.lineThrough,
+                                      color: AppColors.tertiaryBlack,
+                                    )
+                                  : TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.primaryBlack,
+                                    ),
+                            ),
+                            SizedBox(height: 4.h),
+                            AutoSizeText(
+                              widget.subTitle,
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.tertiaryBlack,
+                              ),
+                            ),
+                          ],
+                        ),
+                        widget.trailing ??
+                            FaIcon(
+                              FontAwesomeIcons.ellipsis,
+                              color: AppColors.gray70,
+                              size: 13.sp,
+                            ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }

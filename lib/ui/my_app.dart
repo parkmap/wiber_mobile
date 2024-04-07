@@ -1,6 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wiber_mobile/constants/colors.dart';
 import 'package:wiber_mobile/data/repositories/repository.dart';
+import 'package:wiber_mobile/data/repositories/user_repository.dart';
 import 'package:wiber_mobile/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wiber_mobile/router/router.dart';
 import 'package:wiber_mobile/stores/theme/theme_store.dart';
+import 'package:wiber_mobile/stores/user/user_store.dart';
 // import '../constants/colors.dart';
 // import '../router/router.gr.dart';
 // import '../utils/device_utils.dart';
@@ -27,12 +29,14 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _appRouter = AppRouter();
   late ThemeStore _themeStore;
+  late UserStore _userStore;
 
   @override
   void initState() {
     super.initState();
 
     _themeStore = ThemeStore(getIt<Repository>());
+    _userStore = UserStore(getIt<UserRepository>());
   }
 
   @override
@@ -40,6 +44,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         Provider<ThemeStore>.value(value: _themeStore),
+        Provider<UserStore>.value(value: _userStore),
       ],
       child: Observer(
         name: 'global-observer',

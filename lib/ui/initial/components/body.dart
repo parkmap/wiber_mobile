@@ -63,12 +63,8 @@ class _BodyState extends State<Body> {
                 SizedBox(height: 16.h),
                 DefaultCheckboxListTileWithSubtitle(
                   checkboxValue: false,
-                  onTap: () {
-                    setState(() {
-                      selectedIndex = 0;
-                    });
-                  },
-                  isChecked: selectedIndex == 0,
+                  onTap: null,
+                  isChecked: false,
                   title: "영어공부하기",
                   subTitle: "내년까지 프리토킹이 가능할 수 있도록!",
                   trailing: FaIcon(
@@ -79,12 +75,9 @@ class _BodyState extends State<Body> {
                 ),
                 DefaultCheckboxListTileWithSubtitle(
                   checkboxValue: false,
-                  onTap: () {
-                    setState(() {
-                      selectedIndex = 1;
-                    });
-                  },
-                  isChecked: selectedIndex == 1,
+                  onTap: null,
+                  isChecked: false,
+                  backgroundColor: AppColors.gray10,
                   title: "영자신문 보기",
                   subTitle: "일주일에 7개씩 스크랩",
                   trailing: FaIcon(
@@ -95,12 +88,8 @@ class _BodyState extends State<Body> {
                 ),
                 DefaultCheckboxListTileWithSubtitle(
                   checkboxValue: false,
-                  onTap: () {
-                    setState(() {
-                      selectedIndex = 2;
-                    });
-                  },
-                  isChecked: selectedIndex == 2,
+                  onTap: null,
+                  isChecked: true,
                   title: "영어단어 외우기",
                   subTitle: "토익단어 700개",
                   trailing: FaIcon(
@@ -112,11 +101,9 @@ class _BodyState extends State<Body> {
               ],
             ),
             DefaultFlatButton(
-              onPressed: selectedIndex < 0
-                  ? null
-                  : () {
-                      context.router.push(const SetNicknameRoute());
-                    },
+              onPressed: () {
+                context.router.push(const SetNicknameRoute());
+              },
               child: AutoSizeText(
                 "시작하기",
                 style: TextStyle(
