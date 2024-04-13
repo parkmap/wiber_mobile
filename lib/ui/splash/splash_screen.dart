@@ -56,15 +56,15 @@ class _SplashScreenState extends State<SplashScreen> {
                   width: 103.w,
                   height: 20.h,
                 ),
-                SizedBox(height: 22.h),
-                AutoSizeText(
-                  "우리만의 버킷리스트, 위버",
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.tertiaryBlack,
-                  ),
-                ),
+                // SizedBox(height: 22.h),
+                // AutoSizeText(
+                //   "우리만의 버킷리스트, 위버",
+                //   style: TextStyle(
+                //     fontSize: 14.sp,
+                //     fontWeight: FontWeight.w400,
+                //     color: AppColors.tertiaryBlack,
+                //   ),
+                // ),
               ],
             ),
           )

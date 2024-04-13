@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,7 +17,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  int selectedIndex = -1; // Add this line
+  int selectedIndex = 0; // Add this line
 
   @override
   Widget build(BuildContext context) {
@@ -24,79 +25,70 @@ class _BodyState extends State<Body> {
       width: double.infinity,
       child: Padding(
         padding: EdgeInsets.only(
-          left: 20.w,
-          right: 20.w,
-          bottom: 40.h,
+          top: 56.h,
+          left: 34.w,
+          right: 34.w,
+          bottom: 14.h,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
+            AutoSizeText(
+              "공유하는 버킷리스트",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24.sp,
+                fontWeight: FontWeight.w700,
+                color: AppColors.primaryBlack,
+              ),
+            ),
+            SizedBox(height: 5.h),
+            AutoSizeText(
+              "위버와 함께해요",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24.sp,
+                fontWeight: FontWeight.w700,
+                color: AppColors.primaryBlack,
+              ),
+            ),
+            SizedBox(height: 40.h),
+            Flexible(
+              child: Swiper(
+                itemBuilder: (BuildContext context, int index) {
+                  return Image.asset(
+                    "assets/images/swiper_image_${index + 1}.png",
+                    fit: BoxFit.fill,
+                  );
+                },
+                autoplay: true,
+                autoplayDelay: 2000,
+                onIndexChanged: (value) => setState(() {
+                  selectedIndex = value;
+                }),
+                itemCount: 4,
+              ),
+            ),
+            SizedBox(height: 34.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 100.h),
-                Image.asset(
-                  'assets/images/wiber_landing_image.png',
-                  width: 129.w,
-                  height: 129.h,
-                ),
-                SizedBox(height: 43.h),
-                AutoSizeText(
-                  "반가워요!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.gray90,
+                for (int i = 0; i < 4; i++)
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 3.w),
+                    width: selectedIndex == i ? 20.w : 6.w,
+                    height: 6.h,
+                    decoration: BoxDecoration(
+                      color: selectedIndex == i
+                          ? AppColors.primary2
+                          : AppColors.sub1,
+                      borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                    ),
                   ),
-                ),
-                SizedBox(height: 5.h),
-                AutoSizeText(
-                  "우리만의 버킷리스트를 만들어볼까요?",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.gray90,
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                DefaultCheckboxListTileWithSubtitle(
-                  onTap: null,
-                  isChecked: false,
-                  title: "영어공부하기",
-                  subTitle: "내년까지 프리토킹이 가능할 수 있도록!",
-                  trailing: FaIcon(
-                    FontAwesomeIcons.chevronRight,
-                    color: AppColors.gray70,
-                    size: 16.sp,
-                  ),
-                ),
-                DefaultCheckboxListTileWithSubtitle(
-                  onTap: null,
-                  isChecked: false,
-                  backgroundColor: AppColors.gray10,
-                  title: "영자신문 보기",
-                  subTitle: "일주일에 7개씩 스크랩",
-                  trailing: FaIcon(
-                    FontAwesomeIcons.chevronRight,
-                    color: AppColors.gray70,
-                    size: 16.sp,
-                  ),
-                ),
-                DefaultCheckboxListTileWithSubtitle(
-                  onTap: null,
-                  isChecked: true,
-                  title: "영어단어 외우기",
-                  subTitle: "토익단어 700개",
-                  trailing: FaIcon(
-                    FontAwesomeIcons.chevronRight,
-                    color: AppColors.gray70,
-                    size: 16.sp,
-                  ),
-                ),
               ],
             ),
+            SizedBox(height: 56.h),
             DefaultFlatButton(
               onPressed: () {
                 context.router.replace(const SetNicknameRoute());
