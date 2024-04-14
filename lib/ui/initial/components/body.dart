@@ -18,6 +18,18 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   int selectedIndex = 0; // Add this line
+  List<String> bodyText1Arr = [
+    "공유하는 버킷리스트",
+    "로그인 없이 간편하게",
+    "최대 멤버 5명과",
+    "위버와 함께라면",
+  ];
+  List<String> bodyText2Arr = [
+    "위버와 함께해요",
+    "시작할수있어요",
+    "공유 할수있어요",
+    "버킷리스트 어렵지 않아요!",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +47,8 @@ class _BodyState extends State<Body> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             AutoSizeText(
-              "공유하는 버킷리스트",
+              // "공유하는 버킷리스트",
+              bodyText1Arr[selectedIndex],
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24.sp,
@@ -45,7 +58,8 @@ class _BodyState extends State<Body> {
             ),
             SizedBox(height: 5.h),
             AutoSizeText(
-              "위버와 함께해요",
+              // "위버와 함께해요",
+              bodyText2Arr[selectedIndex],
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24.sp,

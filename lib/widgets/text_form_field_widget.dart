@@ -148,6 +148,11 @@ class TextFormFieldWidget extends StatelessWidget {
             ),
         counterText: '',
         errorText: errorText,
+        errorStyle: TextStyle(
+          color: AppColors.negative,
+          fontSize: 14.sp,
+          fontWeight: FontWeight.w400,
+        ),
         border: inputBorder == null
             ? rounded
                 ? OutlineInputBorder(
@@ -168,12 +173,18 @@ class TextFormFieldWidget extends StatelessWidget {
             ? rounded
                 ? OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.r),
-                    borderSide: const BorderSide(color: Colors.transparent),
+                    borderSide: const BorderSide(color: AppColors.gray100),
                   )
                 : InputBorder.none
             : focusedInputBorder,
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.r),
+          borderSide: const BorderSide(color: AppColors.negative),
+        ),
         filled: fill,
-        fillColor: fillColor,
+        fillColor: focusNode != null && focusNode!.hasFocus
+            ? Colors.transparent
+            : fillColor,
       ),
     );
   }

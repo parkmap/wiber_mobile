@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import '../constants/colors.dart';
 
-class DefaultFlatButton extends StatelessWidget {
+class DefaultFlatButton extends StatefulWidget {
   final VoidCallback? onPressed;
   final Widget child;
   final double? width;
@@ -13,6 +14,9 @@ class DefaultFlatButton extends StatelessWidget {
   final Color? buttonColor;
   final BorderSide? borderSide;
   final double? borderRadius;
+  final bool detectKeyboard;
+  final bool isKeyboardVisible;
+  final EdgeInsets? containerPadding;
 
   const DefaultFlatButton({
     Key? key,
@@ -25,27 +29,47 @@ class DefaultFlatButton extends StatelessWidget {
     this.buttonColor,
     this.borderSide,
     this.borderRadius,
+    this.detectKeyboard = false,
+    this.isKeyboardVisible = false,
+    this.containerPadding,
   }) : super(key: key);
 
   @override
+  State<DefaultFlatButton> createState() => _DefaultFlatButtonState();
+}
+
+class _DefaultFlatButtonState extends State<DefaultFlatButton> {
+  @override
   Widget build(BuildContext context) {
     return Container(
-      width: width ?? double.infinity,
+      padding: widget.detectKeyboard
+          ? widget.isKeyboardVisible
+              ? EdgeInsets.zero
+              : widget.containerPadding ??
+                  EdgeInsets.only(
+                    left: 20.w,
+                    right: 20.w,
+                    bottom: 30.h,
+                  )
+          : widget.containerPadding ?? EdgeInsets.zero,
+      width: widget.width ?? double.infinity,
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: widget.onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: onPressed == null
+          backgroundColor: widget.onPressed == null
               ? AppColors.gray40
-              : buttonColor ?? AppColors.primary2,
+              : widget.buttonColor ?? AppColors.primary2,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius ?? 12.r),
+            borderRadius: widget.detectKeyboard && widget.isKeyboardVisible
+                ? BorderRadius.circular(0)
+                : BorderRadius.circular(widget.borderRadius ?? 12.r),
           ),
           elevation: 0,
           shadowColor: Colors.black.withOpacity(0.8),
-          padding: padding ?? EdgeInsets.symmetric(vertical: 20.h),
-          side: borderSide,
+          padding: widget.padding ?? EdgeInsets.symmetric(vertical: 20.h),
+          side: widget.borderSide,
         ),
-        child: child,
+        child: widget.child,
       ),
     );
   }
