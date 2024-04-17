@@ -4,6 +4,9 @@ import 'package:injectable/injectable.dart';
 import 'package:wiber_mobile/data/dio_client.dart';
 import 'package:wiber_mobile/models/listing/bucket.dart';
 import 'package:wiber_mobile/models/listing/bucket_list.dart';
+import 'package:wiber_mobile/models/user/user.dart';
+import 'package:wiber_mobile/models/wiber_space/wiber_space.dart';
+import 'package:wiber_mobile/models/wiber_space/wiber_space_list.dart';
 
 @lazySingleton
 class UserApi {
@@ -62,6 +65,63 @@ class UserApi {
         totalCount: 3,
         nextPage: 1,
       );
+      return res;
+    } catch (error) {
+      print(
+        error.toString(),
+      );
+      rethrow;
+    }
+  }
+
+  Future<User> getUserInfo() async {
+    try {
+      var res = User(
+        id: "0",
+        nickname: "위버",
+        profileImageUrl: "assets/images/default_profile_image.png",
+      );
+
+      return res;
+    } catch (error) {
+      print(
+        error.toString(),
+      );
+      rethrow;
+    }
+  }
+
+  Future<WiberSpaceList> getWiberSpaceListByUser(String userId) async {
+    try {
+      var res = WiberSpaceList(
+        list: [
+          WiberSpace(
+            id: "0",
+            title: "위버스페이스1",
+            isFavorite: true,
+            maxCount: 30,
+            completeCount: 12,
+            participants: [
+              User(
+                id: "0",
+                nickname: "위버",
+                profileImageUrl: "assets/images/default_profile_image.png",
+              ),
+              User(
+                id: "1",
+                nickname: "위버2",
+                profileImageUrl: "assets/images/default_profile_image.png",
+              ),
+              User(
+                id: "2",
+                nickname: "위버3",
+                profileImageUrl: "assets/images/default_profile_image.png",
+              ),
+            ],
+          )
+        ],
+      );
+
       return res;
     } catch (error) {
       print(

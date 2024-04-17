@@ -28,6 +28,7 @@ class TextFormFieldWidget extends StatelessWidget {
   final Widget? suffix;
   final Widget? suffixIcon;
   final String? suffixText;
+  final Function? suffixActions;
   final TextStyle? suffixTextStyle;
   final EdgeInsets? contentPadding;
   final bool isOutlined;
@@ -67,6 +68,7 @@ class TextFormFieldWidget extends StatelessWidget {
     this.suffixIcon,
     this.suffixText,
     this.suffixTextStyle,
+    this.suffixActions,
     this.contentPadding,
     this.isOutlined = false,
     this.readOnly = false,
@@ -127,7 +129,18 @@ class TextFormFieldWidget extends StatelessWidget {
           minWidth: 10,
         ),
         suffix: suffix,
-        suffixIcon: suffixIcon,
+        suffixIcon: suffixIcon ??
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.h),
+              child: InkWell(
+                onTap: suffixActions as void Function(),
+                child: Image.asset(
+                  'assets/icons/close_icon.png',
+                  width: 20.sp,
+                  height: 20.sp,
+                ),
+              ),
+            ),
         labelStyle: TextStyle(
           color: AppColors.inputBlack,
           fontSize: 14.sp,
@@ -137,7 +150,7 @@ class TextFormFieldWidget extends StatelessWidget {
         contentPadding: contentPadding ??
             EdgeInsets.symmetric(
               horizontal: 16.w,
-              vertical: 14.h,
+              vertical: 15.h,
             ),
         hintText: hintText,
         hintStyle: hintStyle ??

@@ -8,6 +8,7 @@ class Bucket with _$Bucket {
   const Bucket._();
 
   factory Bucket({
+    @JsonKey(name: '_id') @Default('') String id,
     required String title,
     required String body,
     required String category,

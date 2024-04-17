@@ -20,6 +20,8 @@ Bucket _$BucketFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Bucket {
+  @JsonKey(name: '_id')
+  String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get body => throw _privateConstructorUsedError;
   String get category => throw _privateConstructorUsedError;
@@ -35,7 +37,12 @@ abstract class $BucketCopyWith<$Res> {
   factory $BucketCopyWith(Bucket value, $Res Function(Bucket) then) =
       _$BucketCopyWithImpl<$Res, Bucket>;
   @useResult
-  $Res call({String title, String body, String category, bool isCompleted});
+  $Res call(
+      {@JsonKey(name: '_id') String id,
+      String title,
+      String body,
+      String category,
+      bool isCompleted});
 }
 
 /// @nodoc
@@ -51,12 +58,17 @@ class _$BucketCopyWithImpl<$Res, $Val extends Bucket>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? title = null,
     Object? body = null,
     Object? category = null,
     Object? isCompleted = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -83,7 +95,12 @@ abstract class _$$_BucketCopyWith<$Res> implements $BucketCopyWith<$Res> {
       __$$_BucketCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String title, String body, String category, bool isCompleted});
+  $Res call(
+      {@JsonKey(name: '_id') String id,
+      String title,
+      String body,
+      String category,
+      bool isCompleted});
 }
 
 /// @nodoc
@@ -96,12 +113,17 @@ class __$$_BucketCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? title = null,
     Object? body = null,
     Object? category = null,
     Object? isCompleted = null,
   }) {
     return _then(_$_Bucket(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -126,7 +148,8 @@ class __$$_BucketCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Bucket extends _Bucket {
   _$_Bucket(
-      {required this.title,
+      {@JsonKey(name: '_id') this.id = '',
+      required this.title,
       required this.body,
       required this.category,
       required this.isCompleted})
@@ -135,6 +158,9 @@ class _$_Bucket extends _Bucket {
   factory _$_Bucket.fromJson(Map<String, dynamic> json) =>
       _$$_BucketFromJson(json);
 
+  @override
+  @JsonKey(name: '_id')
+  final String id;
   @override
   final String title;
   @override
@@ -146,7 +172,7 @@ class _$_Bucket extends _Bucket {
 
   @override
   String toString() {
-    return 'Bucket(title: $title, body: $body, category: $category, isCompleted: $isCompleted)';
+    return 'Bucket(id: $id, title: $title, body: $body, category: $category, isCompleted: $isCompleted)';
   }
 
   @override
@@ -154,6 +180,7 @@ class _$_Bucket extends _Bucket {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Bucket &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.body, body) || other.body == body) &&
             (identical(other.category, category) ||
@@ -165,7 +192,7 @@ class _$_Bucket extends _Bucket {
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, title, body, category, isCompleted);
+      Object.hash(runtimeType, id, title, body, category, isCompleted);
 
   @JsonKey(ignore: true)
   @override
@@ -183,7 +210,8 @@ class _$_Bucket extends _Bucket {
 
 abstract class _Bucket extends Bucket {
   factory _Bucket(
-      {required final String title,
+      {@JsonKey(name: '_id') final String id,
+      required final String title,
       required final String body,
       required final String category,
       required final bool isCompleted}) = _$_Bucket;
@@ -191,6 +219,9 @@ abstract class _Bucket extends Bucket {
 
   factory _Bucket.fromJson(Map<String, dynamic> json) = _$_Bucket.fromJson;
 
+  @override
+  @JsonKey(name: '_id')
+  String get id;
   @override
   String get title;
   @override

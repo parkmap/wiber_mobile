@@ -71,8 +71,8 @@ class _BodyState extends State<Body> {
                           SizedBox(width: 4.w),
                           Image.asset(
                             "assets/icons/set_nickname_icon.png",
-                            width: 24.w,
-                            height: 24.h,
+                            width: 24.sp,
+                            height: 24.sp,
                           ),
                         ],
                       ),
@@ -98,17 +98,10 @@ class _BodyState extends State<Body> {
                         errorText: _setNicknameStore.nickname.length > 6
                             ? "최대 여섯글자까지 가능합니다"
                             : null,
-                        suffix: InkWell(
-                          onTap: () {
-                            _setNicknameStore.resetNickname();
-                            _nicknameController.clear();
-                          },
-                          child: Image.asset(
-                            'assets/icons/close_icon.png',
-                            width: 20.w,
-                            height: 20.h,
-                          ),
-                        ),
+                        suffixActions: () {
+                          _setNicknameStore.resetNickname();
+                          _nicknameController.clear();
+                        },
                       ),
                     ],
                   ),
@@ -118,12 +111,12 @@ class _BodyState extends State<Body> {
                 onPressed: !_setNicknameStore.isNicknmeValid
                     ? null
                     : () {
-                        context.router.replace(const HomeRoute());
+                        context.router.push(const SetProfileRoute());
                       },
                 detectKeyboard: true,
                 isKeyboardVisible: isKeyboardVisible,
                 child: AutoSizeText(
-                  "시작하기",
+                  "다음",
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,

@@ -2,6 +2,8 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wiber_mobile/data/repositories/user_repository.dart';
 import 'package:wiber_mobile/models/listing/bucket.dart';
+import 'package:wiber_mobile/models/user/user.dart';
+import 'package:wiber_mobile/models/wiber_space/wiber_space.dart';
 
 part 'user_store.g.dart';
 
@@ -13,8 +15,9 @@ abstract class _UserStore with Store {
   final UserRepository _userRepository;
 
   // store variables:-----------------------------------------------------------
+
   @observable
-  String nickname = '';
+  List<dynamic> wiberList = [];
 
   @observable
   List<String> categories = [];
@@ -25,6 +28,12 @@ abstract class _UserStore with Store {
   @observable
   List<Bucket> filteredBucketList = [];
 
+  @observable
+  List<WiberSpace> wiberSpaceList = [];
+
+  @observable
+  User? user;
+
   // getters:-------------------------------------------------------------------
 
   // constructor:---------------------------------------------------------------
@@ -32,10 +41,6 @@ abstract class _UserStore with Store {
       : _userRepository = userRepository {}
 
   // actions:-------------------------------------------------------------------
-  @action
-  Future<void> getUserNickname() async {
-    nickname = await _userRepository.getUserNickname();
-  }
 
   @action
   String? getAuthToken() {
@@ -87,5 +92,35 @@ abstract class _UserStore with Store {
     }
 
     filteredBucketList = filtered;
+  }
+
+  @action
+  Future<void> getUserInfo() async {
+    user = await _userRepository.getUserInfo();
+  }
+
+  @action
+  Future<void> getWiberSpaceListByUser() async {
+    if (user == null) return;
+
+    try {
+      var res = await _userRepository.getWiberSpaceListByUser(user!.id);
+      wiberSpaceList = res.list;
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  @action
+  Future<void> getUserInfoAndWiberSpaceList() async {
+    try {
+      var userRes = await _userRepository.getUserInfo();
+      user = userRes;
+
+      var listRes = await _userRepository.getWiberSpaceListByUser(userRes.id);
+      wiberSpaceList = listRes.list;
+    } catch (err) {
+      print(err);
+    }
   }
 }

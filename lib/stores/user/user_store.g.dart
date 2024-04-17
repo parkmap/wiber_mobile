@@ -9,19 +9,19 @@ part of 'user_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$UserStore on _UserStore, Store {
-  late final _$nicknameAtom =
-      Atom(name: '_UserStore.nickname', context: context);
+  late final _$wiberListAtom =
+      Atom(name: '_UserStore.wiberList', context: context);
 
   @override
-  String get nickname {
-    _$nicknameAtom.reportRead();
-    return super.nickname;
+  List<dynamic> get wiberList {
+    _$wiberListAtom.reportRead();
+    return super.wiberList;
   }
 
   @override
-  set nickname(String value) {
-    _$nicknameAtom.reportWrite(value, super.nickname, () {
-      super.nickname = value;
+  set wiberList(List<dynamic> value) {
+    _$wiberListAtom.reportWrite(value, super.wiberList, () {
+      super.wiberList = value;
     });
   }
 
@@ -73,12 +73,35 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
-  late final _$getUserNicknameAsyncAction =
-      AsyncAction('_UserStore.getUserNickname', context: context);
+  late final _$wiberSpaceListAtom =
+      Atom(name: '_UserStore.wiberSpaceList', context: context);
 
   @override
-  Future<void> getUserNickname() {
-    return _$getUserNicknameAsyncAction.run(() => super.getUserNickname());
+  List<WiberSpace> get wiberSpaceList {
+    _$wiberSpaceListAtom.reportRead();
+    return super.wiberSpaceList;
+  }
+
+  @override
+  set wiberSpaceList(List<WiberSpace> value) {
+    _$wiberSpaceListAtom.reportWrite(value, super.wiberSpaceList, () {
+      super.wiberSpaceList = value;
+    });
+  }
+
+  late final _$userAtom = Atom(name: '_UserStore.user', context: context);
+
+  @override
+  User? get user {
+    _$userAtom.reportRead();
+    return super.user;
+  }
+
+  @override
+  set user(User? value) {
+    _$userAtom.reportWrite(value, super.user, () {
+      super.user = value;
+    });
   }
 
   late final _$getCategoriesAsyncAction =
@@ -95,6 +118,32 @@ mixin _$UserStore on _UserStore, Store {
   @override
   Future<void> getBucketList() {
     return _$getBucketListAsyncAction.run(() => super.getBucketList());
+  }
+
+  late final _$getUserInfoAsyncAction =
+      AsyncAction('_UserStore.getUserInfo', context: context);
+
+  @override
+  Future<void> getUserInfo() {
+    return _$getUserInfoAsyncAction.run(() => super.getUserInfo());
+  }
+
+  late final _$getWiberSpaceListByUserAsyncAction =
+      AsyncAction('_UserStore.getWiberSpaceListByUser', context: context);
+
+  @override
+  Future<void> getWiberSpaceListByUser() {
+    return _$getWiberSpaceListByUserAsyncAction
+        .run(() => super.getWiberSpaceListByUser());
+  }
+
+  late final _$getUserInfoAndWiberSpaceListAsyncAction =
+      AsyncAction('_UserStore.getUserInfoAndWiberSpaceList', context: context);
+
+  @override
+  Future<void> getUserInfoAndWiberSpaceList() {
+    return _$getUserInfoAndWiberSpaceListAsyncAction
+        .run(() => super.getUserInfoAndWiberSpaceList());
   }
 
   late final _$_UserStoreActionController =
@@ -125,10 +174,12 @@ mixin _$UserStore on _UserStore, Store {
   @override
   String toString() {
     return '''
-nickname: ${nickname},
+wiberList: ${wiberList},
 categories: ${categories},
 bucketList: ${bucketList},
-filteredBucketList: ${filteredBucketList}
+filteredBucketList: ${filteredBucketList},
+wiberSpaceList: ${wiberSpaceList},
+user: ${user}
     ''';
   }
 }

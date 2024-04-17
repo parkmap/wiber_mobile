@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'components/body.dart';
 
 @RoutePage()
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class BucketScreen extends StatelessWidget {
+  const BucketScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: SafeArea(
-        bottom: false,
         child: Body(),
       ),
     );

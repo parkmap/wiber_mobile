@@ -47,5 +47,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Wiber Mobile requires access to your photo library to upload photos.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Wiber Mobile requires access to your camera to take photos.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Wiber Mobile requires access to your microphone to record audio.</string>
 </dict>
 </plist>
