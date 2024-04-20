@@ -13,6 +13,7 @@ _$_WiberSpace _$$_WiberSpaceFromJson(Map<String, dynamic> json) =>
       isFavorite: json['isFavorite'] as bool,
       maxCount: json['maxCount'] as int,
       completeCount: json['completeCount'] as int,
+      owner: json['owner'] as String,
       participants: (json['participants'] as List<dynamic>)
           .map((e) => User.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -25,5 +26,6 @@ Map<String, dynamic> _$$_WiberSpaceToJson(_$_WiberSpace instance) =>
       'isFavorite': instance.isFavorite,
       'maxCount': instance.maxCount,
       'completeCount': instance.completeCount,
+      'owner': instance.owner,
       'participants': instance.participants,
     };

@@ -14,6 +14,7 @@ class WiberSpace with _$WiberSpace {
     required bool isFavorite,
     required int maxCount,
     required int completeCount,
+    required String owner,
     required List<User> participants,
   }) = _WiberSpace;
 

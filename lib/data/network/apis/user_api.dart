@@ -101,6 +101,7 @@ class UserApi {
             isFavorite: true,
             maxCount: 30,
             completeCount: 12,
+            owner: "0",
             participants: [
               User(
                 id: "0",

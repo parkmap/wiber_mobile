@@ -26,6 +26,7 @@ mixin _$WiberSpace {
   bool get isFavorite => throw _privateConstructorUsedError;
   int get maxCount => throw _privateConstructorUsedError;
   int get completeCount => throw _privateConstructorUsedError;
+  String get owner => throw _privateConstructorUsedError;
   List<User> get participants => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -46,6 +47,7 @@ abstract class $WiberSpaceCopyWith<$Res> {
       bool isFavorite,
       int maxCount,
       int completeCount,
+      String owner,
       List<User> participants});
 }
 
@@ -67,6 +69,7 @@ class _$WiberSpaceCopyWithImpl<$Res, $Val extends WiberSpace>
     Object? isFavorite = null,
     Object? maxCount = null,
     Object? completeCount = null,
+    Object? owner = null,
     Object? participants = null,
   }) {
     return _then(_value.copyWith(
@@ -90,6 +93,10 @@ class _$WiberSpaceCopyWithImpl<$Res, $Val extends WiberSpace>
           ? _value.completeCount
           : completeCount // ignore: cast_nullable_to_non_nullable
               as int,
+      owner: null == owner
+          ? _value.owner
+          : owner // ignore: cast_nullable_to_non_nullable
+              as String,
       participants: null == participants
           ? _value.participants
           : participants // ignore: cast_nullable_to_non_nullable
@@ -112,6 +119,7 @@ abstract class _$$_WiberSpaceCopyWith<$Res>
       bool isFavorite,
       int maxCount,
       int completeCount,
+      String owner,
       List<User> participants});
 }
 
@@ -131,6 +139,7 @@ class __$$_WiberSpaceCopyWithImpl<$Res>
     Object? isFavorite = null,
     Object? maxCount = null,
     Object? completeCount = null,
+    Object? owner = null,
     Object? participants = null,
   }) {
     return _then(_$_WiberSpace(
@@ -154,6 +163,10 @@ class __$$_WiberSpaceCopyWithImpl<$Res>
           ? _value.completeCount
           : completeCount // ignore: cast_nullable_to_non_nullable
               as int,
+      owner: null == owner
+          ? _value.owner
+          : owner // ignore: cast_nullable_to_non_nullable
+              as String,
       participants: null == participants
           ? _value._participants
           : participants // ignore: cast_nullable_to_non_nullable
@@ -171,6 +184,7 @@ class _$_WiberSpace extends _WiberSpace {
       required this.isFavorite,
       required this.maxCount,
       required this.completeCount,
+      required this.owner,
       required final List<User> participants})
       : _participants = participants,
         super._();
@@ -189,6 +203,8 @@ class _$_WiberSpace extends _WiberSpace {
   final int maxCount;
   @override
   final int completeCount;
+  @override
+  final String owner;
   final List<User> _participants;
   @override
   List<User> get participants {
@@ -199,7 +215,7 @@ class _$_WiberSpace extends _WiberSpace {
 
   @override
   String toString() {
-    return 'WiberSpace(id: $id, title: $title, isFavorite: $isFavorite, maxCount: $maxCount, completeCount: $completeCount, participants: $participants)';
+    return 'WiberSpace(id: $id, title: $title, isFavorite: $isFavorite, maxCount: $maxCount, completeCount: $completeCount, owner: $owner, participants: $participants)';
   }
 
   @override
@@ -215,6 +231,7 @@ class _$_WiberSpace extends _WiberSpace {
                 other.maxCount == maxCount) &&
             (identical(other.completeCount, completeCount) ||
                 other.completeCount == completeCount) &&
+            (identical(other.owner, owner) || other.owner == owner) &&
             const DeepCollectionEquality()
                 .equals(other._participants, _participants));
   }
@@ -222,7 +239,7 @@ class _$_WiberSpace extends _WiberSpace {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, title, isFavorite, maxCount,
-      completeCount, const DeepCollectionEquality().hash(_participants));
+      completeCount, owner, const DeepCollectionEquality().hash(_participants));
 
   @JsonKey(ignore: true)
   @override
@@ -245,6 +262,7 @@ abstract class _WiberSpace extends WiberSpace {
       required final bool isFavorite,
       required final int maxCount,
       required final int completeCount,
+      required final String owner,
       required final List<User> participants}) = _$_WiberSpace;
   _WiberSpace._() : super._();
 
@@ -262,6 +280,8 @@ abstract class _WiberSpace extends WiberSpace {
   int get maxCount;
   @override
   int get completeCount;
+  @override
+  String get owner;
   @override
   List<User> get participants;
   @override

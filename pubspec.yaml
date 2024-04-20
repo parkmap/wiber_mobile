@@ -44,6 +44,7 @@ dependencies:
   flutter_keyboard_visibility: ^6.0.0
   image_picker: ^1.0.4
   image_cropper: ^4.0.1
+  indexed: ^0.0.8
   
 
 dev_dependencies:
