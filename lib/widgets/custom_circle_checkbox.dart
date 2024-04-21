@@ -30,26 +30,10 @@ class _CustomCircleCheckboxState extends State<CustomCircleCheckbox> {
   @override
   Widget build(BuildContext context) {
     return widget.isChecked
-        ? Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                width: widget.width ?? 22.w,
-                height: widget.height ?? 22.h,
-                decoration: const BoxDecoration(
-                  color: AppColors.checkboxActive,
-                  shape: BoxShape.circle,
-                ),
-              ),
-              Container(
-                width: widget.checkHeight ?? 9.w,
-                height: widget.height ?? 9.h,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ],
+        ? Image.asset(
+            "assets/images/checked_image.png",
+            width: 22.w,
+            height: 22.h,
           )
         : Container(
             width: widget.width ?? 22.w,

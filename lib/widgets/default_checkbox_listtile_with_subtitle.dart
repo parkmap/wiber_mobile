@@ -42,7 +42,7 @@ class _DefaultCheckboxListTileWithSubtitleState
             padding: widget.contentPadding ??
                 EdgeInsets.symmetric(
                   horizontal: 20.w,
-                  vertical: 12.w,
+                  vertical: 12.h,
                 ),
             decoration: BoxDecoration(
               color: widget.backgroundColor ?? Colors.transparent,
@@ -94,12 +94,7 @@ class _DefaultCheckboxListTileWithSubtitleState
                           ),
                         ],
                       ),
-                      widget.trailing ??
-                          FaIcon(
-                            FontAwesomeIcons.ellipsis,
-                            color: AppColors.gray70,
-                            size: 13.sp,
-                          ),
+                      widget.trailing ?? const SizedBox.shrink(),
                     ],
                   ),
                 ),
@@ -164,12 +159,7 @@ class _DefaultCheckboxListTileWithSubtitleState
                             ),
                           ],
                         ),
-                        widget.trailing ??
-                            FaIcon(
-                              FontAwesomeIcons.ellipsis,
-                              color: AppColors.gray70,
-                              size: 13.sp,
-                            ),
+                        widget.trailing ?? const SizedBox.shrink(),
                       ],
                     ),
                   ),

@@ -1,16 +1,23 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:wiber_mobile/models/wiber_space/wiber_space.dart';
+import 'package:wiber_mobile/widgets/custom_app_bar_with_back_button.dart';
 import 'components/body.dart';
 
 @RoutePage()
 class BucketScreen extends StatelessWidget {
-  const BucketScreen({Key? key}) : super(key: key);
+  final WiberSpace item;
+  const BucketScreen({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SafeArea(
-        child: Body(),
+        bottom: false,
+        child: Body(item: item),
       ),
     );
   }

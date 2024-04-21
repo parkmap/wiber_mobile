@@ -45,6 +45,8 @@ dependencies:
   image_picker: ^1.0.4
   image_cropper: ^4.0.1
   indexed: ^0.0.8
+  dotted_border: ^2.1.0
+  date_field: ^3.0.5
   
 
 dev_dependencies:

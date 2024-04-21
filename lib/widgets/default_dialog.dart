@@ -27,7 +27,7 @@ class _DefaultDialogState extends State<DefaultDialog> {
     return Dialog(
       elevation: 6,
       insetPadding: EdgeInsets.symmetric(
-        horizontal: 20.w,
+        horizontal: 50.w,
         vertical: 20.h,
       ),
       shape: RoundedRectangleBorder(

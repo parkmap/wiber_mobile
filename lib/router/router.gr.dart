@@ -9,6 +9,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i7;
+import 'package:flutter/material.dart' as _i8;
+import 'package:wiber_mobile/models/wiber_space/wiber_space.dart' as _i9;
 import 'package:wiber_mobile/ui/bucket/bucket_screen.dart' as _i5;
 import 'package:wiber_mobile/ui/home/home_screen.dart' as _i1;
 import 'package:wiber_mobile/ui/initial/initial_screen.dart' as _i3;
@@ -46,9 +48,13 @@ abstract class $AppRouter extends _i7.RootStackRouter {
       );
     },
     BucketRoute.name: (routeData) {
+      final args = routeData.argsAs<BucketRouteArgs>();
       return _i7.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i5.BucketScreen(),
+        child: _i5.BucketScreen(
+          key: args.key,
+          item: args.item,
+        ),
       );
     },
     SetNicknameRoute.name: (routeData) {
@@ -118,16 +124,40 @@ class SetProfileRoute extends _i7.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.BucketScreen]
-class BucketRoute extends _i7.PageRouteInfo<void> {
-  const BucketRoute({List<_i7.PageRouteInfo>? children})
-      : super(
+class BucketRoute extends _i7.PageRouteInfo<BucketRouteArgs> {
+  BucketRoute({
+    _i8.Key? key,
+    required _i9.WiberSpace item,
+    List<_i7.PageRouteInfo>? children,
+  }) : super(
           BucketRoute.name,
+          args: BucketRouteArgs(
+            key: key,
+            item: item,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'BucketRoute';
 
-  static const _i7.PageInfo<void> page = _i7.PageInfo<void>(name);
+  static const _i7.PageInfo<BucketRouteArgs> page =
+      _i7.PageInfo<BucketRouteArgs>(name);
+}
+
+class BucketRouteArgs {
+  const BucketRouteArgs({
+    this.key,
+    required this.item,
+  });
+
+  final _i8.Key? key;
+
+  final _i9.WiberSpace item;
+
+  @override
+  String toString() {
+    return 'BucketRouteArgs{key: $key, item: $item}';
+  }
 }
 
 /// generated route for

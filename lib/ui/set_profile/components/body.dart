@@ -145,9 +145,8 @@ class _BodyState extends State<Body> {
               DefaultFlatButton(
                 onPressed: () {
                   context.router.replaceAll([
-                    const SetNicknameRoute(),
+                    const HomeRoute(),
                   ]);
-                  context.router.replace(const HomeRoute());
                 },
                 detectKeyboard: true,
                 isKeyboardVisible: isKeyboardVisible,
