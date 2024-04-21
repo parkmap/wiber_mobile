@@ -4,8 +4,7 @@
 // InjectableConfigGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_lambdas
-// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: type=lint
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
@@ -19,8 +18,8 @@ import 'data/network/apis/user_api.dart' as _i13;
 import 'data/repositories/repository.dart' as _i11;
 import 'data/repositories/user_repository.dart' as _i14;
 import 'data/sharedpref/shared_preference_helper.dart' as _i9;
-import 'di/network_module.dart' as _i17;
-import 'di/preference_module.dart' as _i16;
+import 'di/network_module.dart' as _i16;
+import 'di/preference_module.dart' as _i17;
 import 'stores/bucket_ui/bucket_ui_store.dart' as _i3;
 import 'stores/home_ui/home_ui_store.dart' as _i5;
 import 'stores/set_nickname/set_nickname_store.dart' as _i6;
@@ -28,8 +27,6 @@ import 'stores/set_profile/set_profile_store.dart' as _i7;
 import 'stores/theme/theme_store.dart' as _i12;
 import 'stores/user/user_store.dart' as _i15;
 
-// ignore_for_file: unnecessary_lambdas
-// ignore_for_file: lines_longer_than_80_chars
 // initializes the registration of main-scope dependencies inside of GetIt
 Future<_i1.GetIt> $initGetIt(
   _i1.GetIt getIt, {
@@ -59,7 +56,7 @@ Future<_i1.GetIt> $initGetIt(
         gh<_i9.SharedPreferenceHelper>(),
       ));
   gh.singleton<_i11.Repository>(
-      _i11.Repository(gh<_i9.SharedPreferenceHelper>()));
+      () => _i11.Repository(gh<_i9.SharedPreferenceHelper>()));
   gh.factory<_i12.ThemeStore>(() => _i12.ThemeStore(gh<_i11.Repository>()));
   gh.lazySingleton<_i13.UserApi>(() => _i13.UserApi(gh<_i10.DioClient>()));
   gh.lazySingleton<_i14.UserRepository>(() => _i14.UserRepository(
@@ -70,6 +67,6 @@ Future<_i1.GetIt> $initGetIt(
   return getIt;
 }
 
-class _$PreferenceModule extends _i16.PreferenceModule {}
+class _$NetworkModule extends _i16.NetworkModule {}
 
-class _$NetworkModule extends _i17.NetworkModule {}
+class _$PreferenceModule extends _i17.PreferenceModule {}

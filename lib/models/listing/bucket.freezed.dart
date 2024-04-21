@@ -12,7 +12,7 @@ part of 'bucket.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 Bucket _$BucketFromJson(Map<String, dynamic> json) {
   return _Bucket.fromJson(json);
@@ -90,9 +90,10 @@ class _$BucketCopyWithImpl<$Res, $Val extends Bucket>
 }
 
 /// @nodoc
-abstract class _$$_BucketCopyWith<$Res> implements $BucketCopyWith<$Res> {
-  factory _$$_BucketCopyWith(_$_Bucket value, $Res Function(_$_Bucket) then) =
-      __$$_BucketCopyWithImpl<$Res>;
+abstract class _$$BucketImplCopyWith<$Res> implements $BucketCopyWith<$Res> {
+  factory _$$BucketImplCopyWith(
+          _$BucketImpl value, $Res Function(_$BucketImpl) then) =
+      __$$BucketImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -104,10 +105,11 @@ abstract class _$$_BucketCopyWith<$Res> implements $BucketCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BucketCopyWithImpl<$Res>
-    extends _$BucketCopyWithImpl<$Res, _$_Bucket>
-    implements _$$_BucketCopyWith<$Res> {
-  __$$_BucketCopyWithImpl(_$_Bucket _value, $Res Function(_$_Bucket) _then)
+class __$$BucketImplCopyWithImpl<$Res>
+    extends _$BucketCopyWithImpl<$Res, _$BucketImpl>
+    implements _$$BucketImplCopyWith<$Res> {
+  __$$BucketImplCopyWithImpl(
+      _$BucketImpl _value, $Res Function(_$BucketImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -119,7 +121,7 @@ class __$$_BucketCopyWithImpl<$Res>
     Object? category = null,
     Object? isCompleted = null,
   }) {
-    return _then(_$_Bucket(
+    return _then(_$BucketImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -146,8 +148,8 @@ class __$$_BucketCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Bucket extends _Bucket {
-  _$_Bucket(
+class _$BucketImpl extends _Bucket {
+  _$BucketImpl(
       {@JsonKey(name: '_id') this.id = '',
       required this.title,
       required this.body,
@@ -155,8 +157,8 @@ class _$_Bucket extends _Bucket {
       required this.isCompleted})
       : super._();
 
-  factory _$_Bucket.fromJson(Map<String, dynamic> json) =>
-      _$$_BucketFromJson(json);
+  factory _$BucketImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BucketImplFromJson(json);
 
   @override
   @JsonKey(name: '_id')
@@ -176,10 +178,10 @@ class _$_Bucket extends _Bucket {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Bucket &&
+            other is _$BucketImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.body, body) || other.body == body) &&
@@ -197,12 +199,12 @@ class _$_Bucket extends _Bucket {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BucketCopyWith<_$_Bucket> get copyWith =>
-      __$$_BucketCopyWithImpl<_$_Bucket>(this, _$identity);
+  _$$BucketImplCopyWith<_$BucketImpl> get copyWith =>
+      __$$BucketImplCopyWithImpl<_$BucketImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_BucketToJson(
+    return _$$BucketImplToJson(
       this,
     );
   }
@@ -214,10 +216,10 @@ abstract class _Bucket extends Bucket {
       required final String title,
       required final String body,
       required final String category,
-      required final bool isCompleted}) = _$_Bucket;
+      required final bool isCompleted}) = _$BucketImpl;
   _Bucket._() : super._();
 
-  factory _Bucket.fromJson(Map<String, dynamic> json) = _$_Bucket.fromJson;
+  factory _Bucket.fromJson(Map<String, dynamic> json) = _$BucketImpl.fromJson;
 
   @override
   @JsonKey(name: '_id')
@@ -232,6 +234,6 @@ abstract class _Bucket extends Bucket {
   bool get isCompleted;
   @override
   @JsonKey(ignore: true)
-  _$$_BucketCopyWith<_$_Bucket> get copyWith =>
+  _$$BucketImplCopyWith<_$BucketImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

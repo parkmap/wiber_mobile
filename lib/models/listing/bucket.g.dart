@@ -6,7 +6,7 @@ part of 'bucket.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Bucket _$$_BucketFromJson(Map<String, dynamic> json) => _$_Bucket(
+_$BucketImpl _$$BucketImplFromJson(Map<String, dynamic> json) => _$BucketImpl(
       id: json['_id'] as String? ?? '',
       title: json['title'] as String,
       body: json['body'] as String,
@@ -14,7 +14,8 @@ _$_Bucket _$$_BucketFromJson(Map<String, dynamic> json) => _$_Bucket(
       isCompleted: json['isCompleted'] as bool,
     );
 
-Map<String, dynamic> _$$_BucketToJson(_$_Bucket instance) => <String, dynamic>{
+Map<String, dynamic> _$$BucketImplToJson(_$BucketImpl instance) =>
+    <String, dynamic>{
       '_id': instance.id,
       'title': instance.title,
       'body': instance.body,

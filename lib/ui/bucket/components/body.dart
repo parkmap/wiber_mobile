@@ -1,10 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:indexed/indexed.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:wiber_mobile/constants/colors.dart';
 import 'package:wiber_mobile/models/wiber_space/wiber_space.dart';
@@ -15,6 +17,9 @@ import 'package:wiber_mobile/widgets/default_dialog.dart';
 import 'package:wiber_mobile/widgets/default_flat_button.dart';
 import 'package:wiber_mobile/widgets/text_form_field_widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:date_field/date_field.dart';
+import 'package:intl/intl_standalone.dart'
+    if (dart.library.html) 'package:intl/intl_browser.dart';
 
 class Body extends StatefulWidget {
   final WiberSpace item;
@@ -743,7 +748,7 @@ class _BodyState extends State<Body> {
         ),
         child: Observer(builder: (context) {
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               if (_uiStore.createNewBucketPhase >= 0)
@@ -774,6 +779,7 @@ class _BodyState extends State<Body> {
               if (_uiStore.createNewBucketPhase >= 1)
                 TextFormField(
                   focusNode: _descriptionfocusNode,
+                  autofocus: true,
                   cursorColor: AppColors.primary1,
                   decoration: InputDecoration(
                     isDense: true,
@@ -794,6 +800,52 @@ class _BodyState extends State<Body> {
                   onChanged: (value) {
                     _uiStore.setNewBucketDescription(value);
                   },
+                ),
+              if (_uiStore.createNewBucketPhase >= 3 &&
+                  _uiStore.newBucketEndDate.isNotEmpty)
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 8.h,
+                  ),
+                  margin: EdgeInsets.only(bottom: 6.h),
+                  decoration: BoxDecoration(
+                    color: AppColors.gray15,
+                    borderRadius: BorderRadius.circular(100.r),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AutoSizeText(
+                        DateFormat("YYYY년 MM월 dd일")
+                            .format(DateTime.parse(_uiStore.newBucketEndDate)),
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.tertiaryBlack,
+                        ),
+                      ),
+                      SizedBox(width: 4.w),
+                      SizedBox(
+                        width: 20.w,
+                        height: 20.h,
+                        child: Center(
+                          child: InkWell(
+                            onTap: () {
+                              _uiStore.setNewBucketEndDate("");
+                              _uiStore.setCreateNewBucketPhase(2);
+                            },
+                            child: Image.asset(
+                              "assets/icons/x_icon.png",
+                              width: 10.w,
+                              height: 10.h,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -817,17 +869,20 @@ class _BodyState extends State<Body> {
                       onTap: _uiStore.newBucketName.isEmpty
                           ? null
                           : () {
-                              if (_uiStore.createNewBucketPhase == 0) {
+                              if (_uiStore.createNewBucketPhase <= 1) {
+                                _uiStore.setCreateNewBucketPhase(
+                                    _uiStore.createNewBucketPhase + 1);
+                              }
+
+                              if (_uiStore.createNewBucketPhase == 1) {
                                 _namefocusNode.unfocus();
                                 _descriptionfocusNode.requestFocus();
                               }
 
-                              if (_uiStore.createNewBucketPhase == 1) {
+                              if (_uiStore.createNewBucketPhase == 2) {
                                 _descriptionfocusNode.unfocus();
+                                _showBottomDateFieldSheet();
                               }
-
-                              _uiStore.setCreateNewBucketPhase(
-                                  _uiStore.createNewBucketPhase + 1);
                             },
                       child: AutoSizeText(
                         "저장",
@@ -853,6 +908,103 @@ class _BodyState extends State<Body> {
         }),
       ),
     ).then((value) => _uiStore.resetNewBucketDatas());
+  }
+
+  void _showBottomDateFieldSheet() {
+    showModalBottomSheet(
+      context: context,
+      enableDrag: false,
+      builder: (_) => Container(
+        padding: EdgeInsets.only(
+          left: 30.w,
+          right: 30.w,
+          bottom: 16.h,
+          top: 24.h,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20.r),
+            topRight: Radius.circular(20.r),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: 16.h,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  AutoSizeText(
+                    "날짜 선택",
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.gray100,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      context.router.pop();
+                    },
+                    child: Image.asset(
+                      "assets/icons/x_icon.png",
+                      width: 15.sp,
+                      height: 15.sp,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 254.h,
+              width: double.infinity,
+              child: Center(
+                child: Container(
+                  width: 300.w,
+                  height: 215.h,
+                  decoration: BoxDecoration(
+                    color: AppColors.gray10,
+                    borderRadius: BorderRadius.circular(13.r),
+                  ),
+                  child: CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.date,
+                    initialDateTime: DateTime.now(),
+                    minimumDate:
+                        DateTime.now().subtract(const Duration(days: 1)),
+                    onDateTimeChanged: (val) {
+                      _uiStore.setNewBucketEndDate(val.toString());
+                    },
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20.h),
+            DefaultFlatButton(
+              onPressed: () {
+                if (_uiStore.newBucketEndDate.isEmpty) {
+                  _uiStore.setNewBucketEndDate(DateTime.now().toString());
+                }
+                _uiStore.setCreateNewBucketPhase(3);
+                context.router.pop();
+              },
+              buttonColor: AppColors.primary1,
+              child: AutoSizeText(
+                "날짜 선택하기",
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _showToast(String text) {

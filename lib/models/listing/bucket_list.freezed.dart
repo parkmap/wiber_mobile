@@ -12,7 +12,7 @@ part of 'bucket_list.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 BucketList _$BucketListFromJson(Map<String, dynamic> json) {
   return _BucketList.fromJson(json);
@@ -74,22 +74,22 @@ class _$BucketListCopyWithImpl<$Res, $Val extends BucketList>
 }
 
 /// @nodoc
-abstract class _$$_BucketListCopyWith<$Res>
+abstract class _$$BucketListImplCopyWith<$Res>
     implements $BucketListCopyWith<$Res> {
-  factory _$$_BucketListCopyWith(
-          _$_BucketList value, $Res Function(_$_BucketList) then) =
-      __$$_BucketListCopyWithImpl<$Res>;
+  factory _$$BucketListImplCopyWith(
+          _$BucketListImpl value, $Res Function(_$BucketListImpl) then) =
+      __$$BucketListImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<Bucket> list, int totalCount, int? nextPage});
 }
 
 /// @nodoc
-class __$$_BucketListCopyWithImpl<$Res>
-    extends _$BucketListCopyWithImpl<$Res, _$_BucketList>
-    implements _$$_BucketListCopyWith<$Res> {
-  __$$_BucketListCopyWithImpl(
-      _$_BucketList _value, $Res Function(_$_BucketList) _then)
+class __$$BucketListImplCopyWithImpl<$Res>
+    extends _$BucketListCopyWithImpl<$Res, _$BucketListImpl>
+    implements _$$BucketListImplCopyWith<$Res> {
+  __$$BucketListImplCopyWithImpl(
+      _$BucketListImpl _value, $Res Function(_$BucketListImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -99,7 +99,7 @@ class __$$_BucketListCopyWithImpl<$Res>
     Object? totalCount = null,
     Object? nextPage = freezed,
   }) {
-    return _then(_$_BucketList(
+    return _then(_$BucketListImpl(
       list: null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
@@ -118,14 +118,14 @@ class __$$_BucketListCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_BucketList extends _BucketList {
-  _$_BucketList(
+class _$BucketListImpl extends _BucketList {
+  _$BucketListImpl(
       {required final List<Bucket> list, this.totalCount = 0, this.nextPage})
       : _list = list,
         super._();
 
-  factory _$_BucketList.fromJson(Map<String, dynamic> json) =>
-      _$$_BucketListFromJson(json);
+  factory _$BucketListImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BucketListImplFromJson(json);
 
   final List<Bucket> _list;
   @override
@@ -147,10 +147,10 @@ class _$_BucketList extends _BucketList {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BucketList &&
+            other is _$BucketListImpl &&
             const DeepCollectionEquality().equals(other._list, _list) &&
             (identical(other.totalCount, totalCount) ||
                 other.totalCount == totalCount) &&
@@ -166,12 +166,12 @@ class _$_BucketList extends _BucketList {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BucketListCopyWith<_$_BucketList> get copyWith =>
-      __$$_BucketListCopyWithImpl<_$_BucketList>(this, _$identity);
+  _$$BucketListImplCopyWith<_$BucketListImpl> get copyWith =>
+      __$$BucketListImplCopyWithImpl<_$BucketListImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_BucketListToJson(
+    return _$$BucketListImplToJson(
       this,
     );
   }
@@ -181,11 +181,11 @@ abstract class _BucketList extends BucketList {
   factory _BucketList(
       {required final List<Bucket> list,
       final int totalCount,
-      final int? nextPage}) = _$_BucketList;
+      final int? nextPage}) = _$BucketListImpl;
   _BucketList._() : super._();
 
   factory _BucketList.fromJson(Map<String, dynamic> json) =
-      _$_BucketList.fromJson;
+      _$BucketListImpl.fromJson;
 
   @override
   List<Bucket> get list;
@@ -195,6 +195,6 @@ abstract class _BucketList extends BucketList {
   int? get nextPage;
   @override
   @JsonKey(ignore: true)
-  _$$_BucketListCopyWith<_$_BucketList> get copyWith =>
+  _$$BucketListImplCopyWith<_$BucketListImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

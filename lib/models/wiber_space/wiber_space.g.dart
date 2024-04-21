@@ -6,8 +6,8 @@ part of 'wiber_space.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_WiberSpace _$$_WiberSpaceFromJson(Map<String, dynamic> json) =>
-    _$_WiberSpace(
+_$WiberSpaceImpl _$$WiberSpaceImplFromJson(Map<String, dynamic> json) =>
+    _$WiberSpaceImpl(
       id: json['_id'] as String? ?? '',
       title: json['title'] as String,
       isFavorite: json['isFavorite'] as bool,
@@ -19,7 +19,7 @@ _$_WiberSpace _$$_WiberSpaceFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$$_WiberSpaceToJson(_$_WiberSpace instance) =>
+Map<String, dynamic> _$$WiberSpaceImplToJson(_$WiberSpaceImpl instance) =>
     <String, dynamic>{
       '_id': instance.id,
       'title': instance.title,

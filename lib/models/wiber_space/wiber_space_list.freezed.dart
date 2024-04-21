@@ -12,7 +12,7 @@ part of 'wiber_space_list.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 WiberSpaceList _$WiberSpaceListFromJson(Map<String, dynamic> json) {
   return _WiberSpaceList.fromJson(json);
@@ -74,22 +74,22 @@ class _$WiberSpaceListCopyWithImpl<$Res, $Val extends WiberSpaceList>
 }
 
 /// @nodoc
-abstract class _$$_WiberSpaceListCopyWith<$Res>
+abstract class _$$WiberSpaceListImplCopyWith<$Res>
     implements $WiberSpaceListCopyWith<$Res> {
-  factory _$$_WiberSpaceListCopyWith(
-          _$_WiberSpaceList value, $Res Function(_$_WiberSpaceList) then) =
-      __$$_WiberSpaceListCopyWithImpl<$Res>;
+  factory _$$WiberSpaceListImplCopyWith(_$WiberSpaceListImpl value,
+          $Res Function(_$WiberSpaceListImpl) then) =
+      __$$WiberSpaceListImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<WiberSpace> list, int totalCount, int? nextPage});
 }
 
 /// @nodoc
-class __$$_WiberSpaceListCopyWithImpl<$Res>
-    extends _$WiberSpaceListCopyWithImpl<$Res, _$_WiberSpaceList>
-    implements _$$_WiberSpaceListCopyWith<$Res> {
-  __$$_WiberSpaceListCopyWithImpl(
-      _$_WiberSpaceList _value, $Res Function(_$_WiberSpaceList) _then)
+class __$$WiberSpaceListImplCopyWithImpl<$Res>
+    extends _$WiberSpaceListCopyWithImpl<$Res, _$WiberSpaceListImpl>
+    implements _$$WiberSpaceListImplCopyWith<$Res> {
+  __$$WiberSpaceListImplCopyWithImpl(
+      _$WiberSpaceListImpl _value, $Res Function(_$WiberSpaceListImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -99,7 +99,7 @@ class __$$_WiberSpaceListCopyWithImpl<$Res>
     Object? totalCount = null,
     Object? nextPage = freezed,
   }) {
-    return _then(_$_WiberSpaceList(
+    return _then(_$WiberSpaceListImpl(
       list: null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
@@ -118,16 +118,16 @@ class __$$_WiberSpaceListCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_WiberSpaceList extends _WiberSpaceList {
-  _$_WiberSpaceList(
+class _$WiberSpaceListImpl extends _WiberSpaceList {
+  _$WiberSpaceListImpl(
       {required final List<WiberSpace> list,
       this.totalCount = 0,
       this.nextPage})
       : _list = list,
         super._();
 
-  factory _$_WiberSpaceList.fromJson(Map<String, dynamic> json) =>
-      _$$_WiberSpaceListFromJson(json);
+  factory _$WiberSpaceListImpl.fromJson(Map<String, dynamic> json) =>
+      _$$WiberSpaceListImplFromJson(json);
 
   final List<WiberSpace> _list;
   @override
@@ -149,10 +149,10 @@ class _$_WiberSpaceList extends _WiberSpaceList {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_WiberSpaceList &&
+            other is _$WiberSpaceListImpl &&
             const DeepCollectionEquality().equals(other._list, _list) &&
             (identical(other.totalCount, totalCount) ||
                 other.totalCount == totalCount) &&
@@ -168,12 +168,13 @@ class _$_WiberSpaceList extends _WiberSpaceList {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_WiberSpaceListCopyWith<_$_WiberSpaceList> get copyWith =>
-      __$$_WiberSpaceListCopyWithImpl<_$_WiberSpaceList>(this, _$identity);
+  _$$WiberSpaceListImplCopyWith<_$WiberSpaceListImpl> get copyWith =>
+      __$$WiberSpaceListImplCopyWithImpl<_$WiberSpaceListImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_WiberSpaceListToJson(
+    return _$$WiberSpaceListImplToJson(
       this,
     );
   }
@@ -183,11 +184,11 @@ abstract class _WiberSpaceList extends WiberSpaceList {
   factory _WiberSpaceList(
       {required final List<WiberSpace> list,
       final int totalCount,
-      final int? nextPage}) = _$_WiberSpaceList;
+      final int? nextPage}) = _$WiberSpaceListImpl;
   _WiberSpaceList._() : super._();
 
   factory _WiberSpaceList.fromJson(Map<String, dynamic> json) =
-      _$_WiberSpaceList.fromJson;
+      _$WiberSpaceListImpl.fromJson;
 
   @override
   List<WiberSpace> get list;
@@ -197,6 +198,6 @@ abstract class _WiberSpaceList extends WiberSpaceList {
   int? get nextPage;
   @override
   @JsonKey(ignore: true)
-  _$$_WiberSpaceListCopyWith<_$_WiberSpaceList> get copyWith =>
+  _$$WiberSpaceListImplCopyWith<_$WiberSpaceListImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

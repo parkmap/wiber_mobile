@@ -6,8 +6,8 @@ part of 'bucket_list.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_BucketList _$$_BucketListFromJson(Map<String, dynamic> json) =>
-    _$_BucketList(
+_$BucketListImpl _$$BucketListImplFromJson(Map<String, dynamic> json) =>
+    _$BucketListImpl(
       list: (json['list'] as List<dynamic>)
           .map((e) => Bucket.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -15,7 +15,7 @@ _$_BucketList _$$_BucketListFromJson(Map<String, dynamic> json) =>
       nextPage: json['nextPage'] as int?,
     );
 
-Map<String, dynamic> _$$_BucketListToJson(_$_BucketList instance) =>
+Map<String, dynamic> _$$BucketListImplToJson(_$BucketListImpl instance) =>
     <String, dynamic>{
       'list': instance.list,
       'totalCount': instance.totalCount,

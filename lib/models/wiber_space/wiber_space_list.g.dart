@@ -6,8 +6,8 @@ part of 'wiber_space_list.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_WiberSpaceList _$$_WiberSpaceListFromJson(Map<String, dynamic> json) =>
-    _$_WiberSpaceList(
+_$WiberSpaceListImpl _$$WiberSpaceListImplFromJson(Map<String, dynamic> json) =>
+    _$WiberSpaceListImpl(
       list: (json['list'] as List<dynamic>)
           .map((e) => WiberSpace.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -15,7 +15,8 @@ _$_WiberSpaceList _$$_WiberSpaceListFromJson(Map<String, dynamic> json) =>
       nextPage: json['nextPage'] as int?,
     );
 
-Map<String, dynamic> _$$_WiberSpaceListToJson(_$_WiberSpaceList instance) =>
+Map<String, dynamic> _$$WiberSpaceListImplToJson(
+        _$WiberSpaceListImpl instance) =>
     <String, dynamic>{
       'list': instance.list,
       'totalCount': instance.totalCount,

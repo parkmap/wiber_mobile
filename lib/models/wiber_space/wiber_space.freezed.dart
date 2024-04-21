@@ -12,7 +12,7 @@ part of 'wiber_space.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 WiberSpace _$WiberSpaceFromJson(Map<String, dynamic> json) {
   return _WiberSpace.fromJson(json);
@@ -106,11 +106,11 @@ class _$WiberSpaceCopyWithImpl<$Res, $Val extends WiberSpace>
 }
 
 /// @nodoc
-abstract class _$$_WiberSpaceCopyWith<$Res>
+abstract class _$$WiberSpaceImplCopyWith<$Res>
     implements $WiberSpaceCopyWith<$Res> {
-  factory _$$_WiberSpaceCopyWith(
-          _$_WiberSpace value, $Res Function(_$_WiberSpace) then) =
-      __$$_WiberSpaceCopyWithImpl<$Res>;
+  factory _$$WiberSpaceImplCopyWith(
+          _$WiberSpaceImpl value, $Res Function(_$WiberSpaceImpl) then) =
+      __$$WiberSpaceImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -124,11 +124,11 @@ abstract class _$$_WiberSpaceCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_WiberSpaceCopyWithImpl<$Res>
-    extends _$WiberSpaceCopyWithImpl<$Res, _$_WiberSpace>
-    implements _$$_WiberSpaceCopyWith<$Res> {
-  __$$_WiberSpaceCopyWithImpl(
-      _$_WiberSpace _value, $Res Function(_$_WiberSpace) _then)
+class __$$WiberSpaceImplCopyWithImpl<$Res>
+    extends _$WiberSpaceCopyWithImpl<$Res, _$WiberSpaceImpl>
+    implements _$$WiberSpaceImplCopyWith<$Res> {
+  __$$WiberSpaceImplCopyWithImpl(
+      _$WiberSpaceImpl _value, $Res Function(_$WiberSpaceImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -142,7 +142,7 @@ class __$$_WiberSpaceCopyWithImpl<$Res>
     Object? owner = null,
     Object? participants = null,
   }) {
-    return _then(_$_WiberSpace(
+    return _then(_$WiberSpaceImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -177,8 +177,8 @@ class __$$_WiberSpaceCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_WiberSpace extends _WiberSpace {
-  _$_WiberSpace(
+class _$WiberSpaceImpl extends _WiberSpace {
+  _$WiberSpaceImpl(
       {@JsonKey(name: '_id') this.id = '',
       required this.title,
       required this.isFavorite,
@@ -189,8 +189,8 @@ class _$_WiberSpace extends _WiberSpace {
       : _participants = participants,
         super._();
 
-  factory _$_WiberSpace.fromJson(Map<String, dynamic> json) =>
-      _$$_WiberSpaceFromJson(json);
+  factory _$WiberSpaceImpl.fromJson(Map<String, dynamic> json) =>
+      _$$WiberSpaceImplFromJson(json);
 
   @override
   @JsonKey(name: '_id')
@@ -219,10 +219,10 @@ class _$_WiberSpace extends _WiberSpace {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_WiberSpace &&
+            other is _$WiberSpaceImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.isFavorite, isFavorite) ||
@@ -244,12 +244,12 @@ class _$_WiberSpace extends _WiberSpace {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_WiberSpaceCopyWith<_$_WiberSpace> get copyWith =>
-      __$$_WiberSpaceCopyWithImpl<_$_WiberSpace>(this, _$identity);
+  _$$WiberSpaceImplCopyWith<_$WiberSpaceImpl> get copyWith =>
+      __$$WiberSpaceImplCopyWithImpl<_$WiberSpaceImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_WiberSpaceToJson(
+    return _$$WiberSpaceImplToJson(
       this,
     );
   }
@@ -263,11 +263,11 @@ abstract class _WiberSpace extends WiberSpace {
       required final int maxCount,
       required final int completeCount,
       required final String owner,
-      required final List<User> participants}) = _$_WiberSpace;
+      required final List<User> participants}) = _$WiberSpaceImpl;
   _WiberSpace._() : super._();
 
   factory _WiberSpace.fromJson(Map<String, dynamic> json) =
-      _$_WiberSpace.fromJson;
+      _$WiberSpaceImpl.fromJson;
 
   @override
   @JsonKey(name: '_id')
@@ -286,6 +286,6 @@ abstract class _WiberSpace extends WiberSpace {
   List<User> get participants;
   @override
   @JsonKey(ignore: true)
-  _$$_WiberSpaceCopyWith<_$_WiberSpace> get copyWith =>
+  _$$WiberSpaceImplCopyWith<_$WiberSpaceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
