@@ -439,7 +439,9 @@ class _BodyState extends State<Body> {
               ),
               SizedBox(height: 30.h),
               DefaultFlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.router.pop();
+                },
                 child: AutoSizeText(
                   "초대링크 공유하기",
                   style: TextStyle(
