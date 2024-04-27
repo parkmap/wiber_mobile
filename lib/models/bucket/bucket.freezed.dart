@@ -26,6 +26,7 @@ mixin _$Bucket {
   String get body => throw _privateConstructorUsedError;
   String get category => throw _privateConstructorUsedError;
   bool get isCompleted => throw _privateConstructorUsedError;
+  String get endDate => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,7 +43,8 @@ abstract class $BucketCopyWith<$Res> {
       String title,
       String body,
       String category,
-      bool isCompleted});
+      bool isCompleted,
+      String endDate});
 }
 
 /// @nodoc
@@ -63,6 +65,7 @@ class _$BucketCopyWithImpl<$Res, $Val extends Bucket>
     Object? body = null,
     Object? category = null,
     Object? isCompleted = null,
+    Object? endDate = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -85,6 +88,10 @@ class _$BucketCopyWithImpl<$Res, $Val extends Bucket>
           ? _value.isCompleted
           : isCompleted // ignore: cast_nullable_to_non_nullable
               as bool,
+      endDate: null == endDate
+          ? _value.endDate
+          : endDate // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -101,7 +108,8 @@ abstract class _$$BucketImplCopyWith<$Res> implements $BucketCopyWith<$Res> {
       String title,
       String body,
       String category,
-      bool isCompleted});
+      bool isCompleted,
+      String endDate});
 }
 
 /// @nodoc
@@ -120,6 +128,7 @@ class __$$BucketImplCopyWithImpl<$Res>
     Object? body = null,
     Object? category = null,
     Object? isCompleted = null,
+    Object? endDate = null,
   }) {
     return _then(_$BucketImpl(
       id: null == id
@@ -142,6 +151,10 @@ class __$$BucketImplCopyWithImpl<$Res>
           ? _value.isCompleted
           : isCompleted // ignore: cast_nullable_to_non_nullable
               as bool,
+      endDate: null == endDate
+          ? _value.endDate
+          : endDate // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -154,7 +167,8 @@ class _$BucketImpl extends _Bucket {
       required this.title,
       required this.body,
       required this.category,
-      required this.isCompleted})
+      required this.isCompleted,
+      required this.endDate})
       : super._();
 
   factory _$BucketImpl.fromJson(Map<String, dynamic> json) =>
@@ -171,10 +185,12 @@ class _$BucketImpl extends _Bucket {
   final String category;
   @override
   final bool isCompleted;
+  @override
+  final String endDate;
 
   @override
   String toString() {
-    return 'Bucket(id: $id, title: $title, body: $body, category: $category, isCompleted: $isCompleted)';
+    return 'Bucket(id: $id, title: $title, body: $body, category: $category, isCompleted: $isCompleted, endDate: $endDate)';
   }
 
   @override
@@ -188,13 +204,14 @@ class _$BucketImpl extends _Bucket {
             (identical(other.category, category) ||
                 other.category == category) &&
             (identical(other.isCompleted, isCompleted) ||
-                other.isCompleted == isCompleted));
+                other.isCompleted == isCompleted) &&
+            (identical(other.endDate, endDate) || other.endDate == endDate));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, title, body, category, isCompleted);
+      Object.hash(runtimeType, id, title, body, category, isCompleted, endDate);
 
   @JsonKey(ignore: true)
   @override
@@ -216,7 +233,8 @@ abstract class _Bucket extends Bucket {
       required final String title,
       required final String body,
       required final String category,
-      required final bool isCompleted}) = _$BucketImpl;
+      required final bool isCompleted,
+      required final String endDate}) = _$BucketImpl;
   _Bucket._() : super._();
 
   factory _Bucket.fromJson(Map<String, dynamic> json) = _$BucketImpl.fromJson;
@@ -232,6 +250,8 @@ abstract class _Bucket extends Bucket {
   String get category;
   @override
   bool get isCompleted;
+  @override
+  String get endDate;
   @override
   @JsonKey(ignore: true)
   _$$BucketImplCopyWith<_$BucketImpl> get copyWith =>

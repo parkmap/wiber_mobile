@@ -12,7 +12,6 @@ import 'package:wiber_mobile/router/router.gr.dart';
 import 'package:wiber_mobile/stores/set_profile/set_profile_store.dart';
 import 'package:wiber_mobile/widgets/default_bottom_dialogue.dart';
 import 'package:wiber_mobile/widgets/default_flat_button.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -34,136 +33,132 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    return KeyboardVisibilityBuilder(builder: (contex, isKeyboardVisible) {
-      return SizedBox(
-        width: double.infinity,
-        child: Observer(builder: (context) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    top: 24.h,
-                    left: 20.w,
-                    right: 20.w,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AutoSizeText(
-                        "프로필을 설정해주세요",
-                        style: TextStyle(
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.gray90,
-                        ),
+    return SizedBox(
+      width: double.infinity,
+      child: Observer(builder: (context) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: double.infinity,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: 24.h,
+                  left: 20.w,
+                  right: 20.w,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AutoSizeText(
+                      "프로필을 설정해주세요",
+                      style: TextStyle(
+                        fontSize: 24.sp,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.gray90,
                       ),
-                      SizedBox(height: 16.h),
-                      AutoSizeText(
-                        "언제든지 프로필 사진을 바꿀 수 있어요.",
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.tertiaryBlack,
-                        ),
+                    ),
+                    SizedBox(height: 16.h),
+                    AutoSizeText(
+                      "언제든지 프로필 사진을 바꿀 수 있어요.",
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.tertiaryBlack,
                       ),
-                      SizedBox(height: 40.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 135.sp,
-                            height: 135.sp,
-                            child: GestureDetector(
-                              onTap: () {
-                                showSetProfileDialogue();
-                              },
-                              child: Stack(
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Container(
-                                        width: 135.sp,
-                                        height: 135.sp,
-                                        clipBehavior: Clip.hardEdge,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: _setProfileStore.profileImage ==
-                                                null
-                                            ? Image.asset(
-                                                _setProfileStore
-                                                    .defaultProfilePath,
-                                                width: 120.sp,
-                                                height: 120.sp,
-                                              )
-                                            : Image.file(
-                                                File(_setProfileStore
-                                                    .profileImage!.path),
-                                                width: 120.sp,
-                                                height: 120.sp,
-                                                fit: BoxFit.cover,
-                                              )),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Container(
-                                      width: 44.sp,
-                                      height: 44.sp,
+                    ),
+                    SizedBox(height: 40.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 135.sp,
+                          height: 135.sp,
+                          child: GestureDetector(
+                            onTap: () {
+                              showSetProfileDialogue();
+                            },
+                            child: Stack(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Container(
+                                      width: 135.sp,
+                                      height: 135.sp,
+                                      clipBehavior: Clip.hardEdge,
                                       decoration: const BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: AppColors.gray20,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: AppColors.gray60,
-                                            offset: Offset(0, 2),
-                                            blurRadius: 4,
-                                          ),
-                                        ],
                                       ),
-                                      child: Center(
-                                        child: Image.asset(
-                                          "assets/icons/camera_icon.png",
-                                          width: 21.sp,
-                                          height: 18.sp,
+                                      child:
+                                          _setProfileStore.profileImage == null
+                                              ? Image.asset(
+                                                  _setProfileStore
+                                                      .defaultProfilePath,
+                                                  width: 120.sp,
+                                                  height: 120.sp,
+                                                )
+                                              : Image.file(
+                                                  File(_setProfileStore
+                                                      .profileImage!.path),
+                                                  width: 120.sp,
+                                                  height: 120.sp,
+                                                  fit: BoxFit.cover,
+                                                )),
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Container(
+                                    width: 44.sp,
+                                    height: 44.sp,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppColors.gray20,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: AppColors.gray60,
+                                          offset: Offset(0, 2),
+                                          blurRadius: 4,
                                         ),
+                                      ],
+                                    ),
+                                    child: Center(
+                                      child: Image.asset(
+                                        "assets/icons/camera_icon.png",
+                                        width: 21.sp,
+                                        height: 18.sp,
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              DefaultFlatButton(
-                onPressed: () {
-                  context.router.replaceAll([
-                    const HomeRoute(),
-                  ]);
-                },
-                detectKeyboard: true,
-                isKeyboardVisible: isKeyboardVisible,
-                child: AutoSizeText(
-                  "시작하기",
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
+            ),
+            DefaultFlatButton(
+              onPressed: () {
+                context.router.replaceAll([
+                  const HomeRoute(),
+                ]);
+              },
+              child: AutoSizeText(
+                "시작하기",
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
                 ),
               ),
-            ],
-          );
-        }),
-      );
-    });
+            ),
+          ],
+        );
+      }),
+    );
   }
 
   void showSetProfileDialogue() {

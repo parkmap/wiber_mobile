@@ -46,7 +46,8 @@ class _BodyState extends State<Body> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
-    final userStore = context.read<UserStore>()..getUserInfoAndWiberSpaceList();
+    final userStore = context.read<UserStore>();
+    // ..getUserInfoAndWiberSpaceList();
 
     if (_userStore != userStore) {
       _userStore = userStore;
@@ -652,6 +653,7 @@ class _BodyState extends State<Body> {
           children: [
             TextFormField(
               autofocus: true,
+              initialValue: item?.title ?? "",
               cursorColor: AppColors.primary1,
               decoration: InputDecoration(
                 hintStyle: TextStyle(

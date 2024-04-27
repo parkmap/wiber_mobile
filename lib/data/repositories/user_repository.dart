@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:injectable/injectable.dart';
-import 'package:wiber_mobile/models/listing/bucket_list.dart';
+import 'package:wiber_mobile/models/bucket/bucket_list.dart';
 import 'package:wiber_mobile/models/user/user.dart';
 import 'package:wiber_mobile/models/wiber_space/wiber_space_list.dart';
 

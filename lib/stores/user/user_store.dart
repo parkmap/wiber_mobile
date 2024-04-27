@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wiber_mobile/data/repositories/user_repository.dart';
-import 'package:wiber_mobile/models/listing/bucket.dart';
+import 'package:wiber_mobile/models/bucket/bucket.dart';
 import 'package:wiber_mobile/models/user/user.dart';
 import 'package:wiber_mobile/models/wiber_space/wiber_space.dart';
 

@@ -33,7 +33,13 @@ abstract class _BucketUIStore with Store {
   String newBucketEndDate = "";
 
   @observable
+  String newBucketDetailCategory = "";
+
+  @observable
   int createNewBucketPhase = 0;
+
+  @observable
+  bool isEditing = false;
 
   // getters:-------------------------------------------------------------------
 
@@ -81,6 +87,11 @@ abstract class _BucketUIStore with Store {
   @action
   void setCreateNewBucketPhase(int val) {
     createNewBucketPhase = val;
+  }
+
+  @action
+  void setNewBucketDetailCategory(String val) {
+    newBucketDetailCategory = val;
   }
 
   @action

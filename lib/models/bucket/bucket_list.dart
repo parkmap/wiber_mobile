@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wiber_mobile/models/listing/bucket.dart';
+import 'package:wiber_mobile/models/bucket/bucket.dart';
 
 part 'bucket_list.freezed.dart';
 part 'bucket_list.g.dart';

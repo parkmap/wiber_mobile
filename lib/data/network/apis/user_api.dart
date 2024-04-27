@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:injectable/injectable.dart';
 import 'package:wiber_mobile/data/dio_client.dart';
-import 'package:wiber_mobile/models/listing/bucket.dart';
-import 'package:wiber_mobile/models/listing/bucket_list.dart';
+import 'package:wiber_mobile/models/bucket/bucket.dart';
+import 'package:wiber_mobile/models/bucket/bucket_list.dart';
 import 'package:wiber_mobile/models/user/user.dart';
 import 'package:wiber_mobile/models/wiber_space/wiber_space.dart';
 import 'package:wiber_mobile/models/wiber_space/wiber_space_list.dart';
@@ -57,6 +57,7 @@ class UserApi {
           body: '간략한 버켓 설명 ${index + 1}',
           category: '카테고리${(index + 1) % 9}',
           isCompleted: Random().nextBool(),
+          endDate: "2024년 12월 31일",
         ),
       );
 

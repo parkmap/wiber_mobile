@@ -131,6 +131,23 @@ mixin _$BucketUIStore on _BucketUIStore, Store {
     });
   }
 
+  late final _$newBucketDetailCategoryAtom =
+      Atom(name: '_BucketUIStore.newBucketDetailCategory', context: context);
+
+  @override
+  String get newBucketDetailCategory {
+    _$newBucketDetailCategoryAtom.reportRead();
+    return super.newBucketDetailCategory;
+  }
+
+  @override
+  set newBucketDetailCategory(String value) {
+    _$newBucketDetailCategoryAtom
+        .reportWrite(value, super.newBucketDetailCategory, () {
+      super.newBucketDetailCategory = value;
+    });
+  }
+
   late final _$createNewBucketPhaseAtom =
       Atom(name: '_BucketUIStore.createNewBucketPhase', context: context);
 
@@ -145,6 +162,22 @@ mixin _$BucketUIStore on _BucketUIStore, Store {
     _$createNewBucketPhaseAtom.reportWrite(value, super.createNewBucketPhase,
         () {
       super.createNewBucketPhase = value;
+    });
+  }
+
+  late final _$isEditingAtom =
+      Atom(name: '_BucketUIStore.isEditing', context: context);
+
+  @override
+  bool get isEditing {
+    _$isEditingAtom.reportRead();
+    return super.isEditing;
+  }
+
+  @override
+  set isEditing(bool value) {
+    _$isEditingAtom.reportWrite(value, super.isEditing, () {
+      super.isEditing = value;
     });
   }
 
@@ -240,6 +273,17 @@ mixin _$BucketUIStore on _BucketUIStore, Store {
   }
 
   @override
+  void setNewBucketDetailCategory(String val) {
+    final _$actionInfo = _$_BucketUIStoreActionController.startAction(
+        name: '_BucketUIStore.setNewBucketDetailCategory');
+    try {
+      return super.setNewBucketDetailCategory(val);
+    } finally {
+      _$_BucketUIStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void resetNewBucketDatas() {
     final _$actionInfo = _$_BucketUIStoreActionController.startAction(
         name: '_BucketUIStore.resetNewBucketDatas');
@@ -260,7 +304,9 @@ editingCategoryName: ${editingCategoryName},
 newBucketName: ${newBucketName},
 newBucketDescription: ${newBucketDescription},
 newBucketEndDate: ${newBucketEndDate},
+newBucketDetailCategory: ${newBucketDetailCategory},
 createNewBucketPhase: ${createNewBucketPhase},
+isEditing: ${isEditing},
 canEditCategoryName: ${canEditCategoryName}
     ''';
   }

@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
-    final userStore = context.read<UserStore>();
+    final userStore = context.read<UserStore>()..getUserInfoAndWiberSpaceList();
 
     if (_userStore != userStore) {
       _userStore = userStore;

@@ -12,6 +12,7 @@ _$BucketImpl _$$BucketImplFromJson(Map<String, dynamic> json) => _$BucketImpl(
       body: json['body'] as String,
       category: json['category'] as String,
       isCompleted: json['isCompleted'] as bool,
+      endDate: json['endDate'] as String,
     );
 
 Map<String, dynamic> _$$BucketImplToJson(_$BucketImpl instance) =>
@@ -21,4 +22,5 @@ Map<String, dynamic> _$$BucketImplToJson(_$BucketImpl instance) =>
       'body': instance.body,
       'category': instance.category,
       'isCompleted': instance.isCompleted,
+      'endDate': instance.endDate,
     };

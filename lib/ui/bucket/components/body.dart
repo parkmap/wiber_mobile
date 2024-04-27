@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:wiber_mobile/constants/colors.dart';
 import 'package:wiber_mobile/models/wiber_space/wiber_space.dart';
+import 'package:wiber_mobile/router/router.gr.dart';
 import 'package:wiber_mobile/stores/bucket_ui/bucket_ui_store.dart';
 import 'package:wiber_mobile/stores/user/user_store.dart';
 import 'package:wiber_mobile/widgets/default_checkbox_listtile_with_subtitle.dart';
@@ -55,7 +56,6 @@ class _BodyState extends State<Body> {
     super.didChangeDependencies();
 
     final userStore = context.read<UserStore>()
-      ..getUserInfo()
       ..getCategories()
       ..getBucketList();
 
@@ -398,114 +398,33 @@ class _BodyState extends State<Body> {
               _userStore!.filteredBucketList.length,
               (index) {
                 var bucket = _userStore!.filteredBucketList[index];
-                return DefaultCheckboxListTileWithSubtitle(
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 20.w,
-                    vertical: 16.h,
+                return InkWell(
+                  onTap: () {
+                    context.router.push(BucketDetailRoute(
+                      space: widget.item,
+                      item: bucket,
+                      onDelete: () {
+                        context.router.popUntilRouteWithName("BucketRoute");
+                        _showToast("버킷 1개를 삭제했어요.");
+                      },
+                    ));
+                  },
+                  child: DefaultCheckboxListTileWithSubtitle(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 16.h,
+                    ),
+                    isChecked: bucket.isCompleted,
+                    title: bucket.title,
+                    subTitle: bucket.body,
+                    hasUnderline: false,
                   ),
-                  isChecked: bucket.isCompleted,
-                  title: bucket.title,
-                  subTitle: bucket.body,
-                  hasUnderline: false,
                 );
               },
             ),
             SizedBox(height: 120.h),
           ],
         ),
-      ),
-    );
-  }
-
-  void _showBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      enableDrag: false,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        child: _buildBottomSheet(context),
-      ),
-    );
-  }
-
-  Widget _buildBottomSheet(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height / 3.5,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(25.r),
-          topRight: Radius.circular(25.r),
-        ),
-        boxShadow: const [
-          BoxShadow(
-            color: AppColors.gray10,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      padding: EdgeInsets.symmetric(
-        horizontal: 20.w,
-        vertical: 20.h,
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AutoSizeText(
-                "카테고리 수정 및 삭제",
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.gray90,
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: FaIcon(
-                  FontAwesomeIcons.xmark,
-                  color: AppColors.gray100,
-                  size: 20.sp,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 20.h),
-          DefaultFlatButton(
-            onPressed: () {
-              _uiStore.setEditingCategoryName("");
-              _showEditModal(context);
-            },
-            buttonColor: AppColors.lightGray,
-            child: AutoSizeText(
-              "수정하기",
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.gray90,
-              ),
-            ),
-          ),
-          SizedBox(height: 10.h),
-          DefaultFlatButton(
-            onPressed: () {
-              _showDeleteModal(context);
-            },
-            buttonColor: AppColors.negative,
-            child: AutoSizeText(
-              "삭제하기",
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -567,162 +486,6 @@ class _BodyState extends State<Body> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  void _showEditModal(BuildContext context) {
-    double buttonWidth = (MediaQuery.of(context).size.width - 80.w) / 2;
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => DefaultDialog(
-        children: Column(
-          children: [
-            AutoSizeText(
-              "카테고리 수정하기",
-              style: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w700,
-                color: AppColors.gray90,
-              ),
-            ),
-            SizedBox(height: 16.h),
-            TextFormFieldWidget(
-              onChanged: (val) => _uiStore.setEditingCategoryName(val),
-              initialValue: _uiStore.selectedCategory,
-            ),
-            SizedBox(height: 16.h),
-            Row(
-              children: [
-                DefaultFlatButton(
-                  onPressed: () {
-                    context.router.pop();
-                  },
-                  width: buttonWidth,
-                  buttonColor: AppColors.lightGray,
-                  child: AutoSizeText(
-                    "취소",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.gray90,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 8.w),
-                Observer(builder: (context) {
-                  return DefaultFlatButton(
-                    onPressed: !_uiStore.canEditCategoryName
-                        ? null
-                        : () {
-                            context.router.popUntilRoot();
-                            _showToast("카테고리 수정이 완료되었어요");
-                          },
-                    width: buttonWidth,
-                    buttonColor: !_uiStore.canEditCategoryName
-                        ? AppColors.lightGray
-                        : AppColors.primary1,
-                    child: AutoSizeText(
-                      "수정하기",
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        color: !_uiStore.canEditCategoryName
-                            ? AppColors.gray90
-                            : Colors.white,
-                      ),
-                    ),
-                  );
-                }),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showDeleteModal(BuildContext context) {
-    double buttonWidth = (MediaQuery.of(context).size.width - 80.w) / 2;
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => DefaultDialog(
-        children: Column(
-          children: [
-            AutoSizeText(
-              "카테고리 삭제하기",
-              style: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w700,
-                color: AppColors.gray90,
-              ),
-            ),
-            SizedBox(height: 16.h),
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 16.w,
-                vertical: 16.h,
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.gray15,
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-              child: SizedBox(
-                width: double.infinity,
-                child: AutoSizeText(
-                  _uiStore.selectedCategory,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.primaryBlack,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 16.h),
-            Row(
-              children: [
-                DefaultFlatButton(
-                  onPressed: () {
-                    context.router.pop();
-                  },
-                  width: buttonWidth,
-                  buttonColor: AppColors.lightGray,
-                  child: AutoSizeText(
-                    "취소",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.gray90,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 8.w),
-                Observer(builder: (context) {
-                  return DefaultFlatButton(
-                    onPressed: () {
-                      context.router.popUntilRoot();
-                      _showToast("카테고리 삭제가 완료되었어요");
-                    },
-                    width: buttonWidth,
-                    buttonColor: AppColors.negative,
-                    child: AutoSizeText(
-                      "삭제하기",
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  );
-                }),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -883,6 +646,10 @@ class _BodyState extends State<Body> {
                                 _descriptionfocusNode.unfocus();
                                 _showBottomDateFieldSheet();
                               }
+
+                              if (_uiStore.createNewBucketPhase == 3) {
+                                context.router.pop();
+                              }
                             },
                       child: AutoSizeText(
                         "저장",
@@ -929,35 +696,29 @@ class _BodyState extends State<Body> {
           ),
         ),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(
-              padding: EdgeInsets.only(
-                bottom: 16.h,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  AutoSizeText(
-                    "날짜 선택",
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.gray100,
-                    ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AutoSizeText(
+                  "날짜 선택",
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.gray100,
                   ),
-                  InkWell(
-                    onTap: () {
-                      context.router.pop();
-                    },
-                    child: Image.asset(
-                      "assets/icons/x_icon.png",
-                      width: 15.sp,
-                      height: 15.sp,
-                    ),
+                ),
+                InkWell(
+                  onTap: () {
+                    context.router.pop();
+                  },
+                  child: Image.asset(
+                    "assets/icons/x_icon.png",
+                    width: 15.sp,
+                    height: 15.sp,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             SizedBox(
               height: 254.h,
