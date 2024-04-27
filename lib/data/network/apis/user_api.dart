@@ -120,7 +120,57 @@ class UserApi {
                 profileImageUrl: "assets/images/default_profile_image.png",
               ),
             ],
-          )
+          ),
+          WiberSpace(
+            id: "1",
+            title: "위버스페이스2",
+            isFavorite: true,
+            maxCount: 30,
+            completeCount: 19,
+            owner: "1",
+            participants: [
+              User(
+                id: "0",
+                nickname: "위버",
+                profileImageUrl: "assets/images/default_profile_image.png",
+              ),
+              User(
+                id: "1",
+                nickname: "위버2",
+                profileImageUrl: "assets/images/default_profile_image.png",
+              ),
+              User(
+                id: "2",
+                nickname: "위버3",
+                profileImageUrl: "assets/images/default_profile_image.png",
+              ),
+              User(
+                id: "3",
+                nickname: "위버4",
+                profileImageUrl: "assets/images/default_profile_image.png",
+              ),
+              User(
+                id: "4",
+                nickname: "위버5",
+                profileImageUrl: "assets/images/default_profile_image.png",
+              ),
+            ],
+          ),
+          WiberSpace(
+            id: "2",
+            title: "위버스페이스3",
+            isFavorite: true,
+            maxCount: 30,
+            completeCount: 19,
+            owner: "0",
+            participants: [
+              User(
+                id: "0",
+                nickname: "위버",
+                profileImageUrl: "assets/images/default_profile_image.png",
+              ),
+            ],
+          ),
         ],
       );
 

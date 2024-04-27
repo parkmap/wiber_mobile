@@ -133,7 +133,9 @@ class _BodyState extends State<Body> {
               ),
               SizedBox(width: 12.w),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  context.router.push(const SettingRoute());
+                },
                 child: Image.asset(
                   'assets/icons/profile_icon.png',
                   width: 22.w,

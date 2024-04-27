@@ -2,9 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:indexed/indexed.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -13,12 +14,10 @@ import 'package:wiber_mobile/models/wiber_space/wiber_space.dart';
 import 'package:wiber_mobile/router/router.gr.dart';
 import 'package:wiber_mobile/stores/bucket_ui/bucket_ui_store.dart';
 import 'package:wiber_mobile/stores/user/user_store.dart';
+import 'package:wiber_mobile/widgets/custom_circle_checkbox.dart';
 import 'package:wiber_mobile/widgets/default_checkbox_listtile_with_subtitle.dart';
-import 'package:wiber_mobile/widgets/default_dialog.dart';
 import 'package:wiber_mobile/widgets/default_flat_button.dart';
-import 'package:wiber_mobile/widgets/text_form_field_widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:date_field/date_field.dart';
 import 'package:intl/intl_standalone.dart'
     if (dart.library.html) 'package:intl/intl_browser.dart';
 
@@ -148,7 +147,9 @@ class _BodyState extends State<Body> {
               ),
               SizedBox(width: 12.w),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  context.router.push(const SettingRoute());
+                },
                 child: Image.asset(
                   'assets/icons/profile_icon.png',
                   width: 22.w,
@@ -168,42 +169,50 @@ class _BodyState extends State<Body> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
-            height: 100.h,
-            width: double.infinity,
-            child: Indexer(
-              alignment: AlignmentDirectional.topCenter,
-              clipBehavior: Clip.none,
-              reversed: true,
-              children: [
-                const SizedBox(width: 0),
-                ...List.generate(
-                  widget.item.participants.length,
-                  (index) => Indexed(
-                    index: index,
-                    child: Positioned(
-                      left: (MediaQuery.of(context).size.width /
-                              widget.item.participants.length) +
-                          (20.sp * index),
-                      child: Container(
-                        width: 100.sp,
-                        height: 100.sp,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 4.sp,
+          GestureDetector(
+            onTap: () {
+              context.router.push(BucketParticipantsRoute(item: widget.item));
+            },
+            child: SizedBox(
+              height: 100.h,
+              width: double.infinity,
+              child: Indexer(
+                alignment: AlignmentDirectional.center,
+                clipBehavior: Clip.none,
+                reversed: true,
+                children: [
+                  const SizedBox(width: 0),
+                  ...List.generate(
+                    widget.item.participants.length,
+                    (index) => Indexed(
+                      index: index,
+                      child: Positioned(
+                        left:
+                            // (MediaQuery.of(context).size.width /
+                            //             widget.item.participants.length +
+                            //         5) +
+                            MediaQuery.of(context).size.width / 2.8 +
+                                (20.sp * index),
+                        child: Container(
+                          width: 100.sp,
+                          height: 100.sp,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 4.sp,
+                            ),
                           ),
-                        ),
-                        child: Image.asset(
-                          widget.item.participants[index].profileImageUrl,
-                          fit: BoxFit.fill,
+                          child: Image.asset(
+                            widget.item.participants[index].profileImageUrl,
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           SizedBox(height: 10.h),
@@ -450,7 +459,9 @@ class _BodyState extends State<Body> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
-            onTap: () {},
+            onTap: () {
+              _showInviteLinkBottomSheet();
+            },
             child: Image.asset(
               "assets/icons/add_person_icon.png",
               width: 26.w,
@@ -478,7 +489,9 @@ class _BodyState extends State<Body> {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              _showSortingListBottomSheet();
+            },
             child: Image.asset(
               "assets/icons/horizontal_icon.png",
               width: 24.w,
@@ -766,6 +779,233 @@ class _BodyState extends State<Body> {
         ),
       ),
     );
+  }
+
+  void _showSortingListBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      enableDrag: false,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Observer(
+        builder: (context) {
+          return Container(
+            padding: EdgeInsets.only(
+              left: 20.w,
+              right: 20.w,
+              bottom: 40.h,
+              top: 20.h,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.r),
+                topRight: Radius.circular(20.r),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    AutoSizeText(
+                      "정렬 기준",
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.gray100,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        context.router.pop();
+                      },
+                      child: Image.asset(
+                        "assets/icons/x_icon.png",
+                        width: 24.sp,
+                        height: 24.sp,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 40.h),
+                ...List.generate(
+                  _uiStore.sortingList.length,
+                  (index) {
+                    String sortItem = _uiStore.sortingList[index];
+                    return InkWell(
+                      onTap: () {
+                        _uiStore.setSelectedSort(sortItem);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 15.h,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            AutoSizeText(
+                              sortItem,
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.primaryBlack,
+                              ),
+                            ),
+                            CustomCircleCheckbox(
+                              isChecked: _uiStore.selectedSort == sortItem,
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(height: 30.h),
+                DefaultFlatButton(
+                  onPressed: () {
+                    context.router.pop();
+                  },
+                  buttonColor: AppColors.primary1,
+                  child: AutoSizeText(
+                    "확인",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void _showInviteLinkBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      enableDrag: false,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        padding: EdgeInsets.only(
+          left: 20.w,
+          right: 20.w,
+          bottom: 40.h,
+          top: 20.h,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20.r),
+            topRight: Radius.circular(20.r),
+          ),
+        ),
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  AutoSizeText(
+                    "초대하기",
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.gray100,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      context.router.pop();
+                    },
+                    child: Image.asset(
+                      "assets/icons/x_icon.png",
+                      width: 24.sp,
+                      height: 24.sp,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30.h),
+              AutoSizeText(
+                "초대링크를 복사해서 파트너에게 전달해보세요.",
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.secondaryBlack,
+                ),
+              ),
+              SizedBox(height: 12.h),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 12.w,
+                  vertical: 14.h,
+                ),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: AppColors.lightGray,
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    AutoSizeText(
+                      "create-invite-links?dskjfdlskfddsfsdfsddsfs...",
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.secondaryBlack,
+                      ),
+                    ),
+                    GestureDetector(
+                      child: InkWell(
+                        onTap: () {
+                          _copyToClipBoard(
+                              "create-invite-links?dskjfdlskfddsfsdfsddsfs...");
+                        },
+                        child: Image.asset(
+                          "assets/icons/clipboard_icon.png",
+                          width: 19.2.sp,
+                          height: 19.2.sp,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 30.h),
+              DefaultFlatButton(
+                onPressed: () {
+                  context.router.pop();
+                },
+                child: AutoSizeText(
+                  "초대링크 공유하기",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _copyToClipBoard(String text) {
+    return Future.delayed(const Duration(milliseconds: 300), () {
+      Clipboard.setData(ClipboardData(text: text));
+      _showToast("초대링크를 복사했어요.");
+    });
   }
 
   void _showToast(String text) {

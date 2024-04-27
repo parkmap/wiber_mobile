@@ -19,7 +19,7 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   SetNicknameStore _setNicknameStore = SetNicknameStore();
-  TextEditingController _nicknameController = TextEditingController();
+  final TextEditingController _nicknameController = TextEditingController();
   late FocusNode _nicknameFocusNode;
 
   @override

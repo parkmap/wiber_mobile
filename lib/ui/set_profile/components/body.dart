@@ -140,18 +140,25 @@ class _BodyState extends State<Body> {
                 ),
               ),
             ),
-            DefaultFlatButton(
-              onPressed: () {
-                context.router.replaceAll([
-                  const HomeRoute(),
-                ]);
-              },
-              child: AutoSizeText(
-                "시작하기",
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: 20.h,
+                left: 20.w,
+                right: 20.w,
+              ),
+              child: DefaultFlatButton(
+                onPressed: () {
+                  context.router.replaceAll([
+                    const HomeRoute(),
+                  ]);
+                },
+                child: AutoSizeText(
+                  "시작하기",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

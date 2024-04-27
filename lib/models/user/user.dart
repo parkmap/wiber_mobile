@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wiber_mobile/models/wiber_space/wiber_space.dart';
 
 part 'user.g.dart';
 part 'user.freezed.dart';

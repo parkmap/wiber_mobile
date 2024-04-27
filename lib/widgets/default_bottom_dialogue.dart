@@ -34,8 +34,8 @@ class _DefaultBottomDialogState extends State<DefaultBottomDialog> {
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         insetPadding: EdgeInsets.only(
-          left: 20.w,
-          right: 20.w,
+          left: 8.w,
+          right: 8.w,
           bottom: 20.h,
           top: 20.h,
         ),

@@ -160,7 +160,7 @@ class _BodyState extends State<Body> {
               ),
               InkWell(
                 onTap: () {
-                  showDeleteBucketConfirmDialog();
+                  _showDeleteBucketConfirmDialog();
                 },
                 child: Image.asset(
                   'assets/icons/delete_icon.png',
@@ -200,7 +200,7 @@ class _BodyState extends State<Body> {
               ),
               InkWell(
                 onTap: () {
-                  showDeleteBucketConfirmDialog();
+                  _showDeleteBucketConfirmDialog();
                 },
                 child: Image.asset(
                   'assets/icons/delete_icon.png',
@@ -596,7 +596,7 @@ class _BodyState extends State<Body> {
     );
   }
 
-  void showDeleteBucketConfirmDialog() {
+  void _showDeleteBucketConfirmDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {

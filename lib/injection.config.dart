@@ -11,21 +11,22 @@
 import 'package:dio/dio.dart' as _i4;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
-import 'package:shared_preferences/shared_preferences.dart' as _i8;
+import 'package:shared_preferences/shared_preferences.dart' as _i9;
 
-import 'data/dio_client.dart' as _i10;
-import 'data/network/apis/user_api.dart' as _i13;
-import 'data/repositories/repository.dart' as _i11;
-import 'data/repositories/user_repository.dart' as _i14;
-import 'data/sharedpref/shared_preference_helper.dart' as _i9;
-import 'di/network_module.dart' as _i16;
-import 'di/preference_module.dart' as _i17;
+import 'data/dio_client.dart' as _i11;
+import 'data/network/apis/user_api.dart' as _i14;
+import 'data/repositories/repository.dart' as _i12;
+import 'data/repositories/user_repository.dart' as _i15;
+import 'data/sharedpref/shared_preference_helper.dart' as _i10;
+import 'di/network_module.dart' as _i17;
+import 'di/preference_module.dart' as _i18;
 import 'stores/bucket_ui/bucket_ui_store.dart' as _i3;
 import 'stores/home_ui/home_ui_store.dart' as _i5;
 import 'stores/set_nickname/set_nickname_store.dart' as _i6;
 import 'stores/set_profile/set_profile_store.dart' as _i7;
-import 'stores/theme/theme_store.dart' as _i12;
-import 'stores/user/user_store.dart' as _i15;
+import 'stores/setting_ui/setting_ui_store.dart' as _i8;
+import 'stores/theme/theme_store.dart' as _i13;
+import 'stores/user/user_store.dart' as _i16;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 Future<_i1.GetIt> $initGetIt(
@@ -45,28 +46,29 @@ Future<_i1.GetIt> $initGetIt(
   gh.factory<_i5.HomeUIStore>(() => _i5.HomeUIStore());
   gh.factory<_i6.SetNicknameStore>(() => _i6.SetNicknameStore());
   gh.factory<_i7.SetProfileStore>(() => _i7.SetProfileStore());
-  await gh.singletonAsync<_i8.SharedPreferences>(
+  gh.factory<_i8.SettingUiStore>(() => _i8.SettingUiStore());
+  await gh.singletonAsync<_i9.SharedPreferences>(
     () => preferenceModule.sharedPref,
     preResolve: true,
   );
-  gh.lazySingleton<_i9.SharedPreferenceHelper>(
-      () => _i9.SharedPreferenceHelper(gh<_i8.SharedPreferences>()));
-  gh.lazySingleton<_i10.DioClient>(() => _i10.DioClient(
+  gh.lazySingleton<_i10.SharedPreferenceHelper>(
+      () => _i10.SharedPreferenceHelper(gh<_i9.SharedPreferences>()));
+  gh.lazySingleton<_i11.DioClient>(() => _i11.DioClient(
         gh<_i4.Dio>(),
-        gh<_i9.SharedPreferenceHelper>(),
+        gh<_i10.SharedPreferenceHelper>(),
       ));
-  gh.singleton<_i11.Repository>(
-      () => _i11.Repository(gh<_i9.SharedPreferenceHelper>()));
-  gh.factory<_i12.ThemeStore>(() => _i12.ThemeStore(gh<_i11.Repository>()));
-  gh.lazySingleton<_i13.UserApi>(() => _i13.UserApi(gh<_i10.DioClient>()));
-  gh.lazySingleton<_i14.UserRepository>(() => _i14.UserRepository(
-        gh<_i13.UserApi>(),
-        gh<_i9.SharedPreferenceHelper>(),
+  gh.singleton<_i12.Repository>(
+      () => _i12.Repository(gh<_i10.SharedPreferenceHelper>()));
+  gh.factory<_i13.ThemeStore>(() => _i13.ThemeStore(gh<_i12.Repository>()));
+  gh.lazySingleton<_i14.UserApi>(() => _i14.UserApi(gh<_i11.DioClient>()));
+  gh.lazySingleton<_i15.UserRepository>(() => _i15.UserRepository(
+        gh<_i14.UserApi>(),
+        gh<_i10.SharedPreferenceHelper>(),
       ));
-  gh.factory<_i15.UserStore>(() => _i15.UserStore(gh<_i14.UserRepository>()));
+  gh.factory<_i16.UserStore>(() => _i16.UserStore(gh<_i15.UserRepository>()));
   return getIt;
 }
 
-class _$NetworkModule extends _i16.NetworkModule {}
+class _$NetworkModule extends _i17.NetworkModule {}
 
-class _$PreferenceModule extends _i17.PreferenceModule {}
+class _$PreferenceModule extends _i18.PreferenceModule {}

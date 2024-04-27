@@ -41,6 +41,15 @@ abstract class _BucketUIStore with Store {
   @observable
   bool isEditing = false;
 
+  @observable
+  List<String> sortingList = [
+    "등록일 기준",
+    "완료일 기준",
+  ];
+
+  @observable
+  String selectedSort = "등록일 기준";
+
   // getters:-------------------------------------------------------------------
 
   @computed
@@ -92,6 +101,11 @@ abstract class _BucketUIStore with Store {
   @action
   void setNewBucketDetailCategory(String val) {
     newBucketDetailCategory = val;
+  }
+
+  @action
+  void setSelectedSort(String val) {
+    selectedSort = val;
   }
 
   @action

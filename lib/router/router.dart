@@ -17,5 +17,10 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: SetProfileRoute.page),
         AutoRoute(page: BucketRoute.page),
         AutoRoute(page: BucketDetailRoute.page),
+        AutoRoute(page: BucketParticipantsRoute.page),
+        AutoRoute(page: SettingRoute.page),
+        AutoRoute(page: SettingWiberSpaceRoute.page),
+        AutoRoute(page: SettingAnnounceRoute.page),
+        AutoRoute(page: SettingFaqRoute.page),
       ];
 }

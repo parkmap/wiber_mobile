@@ -181,6 +181,38 @@ mixin _$BucketUIStore on _BucketUIStore, Store {
     });
   }
 
+  late final _$sortingListAtom =
+      Atom(name: '_BucketUIStore.sortingList', context: context);
+
+  @override
+  List<String> get sortingList {
+    _$sortingListAtom.reportRead();
+    return super.sortingList;
+  }
+
+  @override
+  set sortingList(List<String> value) {
+    _$sortingListAtom.reportWrite(value, super.sortingList, () {
+      super.sortingList = value;
+    });
+  }
+
+  late final _$selectedSortAtom =
+      Atom(name: '_BucketUIStore.selectedSort', context: context);
+
+  @override
+  String get selectedSort {
+    _$selectedSortAtom.reportRead();
+    return super.selectedSort;
+  }
+
+  @override
+  set selectedSort(String value) {
+    _$selectedSortAtom.reportWrite(value, super.selectedSort, () {
+      super.selectedSort = value;
+    });
+  }
+
   late final _$_BucketUIStoreActionController =
       ActionController(name: '_BucketUIStore', context: context);
 
@@ -284,6 +316,17 @@ mixin _$BucketUIStore on _BucketUIStore, Store {
   }
 
   @override
+  void setSelectedSort(String val) {
+    final _$actionInfo = _$_BucketUIStoreActionController.startAction(
+        name: '_BucketUIStore.setSelectedSort');
+    try {
+      return super.setSelectedSort(val);
+    } finally {
+      _$_BucketUIStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void resetNewBucketDatas() {
     final _$actionInfo = _$_BucketUIStoreActionController.startAction(
         name: '_BucketUIStore.resetNewBucketDatas');
@@ -307,6 +350,8 @@ newBucketEndDate: ${newBucketEndDate},
 newBucketDetailCategory: ${newBucketDetailCategory},
 createNewBucketPhase: ${createNewBucketPhase},
 isEditing: ${isEditing},
+sortingList: ${sortingList},
+selectedSort: ${selectedSort},
 canEditCategoryName: ${canEditCategoryName}
     ''';
   }
