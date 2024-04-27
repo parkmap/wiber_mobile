@@ -434,17 +434,17 @@ class _BodyState extends State<Body> {
             ],
           ),
           SizedBox(height: 10.h),
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 12.w,
-              vertical: 16.h,
-            ),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: AppColors.gray15,
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            child: Flexible(
+          Flexible(
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 12.w,
+                vertical: 16.h,
+              ),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: AppColors.gray15,
+                borderRadius: BorderRadius.circular(12.r),
+              ),
               child: TextFormField(
                 autofocus: false,
                 initialValue: widget.item.body,
