@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'package:android_id/android_id.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -78,5 +81,33 @@ class SharedPreferenceHelper {
 
   Future<void> changeLanguage(String language) {
     return _sharedPreference.setString(Preferences.currentLanguage, language);
+  }
+
+  Future<bool?> saveUuid() async {
+    var deviceInfo = DeviceInfoPlugin();
+    var _androidIdPlugin = AndroidId();
+
+    if (Platform.isIOS) {
+      var iosDeviceInfo = await deviceInfo.iosInfo;
+
+      if (iosDeviceInfo.identifierForVendor != null) {
+        return _sharedPreference.setString(
+            Preferences.uuid, iosDeviceInfo.identifierForVendor!);
+      }
+    } else if (Platform.isAndroid) {
+      String? androidId = await _androidIdPlugin.getId();
+
+      if (androidId != null) {
+        return _sharedPreference.setString(Preferences.uuid, androidId);
+      }
+    }
+  }
+
+  String? get uuid {
+    return _sharedPreference.getString(Preferences.uuid);
+  }
+
+  Future<bool> removeUuid() async {
+    return _sharedPreference.remove(Preferences.uuid);
   }
 }

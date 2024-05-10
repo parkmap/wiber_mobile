@@ -60,7 +60,10 @@ Future<_i1.GetIt> $initGetIt(
   gh.singleton<_i12.Repository>(
       () => _i12.Repository(gh<_i10.SharedPreferenceHelper>()));
   gh.factory<_i13.ThemeStore>(() => _i13.ThemeStore(gh<_i12.Repository>()));
-  gh.lazySingleton<_i14.UserApi>(() => _i14.UserApi(gh<_i11.DioClient>()));
+  gh.lazySingleton<_i14.UserApi>(() => _i14.UserApi(
+        gh<_i11.DioClient>(),
+        gh<_i4.Dio>(),
+      ));
   gh.lazySingleton<_i15.UserRepository>(() => _i15.UserRepository(
         gh<_i14.UserApi>(),
         gh<_i10.SharedPreferenceHelper>(),

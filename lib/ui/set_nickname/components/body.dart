@@ -111,7 +111,11 @@ class _BodyState extends State<Body> {
                 onPressed: !_setNicknameStore.isNicknmeValid
                     ? null
                     : () {
-                        context.router.push(const SetProfileRoute());
+                        context.router.push(
+                          SetProfileRoute(
+                            nickname: _setNicknameStore.nickname,
+                          ),
+                        );
                       },
                 detectKeyboard: true,
                 isKeyboardVisible: isKeyboardVisible,

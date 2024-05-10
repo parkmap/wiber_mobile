@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wiber_mobile/data/repositories/user_repository.dart';
@@ -32,6 +34,9 @@ abstract class _UserStore with Store {
   List<WiberSpace> wiberSpaceList = [];
 
   @observable
+  bool isCreatingUser = false;
+
+  @observable
   User? user;
 
   // getters:-------------------------------------------------------------------
@@ -43,8 +48,54 @@ abstract class _UserStore with Store {
   // actions:-------------------------------------------------------------------
 
   @action
+  String? getUuid() {
+    return _userRepository.getUuid();
+  }
+
+  @action
+  Future<bool?> saveUuid() async {
+    return await _userRepository.saveUuid();
+  }
+
+  @action
   String? getAuthToken() {
     return _userRepository.getAuthToekn();
+  }
+
+  @action
+  Future createUser({required String username}) async {
+    if (isCreatingUser || getUuid() == null) return;
+
+    isCreatingUser = true;
+    try {
+      var res = await _userRepository.createUser(
+        username: username,
+        app_uuid: getUuid()!,
+        push_token: "test",
+      );
+
+      return res;
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  @action
+  Future saveProfileImage({required MultipartFile profileImage}) async {
+    try {
+      var userId = await _userRepository.getUserId();
+      var uuid = await _userRepository.getUuid();
+      var res = await _userRepository.saveProfileImage(
+          profileImage: profileImage, userId: userId!, uuid: uuid!);
+      return res;
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  @action
+  Future<void> saveUserId({required String userId}) async {
+    await _userRepository.saveUserId(userId: userId);
   }
 
   @action

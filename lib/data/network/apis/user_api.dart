@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:wiber_mobile/data/dio_client.dart';
+import 'package:wiber_mobile/data/network/constants/endpoints.dart';
 import 'package:wiber_mobile/models/bucket/bucket.dart';
 import 'package:wiber_mobile/models/bucket/bucket_list.dart';
 import 'package:wiber_mobile/models/user/user.dart';
@@ -12,9 +15,65 @@ import 'package:wiber_mobile/models/wiber_space/wiber_space_list.dart';
 class UserApi {
   // dio instance
   final DioClient _dioClient;
+  final Dio _dio;
 
   // injecting dio instance
-  UserApi(this._dioClient);
+  UserApi(
+    this._dioClient,
+    this._dio,
+  );
+
+  Future<dynamic> createUser({
+    required String username,
+    required String app_uuid,
+    required String push_token,
+  }) async {
+    try {
+      var data = {
+        "username": username,
+        "app_uuid": app_uuid,
+        "push_token": push_token,
+      };
+
+      var res = await _dioClient.post(Endpoints.auth, data: data);
+      return res;
+    } catch (error) {
+      print(
+        error.toString(),
+      );
+      rethrow;
+    }
+  }
+
+  Future saveProfileImage(
+      {required MultipartFile profileImage,
+      required String userId,
+      required String uuid}) async {
+    try {
+      String basicAuth = 'Basic ' + base64.encode(utf8.encode('$userId:$uuid'));
+      var formData = FormData.fromMap({'image': profileImage});
+
+      // var res = await _dioClient.put(
+      //   Endpoints.uploadProfileImage,
+      //   data: formData,
+      // );
+
+      var res = await _dio.put(Endpoints.uploadProfileImage,
+          data: formData,
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json; charset=utf-8',
+              'Authorization': basicAuth
+            },
+          ));
+
+      return res;
+    } catch (error) {
+      print(
+        error.toString(),
+      );
+    }
+  }
 
   Future<String> getUserNickname() async {
     try {

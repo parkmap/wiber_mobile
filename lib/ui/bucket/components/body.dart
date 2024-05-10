@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:indexed/indexed.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +22,7 @@ import 'package:wiber_mobile/widgets/default_flat_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl_standalone.dart'
     if (dart.library.html) 'package:intl/intl_browser.dart';
+import 'package:wiber_mobile/widgets/text_form_field_widget.dart';
 
 class Body extends StatefulWidget {
   final WiberSpace item;
@@ -39,6 +42,8 @@ class _BodyState extends State<Body> {
   FToast fToast = FToast();
   FocusNode _namefocusNode = FocusNode();
   FocusNode _descriptionfocusNode = FocusNode();
+  TextEditingController _newCategoryController = TextEditingController();
+  late FocusNode _newCategoryFocusNode;
 
   @override
   void initState() {
@@ -48,6 +53,9 @@ class _BodyState extends State<Body> {
     fToast = FToast();
     // if you want to use context from globally instead of content we need to pass navigatorKey.currentContext!
     fToast.init(context);
+    _namefocusNode = FocusNode();
+    _descriptionfocusNode = FocusNode();
+    _newCategoryFocusNode = FocusNode();
   }
 
   @override
@@ -67,6 +75,7 @@ class _BodyState extends State<Body> {
   void dispose() {
     _namefocusNode.dispose();
     _descriptionfocusNode.dispose();
+    _newCategoryFocusNode.dispose();
     super.dispose();
   }
 
@@ -164,6 +173,13 @@ class _BodyState extends State<Body> {
   }
 
   Widget _buildProfiles() {
+    List<List> profileMatrix = [
+      [0.0.sp],
+      [-15.sp, 15.sp],
+      [-30.sp, 0.sp, 30.sp],
+      [-45.sp, -15.sp, 15.sp, 45.sp],
+      [-60.sp, -30.sp, 0.sp, 30.sp, 60.sp],
+    ];
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -186,16 +202,17 @@ class _BodyState extends State<Body> {
                     widget.item.participants.length,
                     (index) => Indexed(
                       index: index,
-                      child: Positioned(
-                        left:
-                            // (MediaQuery.of(context).size.width /
-                            //             widget.item.participants.length +
-                            //         5) +
-                            MediaQuery.of(context).size.width / 2.8 +
-                                (20.sp * index),
+                      child: Align(
+                        alignment: Alignment.center,
                         child: Container(
                           width: 100.sp,
                           height: 100.sp,
+                          transform: Matrix4.translationValues(
+                            profileMatrix[widget.item.participants.length - 1]
+                                [index],
+                            0.0,
+                            0.0,
+                          ),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
@@ -313,7 +330,9 @@ class _BodyState extends State<Body> {
                 ),
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  _showNewCategoryBottomSheet(context);
+                },
                 child: Padding(
                   padding: EdgeInsets.only(
                     left: 16.w,
@@ -1032,6 +1051,122 @@ class _BodyState extends State<Body> {
       child: toast,
       gravity: ToastGravity.BOTTOM,
       toastDuration: const Duration(seconds: 2),
+    );
+  }
+
+  void _showNewCategoryBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      enableDrag: false,
+      isScrollControlled: true,
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.95,
+      ),
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return KeyboardVisibilityBuilder(
+          builder: (context, isKeyboardVisible) {
+            return Container(
+              child: _buildNewCategoryBottomSheet(context, isKeyboardVisible),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildNewCategoryBottomSheet(
+      BuildContext context, bool isKeyboardVisible) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16.r),
+          topRight: Radius.circular(16.r),
+        ),
+        boxShadow: const [
+          BoxShadow(
+            color: AppColors.gray10,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      constraints: BoxConstraints(
+        minHeight: MediaQuery.of(context).size.height * 0.95,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+              top: 20.h,
+              left: 20.w,
+              right: 20.w,
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    AutoSizeText(
+                      "새 카테고리 만들기",
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.gray90,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        context.router.pop();
+                      },
+                      child: FaIcon(
+                        FontAwesomeIcons.xmark,
+                        color: AppColors.gray100,
+                        size: 20.sp,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20.h),
+                TextFormFieldWidget(
+                  textController: _newCategoryController,
+                  onChanged: (val) {
+                    _uiStore.editingCategoryName = val;
+                  },
+                  autoFocus: true,
+                  focusNode: _newCategoryFocusNode,
+                  hintText: "새 카테고리 이름을 입력해주세요",
+                  maxLength: 6,
+                  suffixActions: () {
+                    _uiStore.setNewBucketDetailCategory("");
+                    _newCategoryController.clear();
+                  },
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: DefaultFlatButton(
+              onPressed: () {},
+              detectKeyboard: true,
+              isKeyboardVisible: isKeyboardVisible,
+              child: AutoSizeText(
+                "완료",
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

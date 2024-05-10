@@ -2,25 +2,32 @@ import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_cropper/image_cropper.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:wiber_mobile/constants/colors.dart';
-import 'package:wiber_mobile/router/router.gr.dart';
 import 'package:wiber_mobile/stores/set_profile/set_profile_store.dart';
+import 'package:wiber_mobile/stores/user/user_store.dart';
 import 'package:wiber_mobile/widgets/default_bottom_dialogue.dart';
 import 'package:wiber_mobile/widgets/default_flat_button.dart';
 
 class Body extends StatefulWidget {
-  const Body({Key? key}) : super(key: key);
+  final String nickname;
+  const Body({
+    required this.nickname,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Body> createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
+  UserStore? _userStore;
   SetProfileStore _setProfileStore = SetProfileStore();
   final ImagePicker picker = ImagePicker();
 
@@ -29,6 +36,19 @@ class _BodyState extends State<Body> {
     super.initState();
 
     _setProfileStore = SetProfileStore();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    final userStore = context.read<UserStore>()
+      ..getCategories()
+      ..getBucketList();
+
+    if (_userStore != userStore) {
+      _userStore = userStore;
+    }
   }
 
   @override
@@ -147,19 +167,46 @@ class _BodyState extends State<Body> {
                 right: 20.w,
               ),
               child: DefaultFlatButton(
-                onPressed: () {
-                  context.router.replaceAll([
-                    const HomeRoute(),
-                  ]);
+                onPressed: () async {
+                  var res = await _userStore!.createUser(
+                    username: widget.nickname,
+                  );
+
+                  if (res != null &&
+                      res["id"] != null &&
+                      res["message"] == null) {
+                    await _userStore?.saveUserId(userId: res["id"]);
+
+                    if (_setProfileStore.profileImage != null) {
+                      final MultipartFile profileImage =
+                          MultipartFile.fromFileSync(
+                        _setProfileStore.profileImage!.path,
+                        contentType: MediaType("image", "jpg"),
+                      );
+
+                      await _userStore?.saveProfileImage(
+                        profileImage: profileImage,
+                      );
+                    }
+                  }
+                  // context.router.replaceAll([
+                  //   const HomeRoute(),
+                  // ]);
                 },
-                child: AutoSizeText(
-                  "시작하기",
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
+                child: _userStore!.isCreatingUser
+                    ? Image.asset(
+                        "assets/images/loading_spinner.gif",
+                        width: 20.sp,
+                        height: 20.sp,
+                      )
+                    : AutoSizeText(
+                        "시작하기",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
           ],

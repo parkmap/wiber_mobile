@@ -842,7 +842,7 @@ class _BodyState extends State<Body> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     AutoSizeText(
-                      "카테고리 선택",
+                      "새 카테고리 만들기",
                       style: TextStyle(
                         fontSize: 18.sp,
                         fontWeight: FontWeight.w700,

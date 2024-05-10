@@ -5,13 +5,21 @@ import 'components/body.dart';
 
 @RoutePage()
 class SetProfileScreen extends StatelessWidget {
-  const SetProfileScreen({Key? key}) : super(key: key);
+  final String nickname;
+  const SetProfileScreen({
+    required this.nickname,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBarWithBackButton(),
-      body: const SafeArea(child: Body()),
+      body: SafeArea(
+        child: Body(
+          nickname: nickname,
+        ),
+      ),
     );
   }
 }

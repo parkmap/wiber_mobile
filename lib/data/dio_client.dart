@@ -34,11 +34,12 @@ class DioClient {
               return handler.next(options);
 
             // getting token
-            var token = _sharedPreferenceHelper.authToken;
-            if (token == null) return;
+            var username = _sharedPreferenceHelper.userId;
+            var password = _sharedPreferenceHelper.uuid;
+            if (password == null || username == null) return;
 
-            options.headers
-                .putIfAbsent('Authorization', () => 'Bearer ' + token);
+            options.headers.putIfAbsent(
+                'Authorization', () => 'Basic ' + username + ':' + password);
             return handler.next(options);
           },
         ),
@@ -137,6 +138,32 @@ class DioClient {
         queryParameters: queryParameters,
         options: options,
         cancelToken: cancelToken,
+      );
+      return response.data;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Patch:--------------------------------------------------------------------
+  Future<dynamic> patch(
+    String uri, {
+    data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    try {
+      final response = await _dio.patch(
+        uri,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
       );
       return response.data;
     } catch (e) {

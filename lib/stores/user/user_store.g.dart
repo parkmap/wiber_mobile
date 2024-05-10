@@ -89,6 +89,22 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$isCreatingUserAtom =
+      Atom(name: '_UserStore.isCreatingUser', context: context);
+
+  @override
+  bool get isCreatingUser {
+    _$isCreatingUserAtom.reportRead();
+    return super.isCreatingUser;
+  }
+
+  @override
+  set isCreatingUser(bool value) {
+    _$isCreatingUserAtom.reportWrite(value, super.isCreatingUser, () {
+      super.isCreatingUser = value;
+    });
+  }
+
   late final _$userAtom = Atom(name: '_UserStore.user', context: context);
 
   @override
@@ -102,6 +118,40 @@ mixin _$UserStore on _UserStore, Store {
     _$userAtom.reportWrite(value, super.user, () {
       super.user = value;
     });
+  }
+
+  late final _$saveUuidAsyncAction =
+      AsyncAction('_UserStore.saveUuid', context: context);
+
+  @override
+  Future<bool?> saveUuid() {
+    return _$saveUuidAsyncAction.run(() => super.saveUuid());
+  }
+
+  late final _$createUserAsyncAction =
+      AsyncAction('_UserStore.createUser', context: context);
+
+  @override
+  Future<dynamic> createUser({required String username}) {
+    return _$createUserAsyncAction
+        .run(() => super.createUser(username: username));
+  }
+
+  late final _$saveProfileImageAsyncAction =
+      AsyncAction('_UserStore.saveProfileImage', context: context);
+
+  @override
+  Future<dynamic> saveProfileImage({required MultipartFile profileImage}) {
+    return _$saveProfileImageAsyncAction
+        .run(() => super.saveProfileImage(profileImage: profileImage));
+  }
+
+  late final _$saveUserIdAsyncAction =
+      AsyncAction('_UserStore.saveUserId', context: context);
+
+  @override
+  Future<void> saveUserId({required String userId}) {
+    return _$saveUserIdAsyncAction.run(() => super.saveUserId(userId: userId));
   }
 
   late final _$getCategoriesAsyncAction =
@@ -150,6 +200,17 @@ mixin _$UserStore on _UserStore, Store {
       ActionController(name: '_UserStore', context: context);
 
   @override
+  String? getUuid() {
+    final _$actionInfo =
+        _$_UserStoreActionController.startAction(name: '_UserStore.getUuid');
+    try {
+      return super.getUuid();
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String? getAuthToken() {
     final _$actionInfo = _$_UserStoreActionController.startAction(
         name: '_UserStore.getAuthToken');
@@ -179,6 +240,7 @@ categories: ${categories},
 bucketList: ${bucketList},
 filteredBucketList: ${filteredBucketList},
 wiberSpaceList: ${wiberSpaceList},
+isCreatingUser: ${isCreatingUser},
 user: ${user}
     ''';
   }

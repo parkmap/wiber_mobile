@@ -30,6 +30,8 @@ class _SplashScreenState extends State<SplashScreen> {
       _userStore = userStore;
     }
 
+    _userStore?.getUuid() ?? await _userStore?.saveUuid();
+
     Timer(
       const Duration(milliseconds: 1500),
       () async {
