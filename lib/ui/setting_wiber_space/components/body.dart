@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -16,7 +17,9 @@ import 'package:wiber_mobile/stores/setting_ui/setting_ui_store.dart';
 import 'package:wiber_mobile/stores/user/user_store.dart';
 import 'package:wiber_mobile/widgets/default_bottom_dialogue.dart';
 import 'package:wiber_mobile/widgets/default_flat_button.dart';
+import 'package:wiber_mobile/widgets/loading_spinner.dart';
 import 'package:wiber_mobile/widgets/text_form_field_widget.dart';
+import 'package:image/image.dart' as img;
 
 class Body extends StatefulWidget {
   const Body({
@@ -92,17 +95,59 @@ class _BodyState extends State<Body> {
                 right: 20.w,
                 bottom: 20.h,
               ),
-              child: DefaultFlatButton(
-                onPressed: _nicknameController.text.isEmpty ? null : () {},
-                child: AutoSizeText(
-                  "저장",
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+              child: Observer(builder: (context) {
+                return DefaultFlatButton(
+                  onPressed: _nicknameController.text.isEmpty ||
+                          _uiStore.isUpdatingUserInfo
+                      ? null
+                      : () async {
+                          _uiStore.toggleIsUpdatingUserInfo();
+                          if (_uiStore.profileImage != null) {
+                            Uint8List imageBytes =
+                                await _uiStore.profileImage!.readAsBytes();
+                            img.Image? originalImage =
+                                img.decodeImage(imageBytes);
+
+                            if (originalImage != null) {
+                              img.Image resizedImage = img.copyResize(
+                                  originalImage,
+                                  width: 300,
+                                  height: 300);
+                              Uint8List jpegImageBytes = Uint8List.fromList(
+                                  img.encodeJpg(resizedImage, quality: 85));
+
+                              await _userStore?.saveProfileImage(
+                                profileImage: jpegImageBytes,
+                              );
+                            }
+                          }
+
+                          await _userStore?.updateUserInfo(
+                            userNickname: _nicknameController.text,
+                            pushToken: "test",
+                          );
+
+                          await _userStore?.refreshUserInfo();
+
+                          _showToast("프로필이 변경되었습니다.");
+                          try {} catch (error) {
+                            print(error);
+                          } finally {
+                            _uiStore.toggleIsUpdatingUserInfo();
+                          }
+                        },
+                  child: _uiStore.isUpdatingUserInfo
+                      ? LoadingSpinner()
+                      : AutoSizeText(
+                          "저장",
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                );
+              }),
             ),
           ],
         ),
@@ -180,11 +225,17 @@ class _BodyState extends State<Body> {
                               shape: BoxShape.circle,
                             ),
                             child: _uiStore.profileImage == null
-                                ? Image.asset(
-                                    _userStore!.user!.profileImageUrl,
-                                    width: 120.sp,
-                                    height: 120.sp,
-                                  )
+                                ? _userStore!.user!.profileImageUrl.isEmpty
+                                    ? Image.asset(
+                                        "assets/images/default_profile_image.png",
+                                        width: 120.sp,
+                                        height: 120.sp,
+                                      )
+                                    : Image.network(
+                                        _userStore!.user!.profileImageUrl,
+                                        width: 120.sp,
+                                        height: 120.sp,
+                                      )
                                 : Image.file(
                                     File(_uiStore.profileImage!.path),
                                     width: 120.sp,

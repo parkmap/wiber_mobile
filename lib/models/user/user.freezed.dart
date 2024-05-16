@@ -24,6 +24,7 @@ mixin _$User {
   String get id => throw _privateConstructorUsedError;
   String get nickname => throw _privateConstructorUsedError;
   String get profileImageUrl => throw _privateConstructorUsedError;
+  String get refreshedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -38,7 +39,8 @@ abstract class $UserCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: '_id') String id,
       String nickname,
-      String profileImageUrl});
+      String profileImageUrl,
+      String refreshedAt});
 }
 
 /// @nodoc
@@ -57,6 +59,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? id = null,
     Object? nickname = null,
     Object? profileImageUrl = null,
+    Object? refreshedAt = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -70,6 +73,10 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
       profileImageUrl: null == profileImageUrl
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      refreshedAt: null == refreshedAt
+          ? _value.refreshedAt
+          : refreshedAt // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -85,7 +92,8 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: '_id') String id,
       String nickname,
-      String profileImageUrl});
+      String profileImageUrl,
+      String refreshedAt});
 }
 
 /// @nodoc
@@ -101,6 +109,7 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? id = null,
     Object? nickname = null,
     Object? profileImageUrl = null,
+    Object? refreshedAt = null,
   }) {
     return _then(_$UserImpl(
       id: null == id
@@ -115,6 +124,10 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      refreshedAt: null == refreshedAt
+          ? _value.refreshedAt
+          : refreshedAt // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -125,7 +138,8 @@ class _$UserImpl extends _User {
   _$UserImpl(
       {@JsonKey(name: '_id') this.id = '',
       required this.nickname,
-      required this.profileImageUrl})
+      required this.profileImageUrl,
+      required this.refreshedAt})
       : super._();
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
@@ -138,10 +152,12 @@ class _$UserImpl extends _User {
   final String nickname;
   @override
   final String profileImageUrl;
+  @override
+  final String refreshedAt;
 
   @override
   String toString() {
-    return 'User(id: $id, nickname: $nickname, profileImageUrl: $profileImageUrl)';
+    return 'User(id: $id, nickname: $nickname, profileImageUrl: $profileImageUrl, refreshedAt: $refreshedAt)';
   }
 
   @override
@@ -153,12 +169,15 @@ class _$UserImpl extends _User {
             (identical(other.nickname, nickname) ||
                 other.nickname == nickname) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
-                other.profileImageUrl == profileImageUrl));
+                other.profileImageUrl == profileImageUrl) &&
+            (identical(other.refreshedAt, refreshedAt) ||
+                other.refreshedAt == refreshedAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, nickname, profileImageUrl);
+  int get hashCode =>
+      Object.hash(runtimeType, id, nickname, profileImageUrl, refreshedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -178,7 +197,8 @@ abstract class _User extends User {
   factory _User(
       {@JsonKey(name: '_id') final String id,
       required final String nickname,
-      required final String profileImageUrl}) = _$UserImpl;
+      required final String profileImageUrl,
+      required final String refreshedAt}) = _$UserImpl;
   _User._() : super._();
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
@@ -190,6 +210,8 @@ abstract class _User extends User {
   String get nickname;
   @override
   String get profileImageUrl;
+  @override
+  String get refreshedAt;
   @override
   @JsonKey(ignore: true)
   _$$UserImplCopyWith<_$UserImpl> get copyWith =>

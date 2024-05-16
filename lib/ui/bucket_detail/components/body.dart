@@ -50,10 +50,12 @@ class _BodyState extends State<Body> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
-    final userStore = context.read<UserStore>()..getCategories();
+    final userStore = context.read<UserStore>();
 
     if (_userStore != userStore) {
       _userStore = userStore;
+
+      await _userStore?.getCategoryList(spaceId: widget.space.id);
     }
   }
 
@@ -223,7 +225,7 @@ class _BodyState extends State<Body> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 16.sp * (widget.space.participants.length + 1),
+            width: 16.sp * (widget.space.members.length + 1),
             height: 28.sp,
             child: Indexer(
               alignment: AlignmentDirectional.centerEnd,
@@ -231,7 +233,7 @@ class _BodyState extends State<Body> {
               children: [
                 const SizedBox.shrink(),
                 ...List.generate(
-                  widget.space.participants.length,
+                  widget.space.members.length,
                   (index) => Indexed(
                     index: -index,
                     child: Positioned(
@@ -247,7 +249,7 @@ class _BodyState extends State<Body> {
                           ),
                         ),
                         child: Image.asset(
-                          widget.space.participants[index].profileImageUrl,
+                          widget.space.members[index].profileImageUrl,
                           fit: BoxFit.fill,
                         ),
                       ),

@@ -9,13 +9,13 @@ class WiberSpace with _$WiberSpace {
   const WiberSpace._();
 
   factory WiberSpace({
-    @JsonKey(name: '_id') @Default('') String id,
+    @JsonKey(name: 'space_id') @Default('') String id,
     required String title,
-    required bool isFavorite,
-    required int maxCount,
-    required int completeCount,
-    required String owner,
-    required List<User> participants,
+    @Default(false) bool isFavorite,
+    @Default(0) int maxCount,
+    @Default(0) int completeCount,
+    @Default("") String owner,
+    required List<User> members,
   }) = _WiberSpace;
 
   factory WiberSpace.fromJson(Map<String, dynamic> json) =>

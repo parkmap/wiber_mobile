@@ -5,6 +5,7 @@ import 'package:android_id/android_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wiber_mobile/models/user/user.dart';
 
 import 'constants/preferences.dart';
 
@@ -36,6 +37,33 @@ class SharedPreferenceHelper {
 
   String? get userId {
     return _sharedPreference.getString(Preferences.userId);
+  }
+
+  Future<bool> saveOtherUserInfo(User user) async {
+    return _sharedPreference.setString(
+        Preferences.otherUserInfo + user.id, jsonEncode(user.toJson()));
+  }
+
+  User? getOtherUserInfo({required String userId}) {
+    var findUser =
+        _sharedPreference.getString(Preferences.otherUserInfo + userId);
+    if (findUser != null) {
+      return User.fromJson(jsonDecode(findUser));
+    }
+    return null;
+  }
+
+  Future<bool> saveSelfInfo(User user) async {
+    return _sharedPreference.setString(
+        Preferences.selfInfo, jsonEncode(user.toJson()));
+  }
+
+  User? get selfInfo {
+    var findUser = _sharedPreference.getString(Preferences.selfInfo);
+    if (findUser != null) {
+      return User.fromJson(jsonDecode(findUser));
+    }
+    return null;
   }
 
   Future<bool> removeUserId() async {

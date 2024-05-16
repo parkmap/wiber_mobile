@@ -25,6 +25,22 @@ mixin _$SettingUiStore on _SettingUiStore, Store {
     });
   }
 
+  late final _$isUpdatingUserInfoAtom =
+      Atom(name: '_SettingUiStore.isUpdatingUserInfo', context: context);
+
+  @override
+  bool get isUpdatingUserInfo {
+    _$isUpdatingUserInfoAtom.reportRead();
+    return super.isUpdatingUserInfo;
+  }
+
+  @override
+  set isUpdatingUserInfo(bool value) {
+    _$isUpdatingUserInfoAtom.reportWrite(value, super.isUpdatingUserInfo, () {
+      super.isUpdatingUserInfo = value;
+    });
+  }
+
   late final _$_SettingUiStoreActionController =
       ActionController(name: '_SettingUiStore', context: context);
 
@@ -51,9 +67,21 @@ mixin _$SettingUiStore on _SettingUiStore, Store {
   }
 
   @override
+  void toggleIsUpdatingUserInfo() {
+    final _$actionInfo = _$_SettingUiStoreActionController.startAction(
+        name: '_SettingUiStore.toggleIsUpdatingUserInfo');
+    try {
+      return super.toggleIsUpdatingUserInfo();
+    } finally {
+      _$_SettingUiStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-profileImage: ${profileImage}
+profileImage: ${profileImage},
+isUpdatingUserInfo: ${isUpdatingUserInfo}
     ''';
   }
 }

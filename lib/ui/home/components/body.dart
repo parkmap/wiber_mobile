@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -14,10 +15,9 @@ import 'package:wiber_mobile/router/router.gr.dart';
 import 'package:wiber_mobile/stores/home_ui/home_ui_store.dart';
 import 'package:wiber_mobile/stores/user/user_store.dart';
 import 'package:wiber_mobile/widgets/default_bottom_dialogue.dart';
-import 'package:wiber_mobile/widgets/default_checkbox_listtile_with_subtitle.dart';
 import 'package:wiber_mobile/widgets/default_dialog.dart';
 import 'package:wiber_mobile/widgets/default_flat_button.dart';
-import 'package:wiber_mobile/widgets/text_form_field_widget.dart';
+import 'package:wiber_mobile/widgets/loading_spinner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Body extends StatefulWidget {
@@ -51,6 +51,8 @@ class _BodyState extends State<Body> {
 
     if (_userStore != userStore) {
       _userStore = userStore;
+      await userStore.getUserInfo();
+      await userStore.getWiberSpaceList();
     }
   }
 
@@ -155,42 +157,51 @@ class _BodyState extends State<Body> {
         horizontal: 20.w,
         vertical: 20.h,
       ),
-      child: InkWell(
-        onTap: () {},
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AutoSizeText(
-                  '${_userStore?.user?.nickname ?? "위버"} 님이',
-                  style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primaryBlack,
-                  ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AutoSizeText(
+                '${_userStore?.user?.nickname ?? "위버"} 님이',
+                style: TextStyle(
+                  fontSize: 24.sp,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primaryBlack,
                 ),
-                SizedBox(height: 2.h),
-                AutoSizeText(
-                  '참여중인 위버스페이스',
-                  style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primaryBlack,
-                  ),
+              ),
+              SizedBox(height: 2.h),
+              AutoSizeText(
+                '참여중인 위버스페이스',
+                style: TextStyle(
+                  fontSize: 24.sp,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primaryBlack,
                 ),
-              ],
+              ),
+            ],
+          ),
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
             ),
-            Image.asset(
-              _userStore?.user?.profileImageUrl ??
-                  'assets/images/default_profile_image.png',
-              width: 56.sp,
-              height: 56.sp,
-            ),
-          ],
-        ),
+            clipBehavior: Clip.hardEdge,
+            child: _userStore?.user?.profileImageUrl == null ||
+                    _userStore?.user?.profileImageUrl == ""
+                ? Image.asset(
+                    'assets/images/default_profile_image.png',
+                    width: 56.sp,
+                    height: 56.sp,
+                  )
+                : Image.network(
+                    _userStore!.user!.profileImageUrl,
+                    width: 56.sp,
+                    height: 56.sp,
+                  ),
+          ),
+        ],
       ),
     );
   }
@@ -207,23 +218,33 @@ class _BodyState extends State<Body> {
               horizontal: 20.w,
               vertical: 24.h,
             ),
-            child: Column(
-              children: [
-                ...List.generate(
-                  _userStore!.wiberSpaceList.length,
-                  (index) => Column(
-                    children: [
-                      _buildWiberSpaceItem(
-                        item: _userStore!.wiberSpaceList[index],
-                        isOwner: _userStore!.user!.id ==
-                            _userStore!.wiberSpaceList[index].id,
+            child: _userStore!.isLoadingWiberspace
+                ? Padding(
+                    padding: EdgeInsets.only(top: 20.h),
+                    child: LoadingSpinner(
+                      width: 80.sp,
+                      height: 80.sp,
+                    ),
+                  )
+                : _userStore!.wiberSpaceList.isEmpty
+                    ? _buildCreateNewSpaceItem()
+                    : Column(
+                        children: [
+                          ...List.generate(
+                            _userStore!.wiberSpaceList.length,
+                            (index) => Column(
+                              children: [
+                                _buildWiberSpaceItem(
+                                  item: _userStore!.wiberSpaceList[index],
+                                  isOwner: _userStore!.user!.id ==
+                                      _userStore!.wiberSpaceList[index].id,
+                                ),
+                                SizedBox(height: 16.h),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 16.h),
-                    ],
-                  ),
-                ),
-              ],
-            ),
           ),
         ),
       ),
@@ -268,17 +289,17 @@ class _BodyState extends State<Body> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    InkWell(
-                      onTap: () {},
-                      child: Image.asset(
-                        item.isFavorite
-                            ? "assets/icons/favorite_on_icon.png"
-                            : "assets/icons/favorite_off_icon.png",
-                        width: 24.sp,
-                        height: 24.sp,
-                      ),
-                    ),
-                    SizedBox(width: 16.w),
+                    // InkWell(
+                    //   onTap: () {},
+                    //   child: Image.asset(
+                    //     item.isFavorite
+                    //         ? "assets/icons/favorite_on_icon.png"
+                    //         : "assets/icons/favorite_off_icon.png",
+                    //     width: 24.sp,
+                    //     height: 24.sp,
+                    //   ),
+                    // ),
+                    // SizedBox(width: 16.w),
                     InkWell(
                       onTap: () {
                         showWiberMenuDialog(item);
@@ -308,10 +329,10 @@ class _BodyState extends State<Body> {
               children: [
                 InkWell(
                   onTap: () {
-                    _showBottomProfiles(item.participants, item);
+                    _showBottomProfiles(item.members, item);
                   },
                   child: SizedBox(
-                    width: 16.sp * (item.participants.length + 1),
+                    width: 16.sp * (item.members.length + 1),
                     height: 28.sp,
                     child: Indexer(
                       alignment: AlignmentDirectional.centerEnd,
@@ -319,25 +340,49 @@ class _BodyState extends State<Body> {
                       children: [
                         const SizedBox.shrink(),
                         ...List.generate(
-                          item.participants.length,
+                          item.members.length,
                           (index) => Indexed(
                             index: -index,
                             child: Positioned(
                               left: 16.sp * index,
-                              child: Container(
+                              child: SizedBox(
                                 width: 28.sp,
                                 height: 28.sp,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 2.sp,
-                                  ),
-                                ),
-                                child: Image.asset(
-                                  item.participants[index].profileImageUrl,
-                                  fit: BoxFit.fill,
-                                ),
+                                child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Container(
+                                        width: 28.sp,
+                                        height: 28.sp,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 26.sp,
+                                        height: 26.sp,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                        ),
+                                        clipBehavior: Clip.hardEdge,
+                                        child: item.members[index]
+                                                .profileImageUrl.isEmpty
+                                            ? Image.asset(
+                                                "assets/images/default_profile_image.png",
+                                                width: 26.sp,
+                                                height: 26.sp,
+                                                fit: BoxFit.fill,
+                                              )
+                                            : Image.network(
+                                                item.members[index]
+                                                    .profileImageUrl,
+                                                width: 26.sp,
+                                                height: 26.sp,
+                                                fit: BoxFit.fill,
+                                              ),
+                                      ),
+                                    ]),
                               ),
                             ),
                           ),
@@ -575,10 +620,22 @@ class _BodyState extends State<Body> {
                   padding: EdgeInsets.symmetric(vertical: 10.h),
                   child: Row(
                     children: [
-                      Image.asset(
-                        user.profileImageUrl,
-                        width: 48.sp,
-                        height: 48.sp,
+                      Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: user.profileImageUrl.isEmpty
+                            ? Image.asset(
+                                "assets/images/default_profile_image.png",
+                                width: 48.sp,
+                                height: 48.sp,
+                              )
+                            : Image.network(
+                                user.profileImageUrl,
+                                width: 48.sp,
+                                height: 48.sp,
+                              ),
                       ),
                       SizedBox(width: 10.w),
                       AutoSizeText(
@@ -670,18 +727,49 @@ class _BodyState extends State<Body> {
                 fontWeight: FontWeight.w500,
                 color: AppColors.primaryBlack,
               ),
-              onChanged: (value) {},
+              onChanged: (value) {
+                _uiStore.setWiberSpaceTitle(value);
+              },
             ),
             SizedBox(
               width: double.infinity,
               child: GestureDetector(
-                onTap: () {
-                  context.router.pop(context);
+                onTap: _uiStore.wiberSpaceTitle.isEmpty
+                    ? null
+                    : () async {
+                        if (item == null) {
+                          var res = await _userStore!.createWiberSpace(
+                            title: _uiStore.wiberSpaceTitle,
+                          );
 
-                  _showToast(
-                    item == null ? "스페이스가 생성되었습니다." : "스페이스가 수정되었습니다.",
-                  );
-                },
+                          if (res != null) {
+                            if (res is DioError) {
+                              _showToast(res.error.toString());
+
+                              context.router.pop(context);
+                            } else {
+                              _showToast("스페이스가 생성되었습니다.");
+
+                              await _userStore!.getWiberSpaceList();
+                              context.router.pop(context);
+                            }
+                          }
+                        } else {
+                          var res = await _userStore!.updateWiberSpace(
+                            spaceId: item.id,
+                            title: _uiStore.wiberSpaceTitle,
+                          );
+
+                          if (res != null) {
+                            _showToast("스페이스가 업데이트 되었습니다.");
+
+                            await _userStore!.getWiberSpaceList();
+                            context.router.pop(context);
+                          }
+                        }
+
+                        _uiStore.wiberSpaceTitle = "";
+                      },
                 child: AutoSizeText(
                   item == null ? "생성" : "수정",
                   textAlign: TextAlign.right,
@@ -755,7 +843,7 @@ class _BodyState extends State<Body> {
                     ),
                     child: InkWell(
                       onTap: () {
-                        Navigator.pop(context);
+                        context.router.pop();
                       },
                       child: AutoSizeText(
                         "취소",
@@ -780,9 +868,16 @@ class _BodyState extends State<Body> {
                       ),
                     ),
                     child: InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                        _showToast("스페이스가 삭제되었습니다.");
+                      onTap: () async {
+                        var res = await _userStore!
+                            .deleteWiberSpace(spaceId: item.id);
+
+                        if (res != null) {
+                          _userStore!.getWiberSpaceList();
+                          _showToast("스페이스가 삭제되었습니다.");
+                        }
+
+                        context.router.pop();
                       },
                       child: AutoSizeText(
                         "나가기",

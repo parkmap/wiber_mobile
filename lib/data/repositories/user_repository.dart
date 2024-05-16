@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:wiber_mobile/models/bucket/bucket_list.dart';
@@ -19,31 +20,27 @@ class UserRepository {
   // constructor
   UserRepository(this._userApi, this._sharedPrefsHelper);
 
-  Future<String> getUserNickname() async {
-    return _userApi.getUserNickname();
-  }
-
   String? getAuthToekn() {
     return _sharedPrefsHelper.authToken;
   }
 
-  Future<List<String>> getCategories() async {
-    return await _userApi.getCategories();
+  Future getUserInfo({String? userId}) async {
+    return await _userApi.getUserInfo(
+      userId: userId,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
   }
 
-  Future<BucketList> getBucketList() async {
-    return await _userApi.getBucketList();
+  Future<bool> saveSelfInfo(User user) async {
+    return await _sharedPrefsHelper.saveSelfInfo(user);
   }
 
-  Future<User> getUserInfo() async {
-    return await _userApi.getUserInfo();
+  User? get selfInfo {
+    return _sharedPrefsHelper.selfInfo;
   }
 
-  Future<WiberSpaceList> getWiberSpaceListByUser(String userId) async {
-    return await _userApi.getWiberSpaceListByUser(userId);
-  }
-
-  Future<dynamic> createUser({
+  Future createUser({
     required String username,
     required String app_uuid,
     required String push_token,
@@ -55,12 +52,34 @@ class UserRepository {
     );
   }
 
+  Future updateUserInfo({
+    required String userId,
+    required String userNickname,
+    required String pushToken,
+  }) async {
+    return await _userApi.updateUserInfo(
+      userId: userId,
+      userNickname: userNickname,
+      pushToken: pushToken,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
   String? getUuid() {
     return _sharedPrefsHelper.uuid;
   }
 
   String? getUserId() {
     return _sharedPrefsHelper.userId;
+  }
+
+  User? getOtherUserInfo({required String userId}) {
+    return _sharedPrefsHelper.getOtherUserInfo(userId: userId);
+  }
+
+  Future<bool> saveOtherUserInfo(User user) {
+    return _sharedPrefsHelper.saveOtherUserInfo(user);
   }
 
   Future<bool?> saveUuid() async {
@@ -71,15 +90,154 @@ class UserRepository {
     return await _sharedPrefsHelper.saveUserId(userId);
   }
 
-  Future saveProfileImage({
-    required MultipartFile profileImage,
-    required String userId,
-    required String uuid,
-  }) async {
+  Future saveProfileImage({required Uint8List profileImage}) async {
     return await _userApi.saveProfileImage(
       profileImage: profileImage,
-      userId: userId,
-      uuid: uuid,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
+  Future getWiberSpaceList() async {
+    return await _userApi.getWiberSpaceList(
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
+  Future createWiberSpace({
+    required String title,
+  }) async {
+    return await _userApi.createWiberSpace(
+      title: title,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
+  Future updateWiberSpace({
+    required String spaceId,
+    required String title,
+  }) async {
+    return await _userApi.updateWiberSpace(
+      spaceId: spaceId,
+      title: title,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
+  Future deleteWiberSpace({
+    required String spaceId,
+  }) async {
+    return await _userApi.deleteWiberSpace(
+      spaceId: spaceId,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
+  Future getCategoryList({required String spaceId}) async {
+    return await _userApi.getCategoryList(
+      spaceId: spaceId,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
+  Future createCategory({
+    required String spaceId,
+    required String title,
+  }) async {
+    return await _userApi.createCategory(
+      title: title,
+      spaceId: spaceId,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
+  Future updateCategory({
+    required String spaceId,
+    required String categoryId,
+    required String title,
+  }) async {
+    return await _userApi.updateCategory(
+      spaceId: spaceId,
+      categoryId: categoryId,
+      title: title,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
+  Future deleteCategory({
+    required String spaceId,
+    required String categoryId,
+  }) async {
+    return await _userApi.deleteCategory(
+      spaceId: spaceId,
+      categoryId: categoryId,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
+  Future getBucketList({
+    required String spaceId,
+    String? categoryId,
+    String? state,
+  }) async {
+    return await _userApi.getBucketList(
+      spaceId: spaceId,
+      categoryId: categoryId,
+      state: state,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
+  Future createBucket({
+    required String spaceId,
+    required String title,
+    required String content,
+  }) async {
+    return await _userApi.createBucket(
+      title: title,
+      content: content,
+      spaceId: spaceId,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
+  Future updateBucket({
+    required String spaceId,
+    required String categoryId,
+    required String bucketId,
+    required String title,
+    required String content,
+  }) async {
+    return await _userApi.updateBucket(
+      spaceId: spaceId,
+      categoryId: categoryId,
+      bucketId: bucketId,
+      title: title,
+      content: content,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
+  Future deleteBucket({
+    required String spaceId,
+    required String bucketId,
+  }) async {
+    return await _userApi.deleteBucket(
+      spaceId: spaceId,
+      bucketId: bucketId,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
     );
   }
 }

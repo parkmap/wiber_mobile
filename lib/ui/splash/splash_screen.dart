@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
-    final userStore = context.read<UserStore>()..getUserInfoAndWiberSpaceList();
+    final userStore = context.read<UserStore>();
 
     if (_userStore != userStore) {
       _userStore = userStore;
@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
       const Duration(milliseconds: 1500),
       () async {
-        if (_userStore?.getAuthToken() == null) {
+        if (_userStore?.getUserId() == null) {
           context.router.replace(const InitialRoute());
         } else {
           context.router.replace(const HomeRoute());

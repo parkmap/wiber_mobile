@@ -36,7 +36,7 @@ class _BodyState extends State<Body> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
-    final userStore = context.read<UserStore>()..getCategories();
+    final userStore = context.read<UserStore>();
 
     if (_userStore != userStore) {
       _userStore = userStore;
@@ -199,10 +199,24 @@ class _BodyState extends State<Body> {
             },
             child: Row(
               children: [
-                Image.asset(
-                  _userStore!.user!.profileImageUrl,
+                Container(
                   width: 48.w,
                   height: 48.h,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                  child: _userStore!.user!.profileImageUrl.isEmpty
+                      ? Image.asset(
+                          'assets/icons/default_profile_icon.png',
+                          width: 48.w,
+                          height: 48.h,
+                        )
+                      : Image.network(
+                          _userStore!.user!.profileImageUrl,
+                          width: 48.w,
+                          height: 48.h,
+                        ),
                 ),
                 SizedBox(width: 16.w),
                 AutoSizeText(

@@ -20,14 +20,14 @@ WiberSpace _$WiberSpaceFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$WiberSpace {
-  @JsonKey(name: '_id')
+  @JsonKey(name: 'space_id')
   String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   bool get isFavorite => throw _privateConstructorUsedError;
   int get maxCount => throw _privateConstructorUsedError;
   int get completeCount => throw _privateConstructorUsedError;
   String get owner => throw _privateConstructorUsedError;
-  List<User> get participants => throw _privateConstructorUsedError;
+  List<User> get members => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,13 +42,13 @@ abstract class $WiberSpaceCopyWith<$Res> {
       _$WiberSpaceCopyWithImpl<$Res, WiberSpace>;
   @useResult
   $Res call(
-      {@JsonKey(name: '_id') String id,
+      {@JsonKey(name: 'space_id') String id,
       String title,
       bool isFavorite,
       int maxCount,
       int completeCount,
       String owner,
-      List<User> participants});
+      List<User> members});
 }
 
 /// @nodoc
@@ -70,7 +70,7 @@ class _$WiberSpaceCopyWithImpl<$Res, $Val extends WiberSpace>
     Object? maxCount = null,
     Object? completeCount = null,
     Object? owner = null,
-    Object? participants = null,
+    Object? members = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -97,9 +97,9 @@ class _$WiberSpaceCopyWithImpl<$Res, $Val extends WiberSpace>
           ? _value.owner
           : owner // ignore: cast_nullable_to_non_nullable
               as String,
-      participants: null == participants
-          ? _value.participants
-          : participants // ignore: cast_nullable_to_non_nullable
+      members: null == members
+          ? _value.members
+          : members // ignore: cast_nullable_to_non_nullable
               as List<User>,
     ) as $Val);
   }
@@ -114,13 +114,13 @@ abstract class _$$WiberSpaceImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: '_id') String id,
+      {@JsonKey(name: 'space_id') String id,
       String title,
       bool isFavorite,
       int maxCount,
       int completeCount,
       String owner,
-      List<User> participants});
+      List<User> members});
 }
 
 /// @nodoc
@@ -140,7 +140,7 @@ class __$$WiberSpaceImplCopyWithImpl<$Res>
     Object? maxCount = null,
     Object? completeCount = null,
     Object? owner = null,
-    Object? participants = null,
+    Object? members = null,
   }) {
     return _then(_$WiberSpaceImpl(
       id: null == id
@@ -167,9 +167,9 @@ class __$$WiberSpaceImplCopyWithImpl<$Res>
           ? _value.owner
           : owner // ignore: cast_nullable_to_non_nullable
               as String,
-      participants: null == participants
-          ? _value._participants
-          : participants // ignore: cast_nullable_to_non_nullable
+      members: null == members
+          ? _value._members
+          : members // ignore: cast_nullable_to_non_nullable
               as List<User>,
     ));
   }
@@ -179,43 +179,47 @@ class __$$WiberSpaceImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$WiberSpaceImpl extends _WiberSpace {
   _$WiberSpaceImpl(
-      {@JsonKey(name: '_id') this.id = '',
+      {@JsonKey(name: 'space_id') this.id = '',
       required this.title,
-      required this.isFavorite,
-      required this.maxCount,
-      required this.completeCount,
-      required this.owner,
-      required final List<User> participants})
-      : _participants = participants,
+      this.isFavorite = false,
+      this.maxCount = 0,
+      this.completeCount = 0,
+      this.owner = "",
+      required final List<User> members})
+      : _members = members,
         super._();
 
   factory _$WiberSpaceImpl.fromJson(Map<String, dynamic> json) =>
       _$$WiberSpaceImplFromJson(json);
 
   @override
-  @JsonKey(name: '_id')
+  @JsonKey(name: 'space_id')
   final String id;
   @override
   final String title;
   @override
+  @JsonKey()
   final bool isFavorite;
   @override
+  @JsonKey()
   final int maxCount;
   @override
+  @JsonKey()
   final int completeCount;
   @override
+  @JsonKey()
   final String owner;
-  final List<User> _participants;
+  final List<User> _members;
   @override
-  List<User> get participants {
-    if (_participants is EqualUnmodifiableListView) return _participants;
+  List<User> get members {
+    if (_members is EqualUnmodifiableListView) return _members;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_participants);
+    return EqualUnmodifiableListView(_members);
   }
 
   @override
   String toString() {
-    return 'WiberSpace(id: $id, title: $title, isFavorite: $isFavorite, maxCount: $maxCount, completeCount: $completeCount, owner: $owner, participants: $participants)';
+    return 'WiberSpace(id: $id, title: $title, isFavorite: $isFavorite, maxCount: $maxCount, completeCount: $completeCount, owner: $owner, members: $members)';
   }
 
   @override
@@ -232,14 +236,13 @@ class _$WiberSpaceImpl extends _WiberSpace {
             (identical(other.completeCount, completeCount) ||
                 other.completeCount == completeCount) &&
             (identical(other.owner, owner) || other.owner == owner) &&
-            const DeepCollectionEquality()
-                .equals(other._participants, _participants));
+            const DeepCollectionEquality().equals(other._members, _members));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, title, isFavorite, maxCount,
-      completeCount, owner, const DeepCollectionEquality().hash(_participants));
+      completeCount, owner, const DeepCollectionEquality().hash(_members));
 
   @JsonKey(ignore: true)
   @override
@@ -257,20 +260,20 @@ class _$WiberSpaceImpl extends _WiberSpace {
 
 abstract class _WiberSpace extends WiberSpace {
   factory _WiberSpace(
-      {@JsonKey(name: '_id') final String id,
+      {@JsonKey(name: 'space_id') final String id,
       required final String title,
-      required final bool isFavorite,
-      required final int maxCount,
-      required final int completeCount,
-      required final String owner,
-      required final List<User> participants}) = _$WiberSpaceImpl;
+      final bool isFavorite,
+      final int maxCount,
+      final int completeCount,
+      final String owner,
+      required final List<User> members}) = _$WiberSpaceImpl;
   _WiberSpace._() : super._();
 
   factory _WiberSpace.fromJson(Map<String, dynamic> json) =
       _$WiberSpaceImpl.fromJson;
 
   @override
-  @JsonKey(name: '_id')
+  @JsonKey(name: 'space_id')
   String get id;
   @override
   String get title;
@@ -283,7 +286,7 @@ abstract class _WiberSpace extends WiberSpace {
   @override
   String get owner;
   @override
-  List<User> get participants;
+  List<User> get members;
   @override
   @JsonKey(ignore: true)
   _$$WiberSpaceImplCopyWith<_$WiberSpaceImpl> get copyWith =>

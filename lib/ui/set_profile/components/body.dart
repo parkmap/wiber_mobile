@@ -1,19 +1,22 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:wiber_mobile/constants/colors.dart';
+import 'package:wiber_mobile/router/router.gr.dart';
 import 'package:wiber_mobile/stores/set_profile/set_profile_store.dart';
 import 'package:wiber_mobile/stores/user/user_store.dart';
 import 'package:wiber_mobile/widgets/default_bottom_dialogue.dart';
 import 'package:wiber_mobile/widgets/default_flat_button.dart';
+import 'package:wiber_mobile/widgets/loading_spinner.dart';
+import 'package:image/image.dart' as img;
 
 class Body extends StatefulWidget {
   final String nickname;
@@ -42,9 +45,7 @@ class _BodyState extends State<Body> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
-    final userStore = context.read<UserStore>()
-      ..getCategories()
-      ..getBucketList();
+    final userStore = context.read<UserStore>();
 
     if (_userStore != userStore) {
       _userStore = userStore;
@@ -172,33 +173,35 @@ class _BodyState extends State<Body> {
                     username: widget.nickname,
                   );
 
-                  if (res != null &&
-                      res["id"] != null &&
-                      res["message"] == null) {
+                  if (res != null && res["id"] != null) {
                     await _userStore?.saveUserId(userId: res["id"]);
 
                     if (_setProfileStore.profileImage != null) {
-                      final MultipartFile profileImage =
-                          MultipartFile.fromFileSync(
-                        _setProfileStore.profileImage!.path,
-                        contentType: MediaType("image", "jpg"),
-                      );
+                      Uint8List imageBytes =
+                          await _setProfileStore.profileImage!.readAsBytes();
+                      img.Image? originalImage = img.decodeImage(imageBytes);
 
-                      await _userStore?.saveProfileImage(
-                        profileImage: profileImage,
-                      );
+                      if (originalImage != null) {
+                        img.Image resizedImage = img.copyResize(originalImage,
+                            width: 300, height: 300);
+                        Uint8List jpegImageBytes = Uint8List.fromList(
+                            img.encodeJpg(resizedImage, quality: 85));
+
+                        await _userStore?.saveProfileImage(
+                          profileImage: jpegImageBytes,
+                        );
+                      }
                     }
+
+                    await _userStore?.getUserInfo();
+
+                    context.router.replaceAll([
+                      const HomeRoute(),
+                    ]);
                   }
-                  // context.router.replaceAll([
-                  //   const HomeRoute(),
-                  // ]);
                 },
                 child: _userStore!.isCreatingUser
-                    ? Image.asset(
-                        "assets/images/loading_spinner.gif",
-                        width: 20.sp,
-                        height: 20.sp,
-                      )
+                    ? LoadingSpinner()
                     : AutoSizeText(
                         "시작하기",
                         style: TextStyle(
@@ -242,8 +245,11 @@ class _BodyState extends State<Body> {
             ),
             InkWell(
               onTap: () async {
-                final XFile? image =
-                    await picker.pickImage(source: ImageSource.gallery);
+                final XFile? image = await picker.pickImage(
+                  source: ImageSource.gallery,
+                  maxHeight: 300,
+                  maxWidth: 300,
+                );
 
                 if (image != null) {
                   // final croppedFile = await ImageCropper().cropImage(

@@ -18,6 +18,9 @@ abstract class _HomeUIStore with Store {
   int selectedCategoryIndex = 0;
 
   @observable
+  String wiberSpaceTitle = '';
+
+  @observable
   String selectedCategory = '';
 
   @observable
@@ -49,5 +52,10 @@ abstract class _HomeUIStore with Store {
   @action
   void setEditingCategoryName(String val) {
     editingCategoryName = val;
+  }
+
+  @action
+  void setWiberSpaceTitle(String val) {
+    wiberSpaceTitle = val;
   }
 }

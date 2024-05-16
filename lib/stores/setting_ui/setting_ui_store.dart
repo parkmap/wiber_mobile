@@ -16,6 +16,9 @@ abstract class _SettingUiStore with Store {
   @observable
   XFile? profileImage;
 
+  @observable
+  bool isUpdatingUserInfo = false;
+
   // getters:-------------------------------------------------------------------
 
   // constructor:---------------------------------------------------------------
@@ -28,5 +31,10 @@ abstract class _SettingUiStore with Store {
   @action
   void resetProfileImage() {
     profileImage = null;
+  }
+
+  @action
+  void toggleIsUpdatingUserInfo() {
+    isUpdatingUserInfo = !isUpdatingUserInfo;
   }
 }

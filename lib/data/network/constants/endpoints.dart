@@ -15,7 +15,11 @@ class Endpoints {
   // connectTimeout
   static int connectionTimeout = 40000;
 
-  // wallet
   static String auth = "https://id-cgz2k4uuaa-du.a.run.app";
   static String uploadProfileImage = "https://image-cgz2k4uuaa-du.a.run.app/";
+  static String wiberSpace = "https://space-cgz2k4uuaa-du.a.run.app";
+  static String category = "https://category-cgz2k4uuaa-du.a.run.app";
+  static String bucket = "https://bucket-cgz2k4uuaa-du.a.run.app";
+  static String notice = "https://notice-cgz2k4uuaa-du.a.run.app";
+  static String faq = "https://faq-cgz2k4uuaa-du.a.run.app";
 }

@@ -11,6 +11,7 @@ class User with _$User {
     @JsonKey(name: '_id') @Default('') String id,
     required String nickname,
     required String profileImageUrl,
+    required String refreshedAt,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

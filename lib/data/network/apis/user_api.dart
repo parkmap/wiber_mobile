@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
@@ -45,86 +46,57 @@ class UserApi {
     }
   }
 
-  Future saveProfileImage(
-      {required MultipartFile profileImage,
-      required String userId,
-      required String uuid}) async {
+  Future saveProfileImage({
+    required Uint8List profileImage,
+    required String username,
+    required String password,
+  }) async {
     try {
-      String basicAuth = 'Basic ' + base64.encode(utf8.encode('$userId:$uuid'));
-      var formData = FormData.fromMap({'image': profileImage});
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
 
-      // var res = await _dioClient.put(
-      //   Endpoints.uploadProfileImage,
-      //   data: formData,
-      // );
-
-      var res = await _dio.put(Endpoints.uploadProfileImage,
-          data: formData,
-          options: Options(
-            headers: {
-              'Content-Type': 'application/json; charset=utf-8',
-              'Authorization': basicAuth
-            },
-          ));
-
-      return res;
-    } catch (error) {
-      print(
-        error.toString(),
-      );
-    }
-  }
-
-  Future<String> getUserNickname() async {
-    try {
-      var res = "위버";
-      return res;
-    } catch (error) {
-      print(
-        error.toString(),
-      );
-      rethrow;
-    }
-  }
-
-  Future<List<String>> getCategories() async {
-    try {
-      var res = [
-        "카테고리1",
-        "카테고리2",
-        "카테고리3",
-        "카테고리4",
-        "카테고리5",
-        "카테고리6",
-        "카테고리7",
-        "카테고리8",
-        "카테고리9",
-      ];
-      return res;
-    } catch (err) {
-      print(err);
-      rethrow;
-    }
-  }
-
-  Future<BucketList> getBucketList() async {
-    try {
-      List<Bucket> dummyBucket = List.generate(
-        50,
-        (index) => Bucket(
-          title: '버켓 ${index + 1}',
-          body: '간략한 버켓 설명 ${index + 1}',
-          category: '카테고리${(index + 1) % 9}',
-          isCompleted: Random().nextBool(),
-          endDate: "2024년 12월 31일",
+      var res = await _dioClient.put(
+        Endpoints.uploadProfileImage,
+        data: profileImage,
+        options: Options(
+          headers: {
+            "Content-Type": "image/png",
+            'Authorization': basicAuth,
+          },
         ),
       );
 
-      var res = BucketList(
-        list: dummyBucket,
-        totalCount: 3,
-        nextPage: 1,
+      return res;
+    } catch (error) {
+      print(
+        error.toString(),
       );
+    }
+  }
+
+  Future getUserInfo({
+    String? userId,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "id": userId,
+      };
+
+      var res = await _dio.get(
+        Endpoints.auth,
+        queryParameters: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
       return res;
     } catch (error) {
       print(
@@ -134,12 +106,30 @@ class UserApi {
     }
   }
 
-  Future<User> getUserInfo() async {
+  Future updateUserInfo({
+    required String userId,
+    required String userNickname,
+    required String pushToken,
+    required String username,
+    required String password,
+  }) async {
     try {
-      var res = User(
-        id: "0",
-        nickname: "위버",
-        profileImageUrl: "assets/images/default_profile_image.png",
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "username": userNickname,
+        "push_token": pushToken,
+      };
+
+      var res = await _dio.patch(
+        Endpoints.auth,
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
       );
 
       return res;
@@ -151,86 +141,21 @@ class UserApi {
     }
   }
 
-  Future<WiberSpaceList> getWiberSpaceListByUser(String userId) async {
+  Future getWiberSpaceList({
+    required String username,
+    required String password,
+  }) async {
     try {
-      var res = WiberSpaceList(
-        list: [
-          WiberSpace(
-            id: "0",
-            title: "위버스페이스1",
-            isFavorite: true,
-            maxCount: 30,
-            completeCount: 12,
-            owner: "0",
-            participants: [
-              User(
-                id: "0",
-                nickname: "위버",
-                profileImageUrl: "assets/images/default_profile_image.png",
-              ),
-              User(
-                id: "1",
-                nickname: "위버2",
-                profileImageUrl: "assets/images/default_profile_image.png",
-              ),
-              User(
-                id: "2",
-                nickname: "위버3",
-                profileImageUrl: "assets/images/default_profile_image.png",
-              ),
-            ],
-          ),
-          WiberSpace(
-            id: "1",
-            title: "위버스페이스2",
-            isFavorite: true,
-            maxCount: 30,
-            completeCount: 19,
-            owner: "1",
-            participants: [
-              User(
-                id: "0",
-                nickname: "위버",
-                profileImageUrl: "assets/images/default_profile_image.png",
-              ),
-              User(
-                id: "1",
-                nickname: "위버2",
-                profileImageUrl: "assets/images/default_profile_image.png",
-              ),
-              User(
-                id: "2",
-                nickname: "위버3",
-                profileImageUrl: "assets/images/default_profile_image.png",
-              ),
-              User(
-                id: "3",
-                nickname: "위버4",
-                profileImageUrl: "assets/images/default_profile_image.png",
-              ),
-              User(
-                id: "4",
-                nickname: "위버5",
-                profileImageUrl: "assets/images/default_profile_image.png",
-              ),
-            ],
-          ),
-          WiberSpace(
-            id: "2",
-            title: "위버스페이스3",
-            isFavorite: true,
-            maxCount: 30,
-            completeCount: 19,
-            owner: "0",
-            participants: [
-              User(
-                id: "0",
-                nickname: "위버",
-                profileImageUrl: "assets/images/default_profile_image.png",
-              ),
-            ],
-          ),
-        ],
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var res = await _dio.get(
+        Endpoints.wiberSpace,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
       );
 
       return res;
@@ -239,6 +164,462 @@ class UserApi {
         error.toString(),
       );
       rethrow;
+    }
+  }
+
+  Future createWiberSpace({
+    required String title,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "title": title,
+      };
+
+      var res = await _dio.put(
+        Endpoints.wiberSpace,
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      if (error is DioException && error.response != null) {
+        return DioError(
+          requestOptions: error.requestOptions,
+          error: error.response?.data['message'],
+        );
+      } else {
+        print(
+          error.toString(),
+        );
+        rethrow;
+      }
+    }
+  }
+
+  Future updateWiberSpace({
+    required String title,
+    required String spaceId,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "space_id": spaceId,
+        "title": title,
+      };
+
+      var res = await _dio.patch(
+        Endpoints.wiberSpace,
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      if (error is DioException && error.response != null) {
+        return DioError(
+          requestOptions: error.requestOptions,
+          error: error.response?.data['message'],
+        );
+      } else {
+        print(
+          error.toString(),
+        );
+        rethrow;
+      }
+    }
+  }
+
+  Future deleteWiberSpace({
+    required String spaceId,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "space_id": spaceId,
+      };
+
+      var res = await _dio.delete(
+        Endpoints.wiberSpace,
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      if (error is DioException && error.response != null) {
+        return DioError(
+          requestOptions: error.requestOptions,
+          error: error.response?.data['message'],
+        );
+      } else {
+        print(
+          error.toString(),
+        );
+        rethrow;
+      }
+    }
+  }
+
+  Future getCategoryList({
+    required String spaceId,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "space_id": spaceId,
+      };
+
+      var res = await _dio.get(
+        Endpoints.category,
+        queryParameters: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      if (error is DioException && error.response != null) {
+        return DioError(
+          requestOptions: error.requestOptions,
+          error: error.response?.data['message'],
+        );
+      } else {
+        print(
+          error.toString(),
+        );
+        rethrow;
+      }
+    }
+  }
+
+  Future createCategory({
+    required String title,
+    required String spaceId,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "space_id": spaceId,
+        "title": title,
+      };
+
+      var res = await _dio.put(
+        Endpoints.category,
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      if (error is DioException && error.response != null) {
+        return DioError(
+          requestOptions: error.requestOptions,
+          error: error.response?.data['message'],
+        );
+      } else {
+        print(
+          error.toString(),
+        );
+        rethrow;
+      }
+    }
+  }
+
+  Future updateCategory({
+    required String title,
+    required String spaceId,
+    required String categoryId,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "space_id": spaceId,
+        "title": title,
+      };
+
+      var res = await _dio.patch(
+        Endpoints.category,
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      if (error is DioException && error.response != null) {
+        return DioError(
+          requestOptions: error.requestOptions,
+          error: error.response?.data['message'],
+        );
+      } else {
+        print(
+          error.toString(),
+        );
+        rethrow;
+      }
+    }
+  }
+
+  Future deleteCategory({
+    required String spaceId,
+    required String categoryId,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "space_id": spaceId,
+        "category_id": categoryId,
+      };
+
+      var res = await _dio.delete(
+        Endpoints.category,
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      if (error is DioException && error.response != null) {
+        return DioError(
+          requestOptions: error.requestOptions,
+          error: error.response?.data['message'],
+        );
+      } else {
+        print(
+          error.toString(),
+        );
+        rethrow;
+      }
+    }
+  }
+
+  Future getBucketList({
+    required String spaceId,
+    String? categoryId,
+    String? state,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "space_id": spaceId,
+        "category_id": categoryId,
+        "state": state,
+      };
+
+      var res = await _dio.get(
+        Endpoints.bucket,
+        queryParameters: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      if (error is DioException && error.response != null) {
+        return DioError(
+          requestOptions: error.requestOptions,
+          error: error.response?.data['message'],
+        );
+      } else {
+        print(
+          error.toString(),
+        );
+        rethrow;
+      }
+    }
+  }
+
+  Future createBucket({
+    required String spaceId,
+    required String title,
+    required String content,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "space_id": spaceId,
+        "title": title,
+        "content": content,
+      };
+
+      var res = await _dio.put(
+        Endpoints.bucket,
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      if (error is DioException && error.response != null) {
+        return DioError(
+          requestOptions: error.requestOptions,
+          error: error.response?.data['message'],
+        );
+      } else {
+        print(
+          error.toString(),
+        );
+        rethrow;
+      }
+    }
+  }
+
+  Future updateBucket({
+    required String spaceId,
+    required String bucketId,
+    required String categoryId,
+    required String title,
+    required String content,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "space_id": spaceId,
+        "bucket_id": bucketId,
+        "category_id": categoryId,
+        "title": title,
+        "content": content,
+      };
+
+      var res = await _dio.patch(
+        Endpoints.bucket,
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      if (error is DioException && error.response != null) {
+        return DioError(
+          requestOptions: error.requestOptions,
+          error: error.response?.data['message'],
+        );
+      } else {
+        print(
+          error.toString(),
+        );
+        rethrow;
+      }
+    }
+  }
+
+  Future deleteBucket({
+    required String spaceId,
+    required String bucketId,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "space_id": spaceId,
+        "bucket_id": bucketId,
+      };
+
+      var res = await _dio.delete(
+        Endpoints.bucket,
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      if (error is DioException && error.response != null) {
+        return DioError(
+          requestOptions: error.requestOptions,
+          error: error.response?.data['message'],
+        );
+      } else {
+        print(
+          error.toString(),
+        );
+        rethrow;
+      }
     }
   }
 }

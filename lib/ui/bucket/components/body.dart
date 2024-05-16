@@ -62,12 +62,13 @@ class _BodyState extends State<Body> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
-    final userStore = context.read<UserStore>()
-      ..getCategories()
-      ..getBucketList();
+    final userStore = context.read<UserStore>();
 
     if (_userStore != userStore) {
       _userStore = userStore;
+
+      await userStore.getCategoryList(spaceId: widget.item.id);
+      await userStore.getBucketList(spaceId: widget.item.id);
     }
   }
 
@@ -199,7 +200,7 @@ class _BodyState extends State<Body> {
                 children: [
                   const SizedBox(width: 0),
                   ...List.generate(
-                    widget.item.participants.length,
+                    widget.item.members.length,
                     (index) => Indexed(
                       index: index,
                       child: Align(
@@ -208,7 +209,7 @@ class _BodyState extends State<Body> {
                           width: 100.sp,
                           height: 100.sp,
                           transform: Matrix4.translationValues(
-                            profileMatrix[widget.item.participants.length - 1]
+                            profileMatrix[widget.item.members.length - 1]
                                 [index],
                             0.0,
                             0.0,
@@ -220,10 +221,35 @@ class _BodyState extends State<Body> {
                               width: 4.sp,
                             ),
                           ),
-                          child: Image.asset(
-                            widget.item.participants[index].profileImageUrl,
-                            fit: BoxFit.fill,
-                          ),
+                          child: Stack(alignment: Alignment.center, children: [
+                            Container(
+                              width: 100.sp,
+                              height: 100.sp,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            Container(
+                              width: 96.sp,
+                              height: 96.sp,
+                              clipBehavior: Clip.hardEdge,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                              ),
+                              child: widget.item.members[index].profileImageUrl
+                                      .isEmpty
+                                  ? Image.asset(
+                                      "assets/images/default_profile_image.png",
+                                      fit: BoxFit.fill,
+                                    )
+                                  : Image.network(
+                                      widget
+                                          .item.members[index].profileImageUrl,
+                                      fit: BoxFit.fill,
+                                    ),
+                            ),
+                          ]),
                         ),
                       ),
                     ),
@@ -234,7 +260,7 @@ class _BodyState extends State<Body> {
           ),
           SizedBox(height: 10.h),
           AutoSizeText(
-            widget.item.participants[0].nickname,
+            widget.item.members[0].nickname,
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w700,
@@ -253,7 +279,7 @@ class _BodyState extends State<Body> {
               ),
               SizedBox(width: 5.w),
               AutoSizeText(
-                "${widget.item.participants.length}명",
+                "${widget.item.members.length}명",
                 style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w400,
@@ -290,10 +316,11 @@ class _BodyState extends State<Body> {
                 (index) => InkWell(
                   onTap: () {
                     _uiStore.setSelectedCategoryIndex(index);
-                    _userStore!.filterBucketList(
-                      _userStore!.categories[_uiStore.selectedCategoryIndex],
-                      _uiStore.selectedTabIndex,
-                    );
+                    // _userStore!.getBucketList(
+                    //   spaceId: widget.item.id,
+                    //   _userStore!.categories[_uiStore.selectedCategoryIndex],
+                    //   _uiStore.selectedTabIndex,
+                    // );
                   },
                   child: Container(
                     padding: EdgeInsets.only(
@@ -380,10 +407,10 @@ class _BodyState extends State<Body> {
                   child: InkWell(
                     onTap: () {
                       _uiStore.setSelectedTabIndex(index);
-                      _userStore!.filterBucketList(
-                        _userStore!.categories[_uiStore.selectedCategoryIndex],
-                        index,
-                      );
+                      // _userStore!.filterBucketList(
+                      //   _userStore!.categories[_uiStore.selectedCategoryIndex],
+                      //   index,
+                      // );
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -1077,96 +1104,110 @@ class _BodyState extends State<Body> {
 
   Widget _buildNewCategoryBottomSheet(
       BuildContext context, bool isKeyboardVisible) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16.r),
-          topRight: Radius.circular(16.r),
+    return Observer(builder: (context) {
+      return Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16.r),
+            topRight: Radius.circular(16.r),
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: AppColors.gray10,
+              spreadRadius: 2,
+            ),
+          ],
         ),
-        boxShadow: const [
-          BoxShadow(
-            color: AppColors.gray10,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      constraints: BoxConstraints(
-        minHeight: MediaQuery.of(context).size.height * 0.95,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(
-              top: 20.h,
-              left: 20.w,
-              right: 20.w,
-            ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    AutoSizeText(
-                      "새 카테고리 만들기",
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.gray90,
+        constraints: BoxConstraints(
+          minHeight: MediaQuery.of(context).size.height * 0.95,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                top: 20.h,
+                left: 20.w,
+                right: 20.w,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AutoSizeText(
+                        "새 카테고리 만들기",
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.gray90,
+                        ),
                       ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        context.router.pop();
+                      InkWell(
+                        onTap: () {
+                          context.router.pop();
+                        },
+                        child: FaIcon(
+                          FontAwesomeIcons.xmark,
+                          color: AppColors.gray100,
+                          size: 20.sp,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20.h),
+                  TextFormFieldWidget(
+                    textController: _newCategoryController,
+                    onChanged: (val) {
+                      _uiStore.editingCategoryName = val;
+                    },
+                    autoFocus: true,
+                    focusNode: _newCategoryFocusNode,
+                    hintText: "새 카테고리 이름을 입력해주세요",
+                    maxLength: 6,
+                    suffixActions: () {
+                      _uiStore.setNewBucketDetailCategory("");
+                      _newCategoryController.clear();
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: DefaultFlatButton(
+                onPressed: _uiStore.editingCategoryName.isEmpty
+                    ? null
+                    : () async {
+                        var res = await _userStore!.createCategory(
+                          spaceId: widget.item.id,
+                          title: _uiStore.editingCategoryName,
+                        );
+
+                        if (res != null) {
+                          context.router.pop();
+                          _showToast("새 카테고리를 만들었어요.");
+                        }
                       },
-                      child: FaIcon(
-                        FontAwesomeIcons.xmark,
-                        color: AppColors.gray100,
-                        size: 20.sp,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                TextFormFieldWidget(
-                  textController: _newCategoryController,
-                  onChanged: (val) {
-                    _uiStore.editingCategoryName = val;
-                  },
-                  autoFocus: true,
-                  focusNode: _newCategoryFocusNode,
-                  hintText: "새 카테고리 이름을 입력해주세요",
-                  maxLength: 6,
-                  suffixActions: () {
-                    _uiStore.setNewBucketDetailCategory("");
-                    _newCategoryController.clear();
-                  },
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: DefaultFlatButton(
-              onPressed: () {},
-              detectKeyboard: true,
-              isKeyboardVisible: isKeyboardVisible,
-              child: AutoSizeText(
-                "완료",
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                detectKeyboard: true,
+                isKeyboardVisible: isKeyboardVisible,
+                child: AutoSizeText(
+                  "완료",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 }

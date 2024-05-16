@@ -50,6 +50,22 @@ mixin _$HomeUIStore on _HomeUIStore, Store {
     });
   }
 
+  late final _$wiberSpaceTitleAtom =
+      Atom(name: '_HomeUIStore.wiberSpaceTitle', context: context);
+
+  @override
+  String get wiberSpaceTitle {
+    _$wiberSpaceTitleAtom.reportRead();
+    return super.wiberSpaceTitle;
+  }
+
+  @override
+  set wiberSpaceTitle(String value) {
+    _$wiberSpaceTitleAtom.reportWrite(value, super.wiberSpaceTitle, () {
+      super.wiberSpaceTitle = value;
+    });
+  }
+
   late final _$selectedCategoryAtom =
       Atom(name: '_HomeUIStore.selectedCategory', context: context);
 
@@ -130,10 +146,22 @@ mixin _$HomeUIStore on _HomeUIStore, Store {
   }
 
   @override
+  void setWiberSpaceTitle(String val) {
+    final _$actionInfo = _$_HomeUIStoreActionController.startAction(
+        name: '_HomeUIStore.setWiberSpaceTitle');
+    try {
+      return super.setWiberSpaceTitle(val);
+    } finally {
+      _$_HomeUIStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 selectedTabIndex: ${selectedTabIndex},
 selectedCategoryIndex: ${selectedCategoryIndex},
+wiberSpaceTitle: ${wiberSpaceTitle},
 selectedCategory: ${selectedCategory},
 editingCategoryName: ${editingCategoryName},
 canEditCategoryName: ${canEditCategoryName}

@@ -48,9 +48,7 @@ class _BodyState extends State<Body> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
-    final userStore = context.read<UserStore>()
-      ..getCategories()
-      ..getBucketList();
+    final userStore = context.read<UserStore>();
 
     if (_userStore != userStore) {
       _userStore = userStore;
@@ -69,12 +67,12 @@ class _BodyState extends State<Body> {
                 children: [
                   _buildTopbar(),
                   SizedBox(height: 10.h),
-                  ...List.generate(widget.item.participants.length, (index) {
-                    User user = widget.item.participants[index];
+                  ...List.generate(widget.item.members.length, (index) {
+                    User user = widget.item.members[index];
                     return _buildProfiles(user: user);
                   }),
                   SizedBox(height: 10.h),
-                  if (widget.item.participants.length < 5)
+                  if (widget.item.members.length < 5)
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: DefaultFlatButton(
@@ -168,10 +166,24 @@ class _BodyState extends State<Body> {
         children: [
           Row(
             children: [
-              Image.asset(
-                user.profileImageUrl,
+              Container(
                 width: 48.sp,
                 height: 48.sp,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                clipBehavior: Clip.hardEdge,
+                child: user.profileImageUrl.isEmpty
+                    ? Image.asset(
+                        "assets/images/default_profile_image.png",
+                        width: 48.sp,
+                        height: 48.sp,
+                      )
+                    : Image.network(
+                        user.profileImageUrl,
+                        width: 48.sp,
+                        height: 48.sp,
+                      ),
               ),
               SizedBox(width: 10.w),
               AutoSizeText(
