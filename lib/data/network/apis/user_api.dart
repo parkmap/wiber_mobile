@@ -494,6 +494,9 @@ class UserApi {
 
   Future createBucket({
     required String spaceId,
+    required String categoryId,
+    required String state,
+    required String date,
     required String title,
     required String content,
     required String username,
@@ -505,6 +508,9 @@ class UserApi {
 
       var data = {
         "space_id": spaceId,
+        "category_id": categoryId,
+        "state": state,
+        "date": date,
         "title": title,
         "content": content,
       };
@@ -539,6 +545,8 @@ class UserApi {
     required String spaceId,
     required String bucketId,
     required String categoryId,
+    String? state,
+    String? date,
     required String title,
     required String content,
     required String username,
@@ -551,6 +559,8 @@ class UserApi {
       var data = {
         "space_id": spaceId,
         "bucket_id": bucketId,
+        "state": state,
+        "date": date,
         "category_id": categoryId,
         "title": title,
         "content": content,

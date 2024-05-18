@@ -52,6 +52,7 @@ abstract class $AppRouter extends _i13.RootStackRouter {
           space: args.space,
           item: args.item,
           onDelete: args.onDelete,
+          onBack: args.onBack,
         ),
       );
     },
@@ -172,6 +173,7 @@ class BucketDetailRoute extends _i13.PageRouteInfo<BucketDetailRouteArgs> {
     required _i15.WiberSpace space,
     required _i16.Bucket item,
     required void Function() onDelete,
+    required void Function() onBack,
     List<_i13.PageRouteInfo>? children,
   }) : super(
           BucketDetailRoute.name,
@@ -180,6 +182,7 @@ class BucketDetailRoute extends _i13.PageRouteInfo<BucketDetailRouteArgs> {
             space: space,
             item: item,
             onDelete: onDelete,
+            onBack: onBack,
           ),
           initialChildren: children,
         );
@@ -196,6 +199,7 @@ class BucketDetailRouteArgs {
     required this.space,
     required this.item,
     required this.onDelete,
+    required this.onBack,
   });
 
   final _i14.Key? key;
@@ -206,9 +210,11 @@ class BucketDetailRouteArgs {
 
   final void Function() onDelete;
 
+  final void Function() onBack;
+
   @override
   String toString() {
-    return 'BucketDetailRouteArgs{key: $key, space: $space, item: $item, onDelete: $onDelete}';
+    return 'BucketDetailRouteArgs{key: $key, space: $space, item: $item, onDelete: $onDelete, onBack: $onBack}';
   }
 }
 

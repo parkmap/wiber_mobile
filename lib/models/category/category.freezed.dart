@@ -20,7 +20,6 @@ Category _$CategoryFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Category {
-  @JsonKey(name: 'created_id')
   String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
 
@@ -35,7 +34,7 @@ abstract class $CategoryCopyWith<$Res> {
   factory $CategoryCopyWith(Category value, $Res Function(Category) then) =
       _$CategoryCopyWithImpl<$Res, Category>;
   @useResult
-  $Res call({@JsonKey(name: 'created_id') String id, String title});
+  $Res call({String id, String title});
 }
 
 /// @nodoc
@@ -75,7 +74,7 @@ abstract class _$$CategoryImplCopyWith<$Res>
       __$$CategoryImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({@JsonKey(name: 'created_id') String id, String title});
+  $Res call({String id, String title});
 }
 
 /// @nodoc
@@ -108,15 +107,13 @@ class __$$CategoryImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$CategoryImpl extends _Category {
-  _$CategoryImpl(
-      {@JsonKey(name: 'created_id') this.id = '', required this.title})
-      : super._();
+  _$CategoryImpl({this.id = '', required this.title}) : super._();
 
   factory _$CategoryImpl.fromJson(Map<String, dynamic> json) =>
       _$$CategoryImplFromJson(json);
 
   @override
-  @JsonKey(name: 'created_id')
+  @JsonKey()
   final String id;
   @override
   final String title;
@@ -154,16 +151,14 @@ class _$CategoryImpl extends _Category {
 }
 
 abstract class _Category extends Category {
-  factory _Category(
-      {@JsonKey(name: 'created_id') final String id,
-      required final String title}) = _$CategoryImpl;
+  factory _Category({final String id, required final String title}) =
+      _$CategoryImpl;
   _Category._() : super._();
 
   factory _Category.fromJson(Map<String, dynamic> json) =
       _$CategoryImpl.fromJson;
 
   @override
-  @JsonKey(name: 'created_id')
   String get id;
   @override
   String get title;

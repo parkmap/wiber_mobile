@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,8 +21,7 @@ import 'package:wiber_mobile/widgets/custom_circle_checkbox.dart';
 import 'package:wiber_mobile/widgets/default_checkbox_listtile_with_subtitle.dart';
 import 'package:wiber_mobile/widgets/default_flat_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl_standalone.dart'
-    if (dart.library.html) 'package:intl/intl_browser.dart';
+import 'package:wiber_mobile/widgets/loading_spinner.dart';
 import 'package:wiber_mobile/widgets/text_form_field_widget.dart';
 
 class Body extends StatefulWidget {
@@ -311,16 +311,57 @@ class _BodyState extends State<Body> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              InkWell(
+                onTap: () {
+                  _uiStore.setSelectedCategoryIndex(-1);
+                  _userStore!.filterBucketList(
+                    categoryId: "",
+                    status: _uiStore.selectedTabIndex,
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.only(
+                    left: 16.w,
+                    right: 16.w,
+                    bottom: 12.h,
+                    top: 12.h,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: _uiStore.selectedCategoryIndex == -1
+                            ? AppColors.primary1
+                            : Colors.transparent,
+                        width: 2.sp,
+                      ),
+                    ),
+                  ),
+                  child: AutoSizeText(
+                    "전체",
+                    style: _uiStore.selectedCategoryIndex == -1
+                        ? TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.primary1,
+                            fontSize: 14.sp,
+                          )
+                        : TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.secondaryBlack,
+                            fontSize: 14.sp,
+                          ),
+                  ),
+                ),
+              ),
               ...List.generate(
                 _userStore!.categories.length,
                 (index) => InkWell(
                   onTap: () {
                     _uiStore.setSelectedCategoryIndex(index);
-                    // _userStore!.getBucketList(
-                    //   spaceId: widget.item.id,
-                    //   _userStore!.categories[_uiStore.selectedCategoryIndex],
-                    //   _uiStore.selectedTabIndex,
-                    // );
+                    _userStore!.filterBucketList(
+                      categoryId: _userStore!
+                          .categories[_uiStore.selectedCategoryIndex].id,
+                      status: _uiStore.selectedTabIndex,
+                    );
                   },
                   child: Container(
                     padding: EdgeInsets.only(
@@ -340,7 +381,7 @@ class _BodyState extends State<Body> {
                       ),
                     ),
                     child: AutoSizeText(
-                      _userStore!.categories[index],
+                      _userStore!.categories[index].title,
                       style: _uiStore.selectedCategoryIndex == index
                           ? TextStyle(
                               fontWeight: FontWeight.w600,
@@ -407,10 +448,13 @@ class _BodyState extends State<Body> {
                   child: InkWell(
                     onTap: () {
                       _uiStore.setSelectedTabIndex(index);
-                      // _userStore!.filterBucketList(
-                      //   _userStore!.categories[_uiStore.selectedCategoryIndex],
-                      //   index,
-                      // );
+                      _userStore!.filterBucketList(
+                        categoryId: _uiStore.selectedCategoryIndex >= 0
+                            ? _userStore!
+                                .categories[_uiStore.selectedCategoryIndex].id
+                            : "",
+                        status: index,
+                      );
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -446,41 +490,113 @@ class _BodyState extends State<Body> {
 
   Widget _buildBucketList() {
     return Flexible(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            ...List.generate(
-              _userStore!.filteredBucketList.length,
-              (index) {
-                var bucket = _userStore!.filteredBucketList[index];
-                return InkWell(
-                  onTap: () {
-                    context.router.push(BucketDetailRoute(
-                      space: widget.item,
-                      item: bucket,
-                      onDelete: () {
-                        context.router.popUntilRouteWithName("BucketRoute");
-                        _showToast("버킷 1개를 삭제했어요.");
-                      },
-                    ));
-                  },
-                  child: DefaultCheckboxListTileWithSubtitle(
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 20.w,
-                      vertical: 16.h,
-                    ),
-                    isChecked: bucket.isCompleted,
-                    title: bucket.title,
-                    subTitle: bucket.body,
-                    hasUnderline: false,
+      child: Observer(builder: (context) {
+        return _userStore!.isLoadingBucket
+            ? Column(
+                children: [
+                  SizedBox(height: 12.h),
+                  LoadingSpinner(
+                    width: 240.sp,
+                    height: 240.sp,
                   ),
-                );
-              },
-            ),
-            SizedBox(height: 120.h),
-          ],
-        ),
-      ),
+                ],
+              )
+            : SingleChildScrollView(
+                child: _userStore!.filteredBucketList.isEmpty
+                    ? Column(children: [
+                        SizedBox(height: 60.h),
+                        Image.asset(
+                          "assets/icons/bucket_empty_icon.png",
+                          width: 43.w,
+                          height: 43.h,
+                        ),
+                        SizedBox(height: 16.h),
+                        AutoSizeText(
+                          "버킷 리스트가 없어요",
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.secondaryBlack,
+                          ),
+                        ),
+                        SizedBox(height: 4.h),
+                        AutoSizeText(
+                          "함께 이룰 수 있는 목표를 세워보면 어때요?",
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.tertiaryBlack,
+                          ),
+                        ),
+                      ])
+                    : Column(
+                        children: [
+                          ...List.generate(
+                            _userStore!.filteredBucketList.length,
+                            (index) {
+                              var bucket =
+                                  _userStore!.filteredBucketList[index];
+                              return InkWell(
+                                onTap: () {
+                                  context.router.push(BucketDetailRoute(
+                                    space: widget.item,
+                                    item: bucket,
+                                    onBack: () {
+                                      context.router
+                                          .popUntilRouteWithName("BucketRoute");
+                                      _uiStore.setSelectedTabIndex(0);
+                                      _uiStore.setSelectedCategoryIndex(-1);
+                                    },
+                                    onDelete: () async {
+                                      context.router
+                                          .popUntilRouteWithName("BucketRoute");
+                                      _uiStore.setSelectedTabIndex(0);
+                                      _uiStore.setSelectedCategoryIndex(-1);
+
+                                      _showToast("버킷 1개를 삭제했어요.");
+                                    },
+                                  ));
+                                },
+                                child: DefaultCheckboxListTileWithSubtitle(
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 20.w,
+                                    vertical: 16.h,
+                                  ),
+                                  onCheck: () async {
+                                    try {
+                                      var res = await _userStore!.updateBucket(
+                                        spaceId: widget.item.id,
+                                        categoryId: bucket.category,
+                                        bucketId: bucket.id,
+                                        title: bucket.title,
+                                        content: bucket.body,
+                                        state:
+                                            bucket.isCompleted ? "진행중" : "완료",
+                                      );
+
+                                      if (res != null) {
+                                        _userStore!.getBucketList(
+                                            spaceId: widget.item.id);
+
+                                        _userStore!.getWiberSpaceList();
+                                      }
+                                    } catch (error) {
+                                      print(error);
+                                    }
+                                  },
+                                  isChecked: bucket.isCompleted,
+                                  title: bucket.title,
+                                  subTitle: bucket.body,
+                                  hasUnderline: false,
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(height: 120.h),
+                        ],
+                      ),
+              );
+      }),
     );
   }
 
@@ -640,7 +756,7 @@ class _BodyState extends State<Body> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       AutoSizeText(
-                        DateFormat("YYYY년 MM월 dd일")
+                        DateFormat("yyyy년 MM월 dd일")
                             .format(DateTime.parse(_uiStore.newBucketEndDate)),
                         style: TextStyle(
                           fontSize: 13.sp,
@@ -690,7 +806,7 @@ class _BodyState extends State<Body> {
                     GestureDetector(
                       onTap: _uiStore.newBucketName.isEmpty
                           ? null
-                          : () {
+                          : () async {
                               if (_uiStore.createNewBucketPhase <= 1) {
                                 _uiStore.setCreateNewBucketPhase(
                                     _uiStore.createNewBucketPhase + 1);
@@ -707,7 +823,45 @@ class _BodyState extends State<Body> {
                               }
 
                               if (_uiStore.createNewBucketPhase == 3) {
-                                context.router.pop();
+                                var res = await _userStore!.createBucket(
+                                  spaceId: widget.item.id,
+                                  categoryId: _uiStore.selectedCategoryIndex >=
+                                          0
+                                      ? _userStore!
+                                          .categories[
+                                              _uiStore.selectedCategoryIndex]
+                                          .id
+                                      : "",
+                                  title: _uiStore.newBucketName,
+                                  content: _uiStore.newBucketDescription,
+                                  date: _uiStore.newBucketEndDate,
+                                  state: "",
+                                );
+
+                                if (res != null) {
+                                  if (res is DioError) {
+                                    context.router.pop();
+                                    _showToast(res.error.toString());
+                                  } else if (res.data["message"] ==
+                                      "같은 이름의 버킷이 이미 존재합니다.") {
+                                    context.router.pop();
+                                    _showToast("같은 이름의 버킷이 이미 존재합니다.");
+                                  } else {
+                                    await _userStore!.getBucketList(
+                                      spaceId: widget.item.id,
+                                      categoryId:
+                                          _uiStore.selectedCategoryIndex >= 0
+                                              ? _userStore!
+                                                  .categories[_uiStore
+                                                      .selectedCategoryIndex]
+                                                  .id
+                                              : "",
+                                      state: _uiStore.selectedTabIndex,
+                                    );
+
+                                    context.router.pop();
+                                  }
+                                }
                               }
                             },
                       child: AutoSizeText(
@@ -1166,7 +1320,6 @@ class _BodyState extends State<Body> {
                     autoFocus: true,
                     focusNode: _newCategoryFocusNode,
                     hintText: "새 카테고리 이름을 입력해주세요",
-                    maxLength: 6,
                     suffixActions: () {
                       _uiStore.setNewBucketDetailCategory("");
                       _newCategoryController.clear();
@@ -1191,6 +1344,10 @@ class _BodyState extends State<Body> {
                         if (res != null) {
                           context.router.pop();
                           _showToast("새 카테고리를 만들었어요.");
+                          await _userStore!
+                              .getCategoryList(spaceId: widget.item.id);
+                          _newCategoryController.clear();
+                          _uiStore.editingCategoryName = "";
                         }
                       },
                 detectKeyboard: true,

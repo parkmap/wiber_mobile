@@ -40,6 +40,11 @@ class UserRepository {
     return _sharedPrefsHelper.selfInfo;
   }
 
+  Future<void> logout() async {
+    await _sharedPrefsHelper.removeUserId();
+    await _sharedPrefsHelper.removeUuid();
+  }
+
   Future createUser({
     required String username,
     required String app_uuid,
@@ -199,13 +204,19 @@ class UserRepository {
 
   Future createBucket({
     required String spaceId,
+    required String categoryId,
     required String title,
     required String content,
+    required String state,
+    required String date,
   }) async {
     return await _userApi.createBucket(
       title: title,
       content: content,
       spaceId: spaceId,
+      categoryId: categoryId,
+      state: state,
+      date: date,
       username: _sharedPrefsHelper.userId!,
       password: _sharedPrefsHelper.uuid!,
     );
@@ -215,6 +226,8 @@ class UserRepository {
     required String spaceId,
     required String categoryId,
     required String bucketId,
+    String? state,
+    String? date,
     required String title,
     required String content,
   }) async {
@@ -222,7 +235,9 @@ class UserRepository {
       spaceId: spaceId,
       categoryId: categoryId,
       bucketId: bucketId,
+      state: state,
       title: title,
+      date: date,
       content: content,
       username: _sharedPrefsHelper.userId!,
       password: _sharedPrefsHelper.uuid!,

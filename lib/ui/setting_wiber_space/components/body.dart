@@ -186,20 +186,9 @@ class _BodyState extends State<Body> {
                   color: AppColors.primaryBlack,
                 ),
               ),
-              _userStore!.wiberSpaceList.isNotEmpty
-                  ? InkWell(
-                      onTap: () {
-                        context.router.push(const SettingWiberSpaceRoute());
-                      },
-                      child: Image.asset(
-                        'assets/icons/setting_icon.png',
-                        width: 20.w,
-                        height: 19.h,
-                      ),
-                    )
-                  : SizedBox(
-                      width: 20.w,
-                    )
+              SizedBox(
+                width: 20.w,
+              )
             ],
           ),
           SizedBox(height: 40.h),
@@ -486,8 +475,14 @@ class _BodyState extends State<Body> {
             ),
             InkWell(
               onTap: () async {
-                context.router.pop();
-                _showToast("${item.title} 스페이스가 삭제되었습니다.");
+                var res = await _userStore!.deleteWiberSpace(spaceId: item.id);
+
+                if (res != null) {
+                  await _userStore!.deleteWiberSpace(spaceId: item.id);
+                  context.router.pop();
+                  _showToast("${item.title} 스페이스가 삭제되었습니다.");
+                  await _userStore!.getWiberSpaceList();
+                }
               },
               child: Container(
                 color: Colors.white,

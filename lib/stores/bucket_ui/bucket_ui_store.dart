@@ -1,6 +1,8 @@
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wiber_mobile/data/repositories/user_repository.dart';
+import 'package:wiber_mobile/models/bucket/bucket.dart';
+import 'package:wiber_mobile/models/category/category.dart';
 
 part 'bucket_ui_store.g.dart';
 
@@ -15,7 +17,7 @@ abstract class _BucketUIStore with Store {
   int selectedTabIndex = 0;
 
   @observable
-  int selectedCategoryIndex = 0;
+  int selectedCategoryIndex = -1;
 
   @observable
   String selectedCategory = '';
@@ -40,6 +42,12 @@ abstract class _BucketUIStore with Store {
 
   @observable
   bool isEditing = false;
+
+  @observable
+  Bucket? tempBucket;
+
+  @observable
+  Category? tempSelectedCategory;
 
   @observable
   List<String> sortingList = [

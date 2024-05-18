@@ -8,12 +8,12 @@ class Bucket with _$Bucket {
   const Bucket._();
 
   factory Bucket({
-    @JsonKey(name: '_id') @Default('') String id,
+    @Default('') String id,
     required String title,
     required String body,
     required String category,
     required bool isCompleted,
-    required String endDate,
+    @Default("") String endDate,
   }) = _Bucket;
 
   factory Bucket.fromJson(Map<String, dynamic> json) => _$BucketFromJson(json);

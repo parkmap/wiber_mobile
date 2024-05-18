@@ -9,7 +9,7 @@ class Category with _$Category {
   const Category._();
 
   factory Category({
-    @JsonKey(name: 'created_id') @Default('') String id,
+    @Default('') String id,
     required String title,
   }) = _Category;
 

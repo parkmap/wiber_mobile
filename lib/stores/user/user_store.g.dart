@@ -29,13 +29,13 @@ mixin _$UserStore on _UserStore, Store {
       Atom(name: '_UserStore.categories', context: context);
 
   @override
-  List<String> get categories {
+  List<Category> get categories {
     _$categoriesAtom.reportRead();
     return super.categories;
   }
 
   @override
-  set categories(List<String> value) {
+  set categories(List<Category> value) {
     _$categoriesAtom.reportWrite(value, super.categories, () {
       super.categories = value;
     });
@@ -121,6 +121,22 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$isLoadingBucketAtom =
+      Atom(name: '_UserStore.isLoadingBucket', context: context);
+
+  @override
+  bool get isLoadingBucket {
+    _$isLoadingBucketAtom.reportRead();
+    return super.isLoadingBucket;
+  }
+
+  @override
+  set isLoadingBucket(bool value) {
+    _$isLoadingBucketAtom.reportWrite(value, super.isLoadingBucket, () {
+      super.isLoadingBucket = value;
+    });
+  }
+
   late final _$userAtom = Atom(name: '_UserStore.user', context: context);
 
   @override
@@ -142,6 +158,14 @@ mixin _$UserStore on _UserStore, Store {
   @override
   Future<bool?> saveUuid() {
     return _$saveUuidAsyncAction.run(() => super.saveUuid());
+  }
+
+  late final _$logoutAsyncAction =
+      AsyncAction('_UserStore.logout', context: context);
+
+  @override
+  Future<void> logout() {
+    return _$logoutAsyncAction.run(() => super.logout());
   }
 
   late final _$getUserInfoAsyncAction =
@@ -278,7 +302,7 @@ mixin _$UserStore on _UserStore, Store {
 
   @override
   Future<void> getBucketList(
-      {required String spaceId, String? categoryId, String? state}) {
+      {required String spaceId, String? categoryId, int? state}) {
     return _$getBucketListAsyncAction.run(() => super
         .getBucketList(spaceId: spaceId, categoryId: categoryId, state: state));
   }
@@ -289,10 +313,18 @@ mixin _$UserStore on _UserStore, Store {
   @override
   Future<dynamic> createBucket(
       {required String spaceId,
+      required String categoryId,
       required String title,
-      required String content}) {
-    return _$createBucketAsyncAction.run(() =>
-        super.createBucket(spaceId: spaceId, title: title, content: content));
+      required String content,
+      required String state,
+      required String date}) {
+    return _$createBucketAsyncAction.run(() => super.createBucket(
+        spaceId: spaceId,
+        categoryId: categoryId,
+        title: title,
+        content: content,
+        state: state,
+        date: date));
   }
 
   late final _$updateBucketAsyncAction =
@@ -303,12 +335,16 @@ mixin _$UserStore on _UserStore, Store {
       {required String spaceId,
       required String categoryId,
       required String bucketId,
+      String? state,
+      String? date,
       required String title,
       required String content}) {
     return _$updateBucketAsyncAction.run(() => super.updateBucket(
         spaceId: spaceId,
         categoryId: categoryId,
         bucketId: bucketId,
+        state: state,
+        date: date,
         title: title,
         content: content));
   }
@@ -349,6 +385,17 @@ mixin _$UserStore on _UserStore, Store {
   }
 
   @override
+  void filterBucketList({required String categoryId, required int status}) {
+    final _$actionInfo = _$_UserStoreActionController.startAction(
+        name: '_UserStore.filterBucketList');
+    try {
+      return super.filterBucketList(categoryId: categoryId, status: status);
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 wiberList: ${wiberList},
@@ -358,6 +405,7 @@ filteredBucketList: ${filteredBucketList},
 wiberSpaceList: ${wiberSpaceList},
 isCreatingUser: ${isCreatingUser},
 isLoadingWiberspace: ${isLoadingWiberspace},
+isLoadingBucket: ${isLoadingBucket},
 user: ${user}
     ''';
   }

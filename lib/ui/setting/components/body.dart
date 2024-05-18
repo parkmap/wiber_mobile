@@ -479,8 +479,9 @@ class _BodyState extends State<Body> {
               color: AppColors.gray10,
             ),
             InkWell(
-              onTap: () {
-                context.router.pop();
+              onTap: () async {
+                await _userStore!.logout();
+                context.router.replaceAll([const SplashRoute()]);
               },
               child: Container(
                 color: Colors.white,

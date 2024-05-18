@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wiber_mobile/data/repositories/user_repository.dart';
 import 'package:wiber_mobile/models/bucket/bucket.dart';
+import 'package:wiber_mobile/models/category/category.dart';
 import 'package:wiber_mobile/models/user/user.dart';
 import 'package:wiber_mobile/models/wiber_space/wiber_space.dart';
 
@@ -24,7 +25,7 @@ abstract class _UserStore with Store {
   List<dynamic> wiberList = [];
 
   @observable
-  List<String> categories = [];
+  List<Category> categories = [];
 
   @observable
   List<Bucket> bucketList = [];
@@ -40,6 +41,9 @@ abstract class _UserStore with Store {
 
   @observable
   bool isLoadingWiberspace = false;
+
+  @observable
+  bool isLoadingBucket = false;
 
   @observable
   User? user;
@@ -65,6 +69,11 @@ abstract class _UserStore with Store {
   @action
   String? getUserId() {
     return _userRepository.getUserId();
+  }
+
+  @action
+  Future<void> logout() async {
+    await _userRepository.logout();
   }
 
   @action
@@ -174,39 +183,42 @@ abstract class _UserStore with Store {
       List<WiberSpace> ownedSpaceList = ownedSpace.isNotEmpty
           ? await Future.wait(
               ownedSpace.map((space) async {
-                List<User> memberData = await Future.wait(
-                    (space['members'] as List<dynamic>).map((user) async {
-                      DateTime now = DateTime.now();
-                      var data =
-                          await _userRepository.getOtherUserInfo(userId: user);
+                List<User> memberData = space['members'] != null
+                    ? await Future.wait(
+                        (space['members'] as List<dynamic>).map((user) async {
+                          DateTime now = DateTime.now();
+                          var data = await _userRepository.getOtherUserInfo(
+                              userId: user);
 
-                      if (data != null &&
-                          now
-                                  .difference(DateTime.parse(data.refreshedAt))
-                                  .inHours <
-                              24) {
-                        return data;
-                      } else {
-                        var userInfo =
-                            await _userRepository.getUserInfo(userId: user);
-                        User userData = User(
-                            id: user,
-                            nickname: userInfo.data['username'],
-                            profileImageUrl: userInfo.data['image'] ?? '',
-                            refreshedAt: DateTime.now().toString());
+                          if (data != null &&
+                              now
+                                      .difference(
+                                          DateTime.parse(data.refreshedAt))
+                                      .inHours <
+                                  24) {
+                            return data;
+                          } else {
+                            var userInfo =
+                                await _userRepository.getUserInfo(userId: user);
+                            User userData = User(
+                                id: user,
+                                nickname: userInfo.data['username'],
+                                profileImageUrl: userInfo.data['image'] ?? '',
+                                refreshedAt: DateTime.now().toString());
 
-                        await _userRepository.saveOtherUserInfo(userData);
-                        return userData;
-                      }
-                    }).toList(),
-                    eagerError: true);
+                            await _userRepository.saveOtherUserInfo(userData);
+                            return userData;
+                          }
+                        }).toList(),
+                        eagerError: true)
+                    : [user!];
 
                 return WiberSpace(
                   id: space['space_id'],
                   title: space['title'],
                   isFavorite: space['is_favorite'] ?? false,
-                  maxCount: space['bucket_count'],
-                  completeCount: space['done_count'],
+                  maxCount: space['bucket_count'] ?? 0,
+                  completeCount: space['done_count'] ?? 0,
                   owner: space['owner'],
                   members: memberData,
                 );
@@ -217,39 +229,42 @@ abstract class _UserStore with Store {
       List<WiberSpace> joinedSpaceList = joinedSpace.isNotEmpty
           ? await Future.wait(
               joinedSpace.map((space) async {
-                List<User> memberData = await Future.wait(
-                    (space['members'] as List<dynamic>).map((user) async {
-                      DateTime now = DateTime.now();
-                      var data =
-                          await _userRepository.getOtherUserInfo(userId: user);
+                List<User> memberData = space['members'] != null
+                    ? await Future.wait(
+                        (space['members'] as List<dynamic>).map((user) async {
+                          DateTime now = DateTime.now();
+                          var data = await _userRepository.getOtherUserInfo(
+                              userId: user);
 
-                      if (data != null &&
-                          now
-                                  .difference(DateTime.parse(data.refreshedAt))
-                                  .inHours <
-                              24) {
-                        return data;
-                      } else {
-                        var userInfo =
-                            await _userRepository.getUserInfo(userId: user);
-                        User userData = User(
-                            id: user,
-                            nickname: userInfo.data['username'],
-                            profileImageUrl: userInfo.data['image'] ?? '',
-                            refreshedAt: DateTime.now().toString());
+                          if (data != null &&
+                              now
+                                      .difference(
+                                          DateTime.parse(data.refreshedAt))
+                                      .inHours <
+                                  24) {
+                            return data;
+                          } else {
+                            var userInfo =
+                                await _userRepository.getUserInfo(userId: user);
+                            User userData = User(
+                                id: user,
+                                nickname: userInfo.data['username'],
+                                profileImageUrl: userInfo.data['image'] ?? '',
+                                refreshedAt: DateTime.now().toString());
 
-                        await _userRepository.saveOtherUserInfo(userData);
-                        return userData;
-                      }
-                    }).toList(),
-                    eagerError: true);
+                            await _userRepository.saveOtherUserInfo(userData);
+                            return userData;
+                          }
+                        }).toList(),
+                        eagerError: true)
+                    : [user!];
 
                 return WiberSpace(
                   id: space['space_id'],
                   title: space['title'],
                   isFavorite: space['is_favorite'] ?? false,
-                  maxCount: space['bucket_count'],
-                  completeCount: space['done_count'],
+                  maxCount: space['bucket_count'] ?? 0,
+                  completeCount: space['done_count'] ?? 0,
                   owner: space['owner'],
                   members: memberData,
                 );
@@ -315,6 +330,14 @@ abstract class _UserStore with Store {
       var res = await _userRepository.getCategoryList(
         spaceId: spaceId,
       );
+
+      categories = res.data["categories"]
+          .map((el) => Category(
+                id: el["id"],
+                title: el["title"],
+              ))
+          .cast<Category>()
+          .toList();
     } catch (err) {
       print(err);
     }
@@ -377,30 +400,77 @@ abstract class _UserStore with Store {
   Future<void> getBucketList({
     required String spaceId,
     String? categoryId,
-    String? state,
+    int? state,
   }) async {
+    isLoadingBucket = true;
     try {
       var res = await _userRepository.getBucketList(
         spaceId: spaceId,
-        categoryId: categoryId,
-        state: state,
+        // categoryId: categoryId,
+        // state: state,
       );
+
+      List<Bucket> dataList = res.data["buckets"]
+          .map((el) => Bucket(
+                id: el["id"],
+                title: el["title"],
+                body: el["content"] ?? "",
+                category: el["category_id"] ?? "",
+                endDate: el["date"] ?? "",
+                isCompleted: el["state"] == "완료",
+              ))
+          .cast<Bucket>()
+          .toList();
+
+      bucketList = dataList;
+
+      filterBucketList(categoryId: categoryId ?? "", status: state ?? 0);
     } catch (err) {
       print(err);
+      isLoadingBucket = false;
     }
+  }
+
+  @action
+  void filterBucketList({
+    required String categoryId,
+    required int status,
+  }) {
+    List<Bucket> copiedBucketList = List.from(bucketList);
+
+    copiedBucketList = categoryId.isEmpty
+        ? copiedBucketList
+        : copiedBucketList
+            .where((bucket) => bucket.category == categoryId)
+            .toList();
+
+    copiedBucketList = status == 0
+        ? copiedBucketList
+        : status == 1
+            ? copiedBucketList.where((bucket) => !bucket.isCompleted).toList()
+            : copiedBucketList.where((bucket) => bucket.isCompleted).toList();
+
+    filteredBucketList = copiedBucketList;
+    isLoadingBucket = false;
   }
 
   @action
   Future createBucket({
     required String spaceId,
+    required String categoryId,
     required String title,
     required String content,
+    required String state,
+    required String date,
   }) async {
     try {
       var res = await _userRepository.createBucket(
         spaceId: spaceId,
+        categoryId: categoryId,
         title: title,
         content: content,
+        state: state,
+        date: date,
       );
 
       return res;
@@ -410,17 +480,22 @@ abstract class _UserStore with Store {
   }
 
   @action
-  Future updateBucket(
-      {required String spaceId,
-      required String categoryId,
-      required String bucketId,
-      required String title,
-      required String content}) async {
+  Future updateBucket({
+    required String spaceId,
+    required String categoryId,
+    required String bucketId,
+    String? state,
+    String? date,
+    required String title,
+    required String content,
+  }) async {
     try {
       var res = await _userRepository.updateBucket(
         spaceId: spaceId,
         categoryId: categoryId,
         bucketId: bucketId,
+        state: state,
+        date: date,
         title: title,
         content: content,
       );

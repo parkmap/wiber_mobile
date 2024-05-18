@@ -47,7 +47,6 @@ class _BodyState extends State<Body> {
     super.didChangeDependencies();
 
     final userStore = context.read<UserStore>();
-    // ..getUserInfoAndWiberSpaceList();
 
     if (_userStore != userStore) {
       _userStore = userStore;
@@ -874,10 +873,9 @@ class _BodyState extends State<Body> {
 
                         if (res != null) {
                           _userStore!.getWiberSpaceList();
+                          context.router.popUntilRoot();
                           _showToast("스페이스가 삭제되었습니다.");
                         }
-
-                        context.router.pop();
                       },
                       child: AutoSizeText(
                         "나가기",

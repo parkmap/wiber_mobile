@@ -181,6 +181,39 @@ mixin _$BucketUIStore on _BucketUIStore, Store {
     });
   }
 
+  late final _$tempBucketAtom =
+      Atom(name: '_BucketUIStore.tempBucket', context: context);
+
+  @override
+  Bucket? get tempBucket {
+    _$tempBucketAtom.reportRead();
+    return super.tempBucket;
+  }
+
+  @override
+  set tempBucket(Bucket? value) {
+    _$tempBucketAtom.reportWrite(value, super.tempBucket, () {
+      super.tempBucket = value;
+    });
+  }
+
+  late final _$tempSelectedCategoryAtom =
+      Atom(name: '_BucketUIStore.tempSelectedCategory', context: context);
+
+  @override
+  Category? get tempSelectedCategory {
+    _$tempSelectedCategoryAtom.reportRead();
+    return super.tempSelectedCategory;
+  }
+
+  @override
+  set tempSelectedCategory(Category? value) {
+    _$tempSelectedCategoryAtom.reportWrite(value, super.tempSelectedCategory,
+        () {
+      super.tempSelectedCategory = value;
+    });
+  }
+
   late final _$sortingListAtom =
       Atom(name: '_BucketUIStore.sortingList', context: context);
 
@@ -350,6 +383,8 @@ newBucketEndDate: ${newBucketEndDate},
 newBucketDetailCategory: ${newBucketDetailCategory},
 createNewBucketPhase: ${createNewBucketPhase},
 isEditing: ${isEditing},
+tempBucket: ${tempBucket},
+tempSelectedCategory: ${tempSelectedCategory},
 sortingList: ${sortingList},
 selectedSort: ${selectedSort},
 canEditCategoryName: ${canEditCategoryName}

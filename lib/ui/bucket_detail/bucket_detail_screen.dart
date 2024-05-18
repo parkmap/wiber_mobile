@@ -9,12 +9,14 @@ class BucketDetailScreen extends StatelessWidget {
   final WiberSpace space;
   final Bucket item;
   final VoidCallback onDelete;
+  final VoidCallback onBack;
 
   const BucketDetailScreen({
     Key? key,
     required this.space,
     required this.item,
     required this.onDelete,
+    required this.onBack,
   }) : super(key: key);
 
   @override
@@ -25,6 +27,7 @@ class BucketDetailScreen extends StatelessWidget {
           space: space,
           item: item,
           onDelete: onDelete,
+          onBack: onBack,
         ),
       ),
     );

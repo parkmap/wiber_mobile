@@ -14,6 +14,7 @@ class DefaultCheckboxListTileWithSubtitle extends StatefulWidget {
   final Color? backgroundColor;
   final bool hasUnderline;
   final EdgeInsets? contentPadding;
+  final VoidCallback? onCheck;
 
   const DefaultCheckboxListTileWithSubtitle({
     Key? key,
@@ -24,6 +25,7 @@ class DefaultCheckboxListTileWithSubtitle extends StatefulWidget {
     this.backgroundColor,
     this.hasUnderline = false,
     this.contentPadding,
+    this.onCheck,
   }) : super(key: key);
 
   @override
@@ -51,9 +53,16 @@ class _DefaultCheckboxListTileWithSubtitleState
       ),
       child: Row(
         children: [
-          CustomCircleCheckbox(
-            isChecked: widget.isChecked,
-          ),
+          widget.onCheck != null
+              ? GestureDetector(
+                  onTap: widget.onCheck,
+                  child: CustomCircleCheckbox(
+                    isChecked: widget.isChecked,
+                  ),
+                )
+              : CustomCircleCheckbox(
+                  isChecked: widget.isChecked,
+                ),
           SizedBox(width: 13.w),
           Flexible(
             child: Row(

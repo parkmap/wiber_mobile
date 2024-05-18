@@ -7,17 +7,17 @@ part of 'bucket.dart';
 // **************************************************************************
 
 _$BucketImpl _$$BucketImplFromJson(Map<String, dynamic> json) => _$BucketImpl(
-      id: json['_id'] as String? ?? '',
+      id: json['id'] as String? ?? '',
       title: json['title'] as String,
       body: json['body'] as String,
       category: json['category'] as String,
       isCompleted: json['isCompleted'] as bool,
-      endDate: json['endDate'] as String,
+      endDate: json['endDate'] as String? ?? "",
     );
 
 Map<String, dynamic> _$$BucketImplToJson(_$BucketImpl instance) =>
     <String, dynamic>{
-      '_id': instance.id,
+      'id': instance.id,
       'title': instance.title,
       'body': instance.body,
       'category': instance.category,

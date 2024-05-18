@@ -20,7 +20,6 @@ Bucket _$BucketFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Bucket {
-  @JsonKey(name: '_id')
   String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get body => throw _privateConstructorUsedError;
@@ -39,7 +38,7 @@ abstract class $BucketCopyWith<$Res> {
       _$BucketCopyWithImpl<$Res, Bucket>;
   @useResult
   $Res call(
-      {@JsonKey(name: '_id') String id,
+      {String id,
       String title,
       String body,
       String category,
@@ -104,7 +103,7 @@ abstract class _$$BucketImplCopyWith<$Res> implements $BucketCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: '_id') String id,
+      {String id,
       String title,
       String body,
       String category,
@@ -163,19 +162,19 @@ class __$$BucketImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$BucketImpl extends _Bucket {
   _$BucketImpl(
-      {@JsonKey(name: '_id') this.id = '',
+      {this.id = '',
       required this.title,
       required this.body,
       required this.category,
       required this.isCompleted,
-      required this.endDate})
+      this.endDate = ""})
       : super._();
 
   factory _$BucketImpl.fromJson(Map<String, dynamic> json) =>
       _$$BucketImplFromJson(json);
 
   @override
-  @JsonKey(name: '_id')
+  @JsonKey()
   final String id;
   @override
   final String title;
@@ -186,6 +185,7 @@ class _$BucketImpl extends _Bucket {
   @override
   final bool isCompleted;
   @override
+  @JsonKey()
   final String endDate;
 
   @override
@@ -229,18 +229,17 @@ class _$BucketImpl extends _Bucket {
 
 abstract class _Bucket extends Bucket {
   factory _Bucket(
-      {@JsonKey(name: '_id') final String id,
+      {final String id,
       required final String title,
       required final String body,
       required final String category,
       required final bool isCompleted,
-      required final String endDate}) = _$BucketImpl;
+      final String endDate}) = _$BucketImpl;
   _Bucket._() : super._();
 
   factory _Bucket.fromJson(Map<String, dynamic> json) = _$BucketImpl.fromJson;
 
   @override
-  @JsonKey(name: '_id')
   String get id;
   @override
   String get title;
