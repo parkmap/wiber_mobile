@@ -189,7 +189,7 @@ mixin _$UserStore on _UserStore, Store {
 
   @override
   Future<dynamic> updateUserInfo(
-      {required String userNickname, required String pushToken}) {
+      {required String userNickname, String? pushToken}) {
     return _$updateUserInfoAsyncAction.run(() =>
         super.updateUserInfo(userNickname: userNickname, pushToken: pushToken));
   }
@@ -210,6 +210,15 @@ mixin _$UserStore on _UserStore, Store {
   Future<dynamic> saveProfileImage({required Uint8List profileImage}) {
     return _$saveProfileImageAsyncAction
         .run(() => super.saveProfileImage(profileImage: profileImage));
+  }
+
+  late final _$deleteProfileImageAsyncAction =
+      AsyncAction('_UserStore.deleteProfileImage', context: context);
+
+  @override
+  Future<dynamic> deleteProfileImage() {
+    return _$deleteProfileImageAsyncAction
+        .run(() => super.deleteProfileImage());
   }
 
   late final _$saveUserIdAsyncAction =
@@ -254,6 +263,53 @@ mixin _$UserStore on _UserStore, Store {
   Future<dynamic> deleteWiberSpace({required String spaceId}) {
     return _$deleteWiberSpaceAsyncAction
         .run(() => super.deleteWiberSpace(spaceId: spaceId));
+  }
+
+  late final _$leaveWiberSpaceAsyncAction =
+      AsyncAction('_UserStore.leaveWiberSpace', context: context);
+
+  @override
+  Future<dynamic> leaveWiberSpace({required String spaceId}) {
+    return _$leaveWiberSpaceAsyncAction
+        .run(() => super.leaveWiberSpace(spaceId: spaceId));
+  }
+
+  late final _$createWiberSpaceInviteLinkAsyncAction =
+      AsyncAction('_UserStore.createWiberSpaceInviteLink', context: context);
+
+  @override
+  Future<dynamic> createWiberSpaceInviteLink({required String spaceId}) {
+    return _$createWiberSpaceInviteLinkAsyncAction
+        .run(() => super.createWiberSpaceInviteLink(spaceId: spaceId));
+  }
+
+  late final _$kickUserFromWiberSpaceAsyncAction =
+      AsyncAction('_UserStore.kickUserFromWiberSpace', context: context);
+
+  @override
+  Future<dynamic> kickUserFromWiberSpace(
+      {required String spaceId, required String exitId}) {
+    return _$kickUserFromWiberSpaceAsyncAction.run(
+        () => super.kickUserFromWiberSpace(spaceId: spaceId, exitId: exitId));
+  }
+
+  late final _$enterWiberSpaceInvitationAsyncAction =
+      AsyncAction('_UserStore.enterWiberSpaceInvitation', context: context);
+
+  @override
+  Future<dynamic> enterWiberSpaceInvitation() {
+    return _$enterWiberSpaceInvitationAsyncAction
+        .run(() => super.enterWiberSpaceInvitation());
+  }
+
+  late final _$changeOwnerOfWiberSpaceAsyncAction =
+      AsyncAction('_UserStore.changeOwnerOfWiberSpace', context: context);
+
+  @override
+  Future<dynamic> changeOwnerOfWiberSpace(
+      {required String spaceId, required String userId}) {
+    return _$changeOwnerOfWiberSpaceAsyncAction.run(
+        () => super.changeOwnerOfWiberSpace(spaceId: spaceId, userId: userId));
   }
 
   late final _$getCategoryListAsyncAction =
@@ -337,8 +393,8 @@ mixin _$UserStore on _UserStore, Store {
       required String bucketId,
       String? state,
       String? date,
-      required String title,
-      required String content}) {
+      String? title,
+      String? content}) {
     return _$updateBucketAsyncAction.run(() => super.updateBucket(
         spaceId: spaceId,
         categoryId: categoryId,

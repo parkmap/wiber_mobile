@@ -41,6 +41,38 @@ mixin _$SettingUiStore on _SettingUiStore, Store {
     });
   }
 
+  late final _$isResetProfileImageAtom =
+      Atom(name: '_SettingUiStore.isResetProfileImage', context: context);
+
+  @override
+  bool get isResetProfileImage {
+    _$isResetProfileImageAtom.reportRead();
+    return super.isResetProfileImage;
+  }
+
+  @override
+  set isResetProfileImage(bool value) {
+    _$isResetProfileImageAtom.reportWrite(value, super.isResetProfileImage, () {
+      super.isResetProfileImage = value;
+    });
+  }
+
+  late final _$nicknameAtom =
+      Atom(name: '_SettingUiStore.nickname', context: context);
+
+  @override
+  String get nickname {
+    _$nicknameAtom.reportRead();
+    return super.nickname;
+  }
+
+  @override
+  set nickname(String value) {
+    _$nicknameAtom.reportWrite(value, super.nickname, () {
+      super.nickname = value;
+    });
+  }
+
   late final _$_SettingUiStoreActionController =
       ActionController(name: '_SettingUiStore', context: context);
 
@@ -78,10 +110,34 @@ mixin _$SettingUiStore on _SettingUiStore, Store {
   }
 
   @override
+  void setNickname(String val) {
+    final _$actionInfo = _$_SettingUiStoreActionController.startAction(
+        name: '_SettingUiStore.setNickname');
+    try {
+      return super.setNickname(val);
+    } finally {
+      _$_SettingUiStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void resetNickname() {
+    final _$actionInfo = _$_SettingUiStoreActionController.startAction(
+        name: '_SettingUiStore.resetNickname');
+    try {
+      return super.resetNickname();
+    } finally {
+      _$_SettingUiStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 profileImage: ${profileImage},
-isUpdatingUserInfo: ${isUpdatingUserInfo}
+isUpdatingUserInfo: ${isUpdatingUserInfo},
+isResetProfileImage: ${isResetProfileImage},
+nickname: ${nickname}
     ''';
   }
 }

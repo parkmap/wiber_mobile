@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wiber_mobile/constants/colors.dart';
+import 'package:lottie/lottie.dart';
 
 class LoadingSpinner extends StatelessWidget {
   const LoadingSpinner({
@@ -14,8 +14,8 @@ class LoadingSpinner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      "assets/images/loading_spinner.gif",
+    return Lottie.asset(
+      "assets/lottie/loading_spinner.json",
       width: width ?? 20.sp,
       height: height ?? 20.sp,
     );

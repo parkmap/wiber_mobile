@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,12 +8,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_share.dart';
 import 'package:provider/provider.dart';
 import 'package:wiber_mobile/constants/colors.dart';
 import 'package:wiber_mobile/models/user/user.dart';
 import 'package:wiber_mobile/models/wiber_space/wiber_space.dart';
 import 'package:wiber_mobile/stores/bucket_ui/bucket_ui_store.dart';
 import 'package:wiber_mobile/stores/user/user_store.dart';
+import 'package:wiber_mobile/utils/text_utils.dart';
 import 'package:wiber_mobile/widgets/default_bottom_dialogue.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wiber_mobile/widgets/default_flat_button.dart';
@@ -38,10 +41,6 @@ class _BodyState extends State<Body> {
   void initState() {
     super.initState();
     _uiStore = BucketUIStore();
-
-    fToast = FToast();
-    // if you want to use context from globally instead of content we need to pass navigatorKey.currentContext!
-    fToast.init(context);
   }
 
   @override
@@ -53,6 +52,8 @@ class _BodyState extends State<Body> {
     if (_userStore != userStore) {
       _userStore = userStore;
     }
+
+    fToast.init(context);
   }
 
   @override
@@ -76,8 +77,19 @@ class _BodyState extends State<Body> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: DefaultFlatButton(
-                        onPressed: () {
-                          _showInviteLinkBottomSheet();
+                        onPressed: () async {
+                          var res = await _userStore!
+                              .createWiberSpaceInviteLink(
+                                  spaceId: widget.item.id);
+
+                          if (res != null) {
+                            if (res is DioError) {
+                              _showToast(res.error.toString());
+                            } else if (res.data["share_link"] != null) {
+                              _showInviteLinkBottomSheet(
+                                  res.data["share_link"]);
+                            }
+                          }
                         },
                         buttonColor: AppColors.gray15,
                         child: Row(
@@ -331,7 +343,22 @@ class _BodyState extends State<Body> {
             InkWell(
               onTap: () async {
                 context.router.pop();
-                _showToast("${user.nickname}을(를) 내보내셨습니다.");
+
+                var res = await _userStore!.kickUserFromWiberSpace(
+                  spaceId: widget.item.id,
+                  exitId: user.id,
+                );
+
+                if (res != null) {
+                  if (res is DioError) {
+                    _showToast(res.error.toString());
+                  } else {
+                    context.router.popUntilRoot();
+
+                    _userStore!.getWiberSpaceList();
+                    _showToast("${user.nickname}을(를) 내보내셨습니다.");
+                  }
+                }
               },
               child: Container(
                 color: Colors.white,
@@ -354,7 +381,7 @@ class _BodyState extends State<Body> {
     );
   }
 
-  void _showInviteLinkBottomSheet() {
+  void _showInviteLinkBottomSheet(String link) {
     showModalBottomSheet(
       context: context,
       enableDrag: false,
@@ -426,7 +453,7 @@ class _BodyState extends State<Body> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     AutoSizeText(
-                      "create-invite-links?dskjfdlskfddsfsdfsddsfs...",
+                      TextUtils.getShortenedString(val: link, length: 35),
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w400,
@@ -436,8 +463,7 @@ class _BodyState extends State<Body> {
                     GestureDetector(
                       child: InkWell(
                         onTap: () {
-                          _copyToClipBoard(
-                              "create-invite-links?dskjfdlskfddsfsdfsddsfs...");
+                          _copyToClipBoard(link);
                         },
                         child: Image.asset(
                           "assets/icons/clipboard_icon.png",
@@ -452,7 +478,9 @@ class _BodyState extends State<Body> {
               SizedBox(height: 30.h),
               DefaultFlatButton(
                 onPressed: () {
-                  context.router.pop();
+                  context.router
+                      .popUntilRouteWithName("BucketParticipantsRoute");
+                  _showInviteLinkShareBottomSheet(link);
                 },
                 child: AutoSizeText(
                   "초대링크 공유하기",
@@ -501,6 +529,158 @@ class _BodyState extends State<Body> {
       child: toast,
       gravity: ToastGravity.BOTTOM,
       toastDuration: const Duration(seconds: 2),
+    );
+  }
+
+  void _showInviteLinkShareBottomSheet(String link) {
+    showModalBottomSheet(
+      context: context,
+      enableDrag: false,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        padding: EdgeInsets.only(
+          left: 16.w,
+          right: 16.w,
+          bottom: 128.h,
+          top: 16.h,
+        ),
+        decoration: BoxDecoration(
+          color: const Color(0xffFAFAFA),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20.r),
+            topRight: Radius.circular(20.r),
+          ),
+        ),
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Image.asset(
+                        "assets/images/launcher_image.png",
+                        width: 32.w,
+                        height: 32.h,
+                      ),
+                      SizedBox(width: 6.w),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AutoSizeText(
+                            "위버 초대링크",
+                            style: TextStyle(
+                              fontSize: 10.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                            ),
+                          ),
+                          AutoSizeText(
+                            TextUtils.getShortenedString(val: link, length: 35),
+                            style: TextStyle(
+                              fontSize: 10.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      context.router.pop();
+                    },
+                    child: Image.asset(
+                      "assets/icons/link_share_close_icon.png",
+                      width: 30.sp,
+                      height: 30.sp,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 24.h),
+              Row(
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      bool isKakaoTalkSharingAvailable = await ShareClient
+                          .instance
+                          .isKakaoTalkSharingAvailable();
+
+                      if (isKakaoTalkSharingAvailable) {
+                        try {
+                          Uri uri = await ShareClient.instance
+                              .shareDefault(template: _getKakaotalkFeed(link));
+                          await ShareClient.instance.launchKakaoTalk(uri);
+                        } catch (err) {
+                          _showToast("에러로 인해 카카오톡 공유를 실패했어요. $err");
+                        }
+                      } else {
+                        _showToast("카카오톡으로 공유가 불가능합니다. 카카오톡을 설치해주세요.");
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 56.sp,
+                          height: 56.sp,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          child: Image.asset(
+                            "assets/icons/kakaotalk_share_icon.png",
+                            width: 48.sp,
+                            height: 48.sp,
+                          ),
+                        ),
+                        SizedBox(height: 9.h),
+                        AutoSizeText(
+                          "카카오톡",
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.secondaryBlack,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  FeedTemplate _getKakaotalkFeed(String link) {
+    return FeedTemplate(
+      content: Content(
+        title: '위버스페이스 초대',
+        description: '함께 이룰 수 있는 목표를 세워보세요!',
+        imageUrl: Uri.parse(
+            'https://res.cloudinary.com/ddgoy0mpu/image/upload/v1716294105/Wiber/bdmjlzncqg6ml1hpdq8k.png'),
+        link: Link(
+          webUrl: Uri.parse(link),
+          mobileWebUrl: Uri.parse(link),
+        ),
+      ),
+      buttons: [
+        Button(
+          title: '웹으로 보기',
+          link: Link(
+            webUrl: Uri.parse(link),
+            mobileWebUrl: Uri.parse(link),
+          ),
+        ),
+      ],
     );
   }
 }

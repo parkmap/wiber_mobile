@@ -25,14 +25,6 @@ class _BodyState extends State<Body> {
   FToast fToast = FToast();
 
   @override
-  void initState() {
-    fToast = FToast();
-    // if you want to use context from globally instead of content we need to pass navigatorKey.currentContext!
-    fToast.init(context);
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
@@ -41,6 +33,8 @@ class _BodyState extends State<Body> {
     if (_userStore != userStore) {
       _userStore = userStore;
     }
+
+    fToast.init(context);
   }
 
   @override
@@ -208,7 +202,7 @@ class _BodyState extends State<Body> {
                   clipBehavior: Clip.hardEdge,
                   child: _userStore!.user!.profileImageUrl.isEmpty
                       ? Image.asset(
-                          'assets/icons/default_profile_icon.png',
+                          'assets/images/default_profile_image.png',
                           width: 48.w,
                           height: 48.h,
                         )

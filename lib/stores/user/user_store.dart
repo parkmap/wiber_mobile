@@ -120,7 +120,7 @@ abstract class _UserStore with Store {
   @action
   Future updateUserInfo({
     required String userNickname,
-    required String pushToken,
+    String? pushToken,
   }) async {
     try {
       var res = await _userRepository.updateUserInfo(
@@ -144,7 +144,6 @@ abstract class _UserStore with Store {
       var res = await _userRepository.createUser(
         username: username,
         app_uuid: getUuid()!,
-        push_token: "test",
       );
 
       return res;
@@ -158,6 +157,16 @@ abstract class _UserStore with Store {
     try {
       var res =
           await _userRepository.saveProfileImage(profileImage: profileImage);
+      return res;
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  @action
+  Future deleteProfileImage() async {
+    try {
+      var res = await _userRepository.deleteProfileImage();
       return res;
     } catch (err) {
       print(err);
@@ -323,6 +332,74 @@ abstract class _UserStore with Store {
   }
 
   @action
+  Future leaveWiberSpace({required String spaceId}) async {
+    try {
+      var res = await _userRepository.leaveWiberSpace(spaceId: spaceId);
+
+      return res;
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  @action
+  Future createWiberSpaceInviteLink({required String spaceId}) async {
+    try {
+      var res =
+          await _userRepository.createWiberSpaceInviteLink(spaceId: spaceId);
+
+      return res;
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  @action
+  Future kickUserFromWiberSpace({
+    required String spaceId,
+    required String exitId,
+  }) async {
+    try {
+      var res = await _userRepository.kickUserFromWiberSpace(
+        spaceId: spaceId,
+        exitId: exitId,
+      );
+
+      return res;
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  @action
+  Future enterWiberSpaceInvitation() async {
+    try {
+      var res = await _userRepository.enterWiberSpaceInvitation();
+
+      return res;
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  @action
+  Future changeOwnerOfWiberSpace({
+    required String spaceId,
+    required String userId,
+  }) async {
+    try {
+      var res = await _userRepository.changeOwnerOfWiberSpace(
+        spaceId: spaceId,
+        userId: userId,
+      );
+
+      return res;
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  @action
   Future<void> getCategoryList({
     required String spaceId,
   }) async {
@@ -416,7 +493,9 @@ abstract class _UserStore with Store {
                 title: el["title"],
                 body: el["content"] ?? "",
                 category: el["category_id"] ?? "",
-                endDate: el["date"] ?? "",
+                endDate: el["date"] == null || el["date"] == "null"
+                    ? ""
+                    : el["date"],
                 isCompleted: el["state"] == "완료",
               ))
           .cast<Bucket>()
@@ -486,8 +565,8 @@ abstract class _UserStore with Store {
     required String bucketId,
     String? state,
     String? date,
-    required String title,
-    required String content,
+    String? title,
+    String? content,
   }) async {
     try {
       var res = await _userRepository.updateBucket(

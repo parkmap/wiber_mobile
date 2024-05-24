@@ -3,14 +3,10 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:injectable/injectable.dart';
 import 'package:wiber_mobile/data/dio_client.dart';
 import 'package:wiber_mobile/data/network/constants/endpoints.dart';
-import 'package:wiber_mobile/models/bucket/bucket.dart';
-import 'package:wiber_mobile/models/bucket/bucket_list.dart';
-import 'package:wiber_mobile/models/user/user.dart';
-import 'package:wiber_mobile/models/wiber_space/wiber_space.dart';
-import 'package:wiber_mobile/models/wiber_space/wiber_space_list.dart';
 
 @lazySingleton
 class UserApi {
@@ -27,13 +23,14 @@ class UserApi {
   Future<dynamic> createUser({
     required String username,
     required String app_uuid,
-    required String push_token,
   }) async {
     try {
+      String? _fcmToken = await FirebaseMessaging.instance.getToken();
+
       var data = {
         "username": username,
         "app_uuid": app_uuid,
-        "push_token": push_token,
+        "push_token": _fcmToken,
       };
 
       var res = await _dioClient.post(Endpoints.auth, data: data);
@@ -58,6 +55,32 @@ class UserApi {
       var res = await _dioClient.put(
         Endpoints.uploadProfileImage,
         data: profileImage,
+        options: Options(
+          headers: {
+            "Content-Type": "image/png",
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      print(
+        error.toString(),
+      );
+    }
+  }
+
+  Future deleteProfileImage({
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var res = await _dioClient.delete(
+        Endpoints.uploadProfileImage,
         options: Options(
           headers: {
             "Content-Type": "image/png",
@@ -109,7 +132,7 @@ class UserApi {
   Future updateUserInfo({
     required String userId,
     required String userNickname,
-    required String pushToken,
+    String? pushToken,
     required String username,
     required String password,
   }) async {
@@ -286,6 +309,207 @@ class UserApi {
     }
   }
 
+  Future leaveWiberSpace({
+    required String spaceId,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "space_id": spaceId,
+      };
+
+      var res = await _dio.put(
+        "${Endpoints.wiberSpace}/exit",
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      if (error is DioException && error.response != null) {
+        return DioError(
+          requestOptions: error.requestOptions,
+          error: error.response?.data['message'],
+        );
+      } else {
+        print(
+          error.toString(),
+        );
+        rethrow;
+      }
+    }
+  }
+
+  Future createWiberSpaceInviteLink({
+    required String spaceId,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "space_id": spaceId,
+      };
+
+      var res = await _dio.put(
+        "${Endpoints.wiberSpace}/share",
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      if (error is DioException && error.response != null) {
+        return DioError(
+          requestOptions: error.requestOptions,
+          error: error.response?.data['message'],
+        );
+      } else {
+        print(
+          error.toString(),
+        );
+        rethrow;
+      }
+    }
+  }
+
+  Future kickUserFromWiberSpace({
+    required String spaceId,
+    required String exitId,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "space_id": spaceId,
+        "exit_id": exitId,
+      };
+
+      var res = await _dio.patch(
+        "${Endpoints.wiberSpace}/manage",
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      if (error is DioException && error.response != null) {
+        return DioError(
+          requestOptions: error.requestOptions,
+          error: error.response?.data['message'],
+        );
+      } else {
+        print(
+          error.toString(),
+        );
+        rethrow;
+      }
+    }
+  }
+
+  Future changeOwnerOfWiberSpace({
+    required String spaceId,
+    required String userId,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "space_id": spaceId,
+        "user_id": userId,
+      };
+
+      var res = await _dio.patch(
+        "${Endpoints.wiberSpace}/manage",
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      if (error is DioException && error.response != null) {
+        return DioError(
+          requestOptions: error.requestOptions,
+          error: error.response?.data['message'],
+        );
+      } else {
+        print(
+          error.toString(),
+        );
+        rethrow;
+      }
+    }
+  }
+
+  Future enterWiberSpaceInvitation({
+    required String spaceId,
+    required String shareId,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+      var data = {
+        "space_id": spaceId,
+        "share_id": shareId,
+      };
+
+      var res = await _dio.put(
+        "${Endpoints.wiberSpace}/enter",
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': basicAuth,
+          },
+        ),
+      );
+
+      return res;
+    } catch (error) {
+      if (error is DioException && error.response != null) {
+        return DioError(
+          requestOptions: error.requestOptions,
+          error: error.response?.data['message'],
+        );
+      } else {
+        print(
+          error.toString(),
+        );
+        rethrow;
+      }
+    }
+  }
+
   Future getCategoryList({
     required String spaceId,
     required String username,
@@ -379,6 +603,7 @@ class UserApi {
 
       var data = {
         "space_id": spaceId,
+        "category_id": categoryId,
         "title": title,
       };
 
@@ -547,8 +772,8 @@ class UserApi {
     required String categoryId,
     String? state,
     String? date,
-    required String title,
-    required String content,
+    String? title,
+    String? content,
     required String username,
     required String password,
   }) async {

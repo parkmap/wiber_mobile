@@ -13,7 +13,7 @@ class Bucket with _$Bucket {
     required String body,
     required String category,
     required bool isCompleted,
-    @Default("") String endDate,
+    @Default("") String? endDate,
   }) = _Bucket;
 
   factory Bucket.fromJson(Map<String, dynamic> json) => _$BucketFromJson(json);

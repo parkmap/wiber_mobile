@@ -12,4 +12,13 @@ class TextUtils {
   }
 
   static String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+
+  static bool canParseDateTime(String val) {
+    try {
+      DateTime.parse(val);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

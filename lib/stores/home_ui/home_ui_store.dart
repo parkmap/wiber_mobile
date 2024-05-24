@@ -26,6 +26,12 @@ abstract class _HomeUIStore with Store {
   @observable
   String editingCategoryName = "";
 
+  @observable
+  bool isCreatingSpace = false;
+
+  @observable
+  bool isEditingSpace = false;
+
   // getters:-------------------------------------------------------------------
 
   @computed

@@ -197,20 +197,19 @@ mixin _$BucketUIStore on _BucketUIStore, Store {
     });
   }
 
-  late final _$tempSelectedCategoryAtom =
-      Atom(name: '_BucketUIStore.tempSelectedCategory', context: context);
+  late final _$tempCategoryNameAtom =
+      Atom(name: '_BucketUIStore.tempCategoryName', context: context);
 
   @override
-  Category? get tempSelectedCategory {
-    _$tempSelectedCategoryAtom.reportRead();
-    return super.tempSelectedCategory;
+  String get tempCategoryName {
+    _$tempCategoryNameAtom.reportRead();
+    return super.tempCategoryName;
   }
 
   @override
-  set tempSelectedCategory(Category? value) {
-    _$tempSelectedCategoryAtom.reportWrite(value, super.tempSelectedCategory,
-        () {
-      super.tempSelectedCategory = value;
+  set tempCategoryName(String value) {
+    _$tempCategoryNameAtom.reportWrite(value, super.tempCategoryName, () {
+      super.tempCategoryName = value;
     });
   }
 
@@ -227,6 +226,23 @@ mixin _$BucketUIStore on _BucketUIStore, Store {
   set sortingList(List<String> value) {
     _$sortingListAtom.reportWrite(value, super.sortingList, () {
       super.sortingList = value;
+    });
+  }
+
+  late final _$tempSelectedCategoryAtom =
+      Atom(name: '_BucketUIStore.tempSelectedCategory', context: context);
+
+  @override
+  Category? get tempSelectedCategory {
+    _$tempSelectedCategoryAtom.reportRead();
+    return super.tempSelectedCategory;
+  }
+
+  @override
+  set tempSelectedCategory(Category? value) {
+    _$tempSelectedCategoryAtom.reportWrite(value, super.tempSelectedCategory,
+        () {
+      super.tempSelectedCategory = value;
     });
   }
 
@@ -371,6 +387,17 @@ mixin _$BucketUIStore on _BucketUIStore, Store {
   }
 
   @override
+  void setTempCategoryName(String val) {
+    final _$actionInfo = _$_BucketUIStoreActionController.startAction(
+        name: '_BucketUIStore.setTempCategoryName');
+    try {
+      return super.setTempCategoryName(val);
+    } finally {
+      _$_BucketUIStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 selectedTabIndex: ${selectedTabIndex},
@@ -384,8 +411,9 @@ newBucketDetailCategory: ${newBucketDetailCategory},
 createNewBucketPhase: ${createNewBucketPhase},
 isEditing: ${isEditing},
 tempBucket: ${tempBucket},
-tempSelectedCategory: ${tempSelectedCategory},
+tempCategoryName: ${tempCategoryName},
 sortingList: ${sortingList},
+tempSelectedCategory: ${tempSelectedCategory},
 selectedSort: ${selectedSort},
 canEditCategoryName: ${canEditCategoryName}
     ''';

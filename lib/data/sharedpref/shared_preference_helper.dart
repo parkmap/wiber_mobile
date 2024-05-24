@@ -138,4 +138,28 @@ class SharedPreferenceHelper {
   Future<bool> removeUuid() async {
     return _sharedPreference.remove(Preferences.uuid);
   }
+
+  Future<bool> saveTempSpaceId(String spaceId) async {
+    return _sharedPreference.setString(Preferences.tempSpaceId, spaceId);
+  }
+
+  String? get tempSpaceId {
+    return _sharedPreference.getString(Preferences.tempSpaceId);
+  }
+
+  Future<bool> removeTempSpaceId() async {
+    return _sharedPreference.remove(Preferences.tempSpaceId);
+  }
+
+  Future<bool> saveTempShareId(String shareId) async {
+    return _sharedPreference.setString(Preferences.tempShareId, shareId);
+  }
+
+  String? get tempShareId {
+    return _sharedPreference.getString(Preferences.tempShareId);
+  }
+
+  Future<bool> removeTempShareId() async {
+    return _sharedPreference.remove(Preferences.tempShareId);
+  }
 }

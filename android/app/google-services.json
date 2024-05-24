@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "981075863140",
+    "project_id": "wiber-now",
+    "storage_bucket": "wiber-now.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981075863140:android:f00ef88f48c1327aef2171",
+        "android_client_info": {
+          "package_name": "com.example.wiber_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvZlVjYomj7SSx1_6h9Kx6HRZcQmsLPHY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

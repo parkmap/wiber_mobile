@@ -193,11 +193,21 @@ class _BodyState extends State<Body> {
                       }
                     }
 
-                    await _userStore?.getUserInfo();
+                    if (res["message"] == "이미 존재하는 사용자입니다.") {
+                      await _userStore!.updateUserInfo(
+                        userNickname: widget.nickname,
+                      );
+
+                      await _userStore!.refreshUserInfo();
+                    } else {
+                      await _userStore?.getUserInfo();
+                    }
 
                     context.router.replaceAll([
                       const HomeRoute(),
                     ]);
+
+                    _userStore!.isCreatingUser = false;
                   }
                 },
                 child: _userStore!.isCreatingUser

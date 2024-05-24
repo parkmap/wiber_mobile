@@ -47,13 +47,16 @@ abstract class _BucketUIStore with Store {
   Bucket? tempBucket;
 
   @observable
-  Category? tempSelectedCategory;
+  String tempCategoryName = "";
 
   @observable
   List<String> sortingList = [
     "등록일 기준",
     "완료일 기준",
   ];
+
+  @observable
+  Category? tempSelectedCategory;
 
   @observable
   String selectedSort = "등록일 기준";
@@ -122,5 +125,10 @@ abstract class _BucketUIStore with Store {
     newBucketName = "";
     newBucketDescription = "";
     newBucketEndDate = "";
+  }
+
+  @action
+  void setTempCategoryName(String val) {
+    tempCategoryName = val;
   }
 }

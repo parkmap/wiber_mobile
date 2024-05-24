@@ -19,6 +19,12 @@ abstract class _SettingUiStore with Store {
   @observable
   bool isUpdatingUserInfo = false;
 
+  @observable
+  bool isResetProfileImage = false;
+
+  @observable
+  String nickname = "";
+
   // getters:-------------------------------------------------------------------
 
   // constructor:---------------------------------------------------------------
@@ -26,15 +32,27 @@ abstract class _SettingUiStore with Store {
   @action
   void setProfileImage(XFile val) {
     profileImage = val;
+    isResetProfileImage = false;
   }
 
   @action
   void resetProfileImage() {
     profileImage = null;
+    isResetProfileImage = true;
   }
 
   @action
   void toggleIsUpdatingUserInfo() {
     isUpdatingUserInfo = !isUpdatingUserInfo;
+  }
+
+  @action
+  void setNickname(String val) {
+    nickname = val;
+  }
+
+  @action
+  void resetNickname() {
+    nickname = "";
   }
 }

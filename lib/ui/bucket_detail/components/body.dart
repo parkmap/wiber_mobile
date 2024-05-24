@@ -1,9 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:indexed/indexed.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +18,7 @@ import 'package:wiber_mobile/models/category/category.dart';
 import 'package:wiber_mobile/models/wiber_space/wiber_space.dart';
 import 'package:wiber_mobile/stores/bucket_ui/bucket_ui_store.dart';
 import 'package:wiber_mobile/stores/user/user_store.dart';
+import 'package:wiber_mobile/utils/text_utils.dart';
 import 'package:wiber_mobile/widgets/custom_circle_checkbox.dart';
 import 'package:wiber_mobile/widgets/default_bottom_dialogue.dart';
 import 'package:wiber_mobile/widgets/default_flat_button.dart';
@@ -42,6 +47,7 @@ class _BodyState extends State<Body> {
   BucketUIStore _uiStore = BucketUIStore();
   TextEditingController _newCategoryController = TextEditingController();
   late FocusNode _newCategoryFocusNode;
+  FToast fToast = FToast();
 
   @override
   void initState() {
@@ -203,9 +209,15 @@ class _BodyState extends State<Body> {
                     spaceId: widget.space.id,
                     categoryId: _uiStore.tempBucket!.category,
                     bucketId: _uiStore.tempBucket!.id,
-                    title: _uiStore.tempBucket!.title,
-                    content: _uiStore.tempBucket!.body,
-                    date: _uiStore.tempBucket!.endDate,
+                    title: _uiStore.tempBucket!.title == widget.item.title
+                        ? null
+                        : _uiStore.tempBucket!.title,
+                    content: _uiStore.tempBucket!.body == widget.item.body
+                        ? null
+                        : _uiStore.tempBucket!.body,
+                    date: _uiStore.tempBucket!.endDate == widget.item.endDate
+                        ? null
+                        : _uiStore.tempBucket!.endDate,
                   );
                   await _userStore!.getBucketList(spaceId: widget.space.id);
                   widget.onBack();
@@ -562,37 +574,39 @@ class _BodyState extends State<Body> {
             height: 22.h,
           ),
           SizedBox(width: 17.w),
-          _uiStore.tempBucket!.endDate.isNotEmpty
-              ? Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.w,
-                    vertical: 8.h,
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: 12.w,
+              vertical: 8.h,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.gray15,
+              borderRadius: BorderRadius.circular(20.r),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                AutoSizeText(
+                  TextUtils.canParseDateTime(_uiStore.tempBucket!.endDate!) &&
+                          _uiStore.tempBucket!.endDate!.isNotEmpty
+                      ? "${DateFormat('yyyy년 MM월 dd일').format(DateTime.parse(_uiStore.tempBucket!.endDate!))} 까지"
+                      : "완료일이 없습니다",
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.primaryBlack,
                   ),
-                  decoration: BoxDecoration(
-                    color: AppColors.gray15,
-                    borderRadius: BorderRadius.circular(20.r),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      AutoSizeText(
-                        "${DateFormat('yyyy년 MM월 dd일').format(DateTime.parse(_uiStore.tempBucket!.endDate))} 까지",
-                        style: TextStyle(
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.primaryBlack,
-                        ),
-                      ),
-                      SizedBox(width: 6.w),
-                      Image.asset(
-                        "assets/icons/x_icon.png",
-                        width: 10.sp,
-                        height: 10.sp,
-                      ),
-                    ],
-                  ))
-              : const SizedBox.shrink(),
+                ),
+                SizedBox(width: 6.w),
+                Image.asset(
+                  "assets/icons/x_icon.png",
+                  width: 10.sp,
+                  height: 10.sp,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -627,53 +641,158 @@ class _BodyState extends State<Body> {
             ],
           ),
           SizedBox(height: 10.h),
-          _uiStore.tempBucket!.endDate.isNotEmpty
-              ? GestureDetector(
-                  onTap: () {
-                    Bucket bucket = Bucket(
-                      id: _uiStore.tempBucket!.id,
-                      title: _uiStore.tempBucket!.title,
-                      body: _uiStore.tempBucket!.body,
-                      category: _uiStore.tempBucket!.category,
-                      endDate: "",
-                      isCompleted: _uiStore.tempBucket!.isCompleted,
-                    );
-
-                    _uiStore.tempBucket = bucket;
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 12.w,
-                      vertical: 8.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.gray15,
-                      borderRadius: BorderRadius.circular(20.r),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        AutoSizeText(
-                          "${DateFormat('yyyy년 MM월 dd일').format(DateTime.parse(_uiStore.tempBucket!.endDate))} 까지",
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.primaryBlack,
-                          ),
-                        ),
-                        SizedBox(width: 6.w),
-                        Image.asset(
-                          "assets/icons/x_icon.png",
-                          width: 10.sp,
-                          height: 10.sp,
-                        ),
-                      ],
+          GestureDetector(
+            onTap: () {
+              _showBottomDateFieldSheet();
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 12.w,
+                vertical: 8.h,
+              ),
+              decoration: BoxDecoration(
+                color: AppColors.gray15,
+                borderRadius: BorderRadius.circular(20.r),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  AutoSizeText(
+                    TextUtils.canParseDateTime(_uiStore.tempBucket!.endDate!) &&
+                            _uiStore.tempBucket!.endDate!.isNotEmpty
+                        ? "${DateFormat('yyyy년 MM월 dd일').format(DateTime.parse(_uiStore.tempBucket!.endDate!))} 까지"
+                        : "완료일이 없습니다",
+                    style: TextStyle(
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.primaryBlack,
                     ),
                   ),
-                )
-              : const SizedBox.shrink(),
+                  SizedBox(width: 6.w),
+                  GestureDetector(
+                    onTap: () {
+                      Bucket bucket = Bucket(
+                        id: _uiStore.tempBucket!.id,
+                        title: _uiStore.tempBucket!.title,
+                        body: _uiStore.tempBucket!.body,
+                        category: _uiStore.tempBucket!.category,
+                        endDate: "null",
+                        isCompleted: _uiStore.tempBucket!.isCompleted,
+                      );
+
+                      _uiStore.tempBucket = bucket;
+                    },
+                    child: Image.asset(
+                      "assets/icons/x_icon.png",
+                      width: 10.sp,
+                      height: 10.sp,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
+      ),
+    );
+  }
+
+  void _showBottomDateFieldSheet() {
+    showModalBottomSheet(
+      context: context,
+      enableDrag: false,
+      builder: (_) => Container(
+        padding: EdgeInsets.only(
+          left: 30.w,
+          right: 30.w,
+          bottom: 16.h,
+          top: 24.h,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20.r),
+            topRight: Radius.circular(20.r),
+          ),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AutoSizeText(
+                  "날짜 선택",
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.gray100,
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    context.router.pop();
+                  },
+                  child: Image.asset(
+                    "assets/icons/x_icon.png",
+                    width: 15.sp,
+                    height: 15.sp,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 254.h,
+              width: double.infinity,
+              child: Center(
+                child: Container(
+                  width: 300.w,
+                  height: 215.h,
+                  decoration: BoxDecoration(
+                    color: AppColors.gray10,
+                    borderRadius: BorderRadius.circular(13.r),
+                  ),
+                  child: CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.date,
+                    initialDateTime: DateTime.now(),
+                    minimumDate:
+                        DateTime.now().subtract(const Duration(days: 1)),
+                    onDateTimeChanged: (val) {
+                      _uiStore.setNewBucketEndDate(val.toString());
+                    },
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20.h),
+            DefaultFlatButton(
+              onPressed: () {
+                if (_uiStore.newBucketEndDate.isNotEmpty) {
+                  Bucket bucket = Bucket(
+                    id: _uiStore.tempBucket!.id,
+                    title: _uiStore.tempBucket!.title,
+                    body: _uiStore.tempBucket!.body,
+                    category: _uiStore.tempBucket!.category,
+                    endDate: _uiStore.newBucketEndDate,
+                    isCompleted: _uiStore.tempBucket!.isCompleted,
+                  );
+
+                  _uiStore.tempBucket = bucket;
+                }
+                context.router.pop();
+              },
+              buttonColor: AppColors.primary1,
+              child: AutoSizeText(
+                "날짜 선택하기",
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1005,9 +1124,19 @@ class _BodyState extends State<Body> {
                         );
 
                         if (res != null) {
-                          context.router.pop();
-                          await _userStore!
-                              .getCategoryList(spaceId: widget.space.id);
+                          if (res is DioError) {
+                            context.router.pop();
+                            _showToast(res.error.toString());
+                          } else if (res.data["message"] ==
+                              "같은 이름의 카테고리가 이미 존재합니다.") {
+                            context.router.pop();
+                            _showToast("같은 이름의 카테고리가 이미 존재합니다.");
+                          } else {
+                            context.router.pop();
+                            _showToast("새 카테고리를 만들었어요.");
+                            await _userStore!
+                                .getCategoryList(spaceId: widget.space.id);
+                          }
                           _uiStore.setNewBucketDetailCategory("");
                           _newCategoryController.clear();
                           _uiStore.editingCategoryName = "";
@@ -1029,5 +1158,32 @@ class _BodyState extends State<Body> {
         ),
       );
     });
+  }
+
+  void _showToast(String text) {
+    Widget toast = Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.r),
+        color: AppColors.gray90.withOpacity(0.9),
+      ),
+      child: SizedBox(
+        width: double.infinity,
+        child: AutoSizeText(
+          text,
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w400,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: const Duration(seconds: 2),
+    );
   }
 }

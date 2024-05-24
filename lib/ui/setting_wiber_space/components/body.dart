@@ -4,6 +4,8 @@ import 'dart:typed_data';
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -34,18 +36,24 @@ class _BodyState extends State<Body> {
   UserStore? _userStore;
   SettingUiStore _uiStore = SettingUiStore();
   final ImagePicker picker = ImagePicker();
-  final TextEditingController _nicknameController = TextEditingController();
+  TextEditingController _nicknameController = TextEditingController();
   late FocusNode _nicknameFocusNode;
   FToast fToast = FToast();
 
   @override
   void initState() {
-    _uiStore = SettingUiStore();
-    _nicknameFocusNode = FocusNode();
-    fToast = FToast();
-    // if you want to use context from globally instead of content we need to pass navigatorKey.currentContext!
-    fToast.init(context);
     super.initState();
+    _uiStore = SettingUiStore();
+    fToast = FToast();
+
+    _nicknameFocusNode = FocusNode();
+    _nicknameFocusNode.addListener(() {
+      _handleListener();
+    });
+  }
+
+  void _handleListener() {
+    setState(() {});
   }
 
   @override
@@ -56,9 +64,11 @@ class _BodyState extends State<Body> {
 
     if (_userStore != userStore) {
       _userStore = userStore;
+      _uiStore.setNickname(_userStore!.user!.nickname);
+      _nicknameController.text = _userStore!.user!.nickname;
     }
 
-    _nicknameController.text = _userStore!.user!.nickname;
+    fToast.init(context);
   }
 
   @override
@@ -72,86 +82,98 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      child: Observer(
-        builder: (context) => Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Observer(builder: (context) {
+        return Stack(
           children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildTopBar(),
-                SizedBox(height: 20.h),
-                Container(
-                  width: double.infinity,
-                  height: 8.h,
-                  color: AppColors.gray15,
+            SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 80.h),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildTopBar(),
+                    SizedBox(height: 20.h),
+                    Container(
+                      width: double.infinity,
+                      height: 8.h,
+                      color: AppColors.gray15,
+                    ),
+                    _buildBottomItems(),
+                  ],
                 ),
-                _buildBottomItems(),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                left: 20.w,
-                right: 20.w,
-                bottom: 20.h,
               ),
-              child: Observer(builder: (context) {
-                return DefaultFlatButton(
-                  onPressed: _nicknameController.text.isEmpty ||
-                          _uiStore.isUpdatingUserInfo
-                      ? null
-                      : () async {
-                          _uiStore.toggleIsUpdatingUserInfo();
-                          if (_uiStore.profileImage != null) {
-                            Uint8List imageBytes =
-                                await _uiStore.profileImage!.readAsBytes();
-                            img.Image? originalImage =
-                                img.decodeImage(imageBytes);
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: KeyboardVisibilityBuilder(
+                builder: (context, isKeyboardVisible) {
+                  return Observer(builder: (context) {
+                    return DefaultFlatButton(
+                      detectKeyboard: true,
+                      isKeyboardVisible: isKeyboardVisible,
+                      onPressed: _uiStore.nickname.isEmpty ||
+                              _uiStore.isUpdatingUserInfo
+                          ? null
+                          : () async {
+                              _uiStore.toggleIsUpdatingUserInfo();
+                              if (_uiStore.profileImage != null) {
+                                Uint8List imageBytes =
+                                    await _uiStore.profileImage!.readAsBytes();
+                                img.Image? originalImage =
+                                    img.decodeImage(imageBytes);
 
-                            if (originalImage != null) {
-                              img.Image resizedImage = img.copyResize(
-                                  originalImage,
-                                  width: 300,
-                                  height: 300);
-                              Uint8List jpegImageBytes = Uint8List.fromList(
-                                  img.encodeJpg(resizedImage, quality: 85));
+                                if (originalImage != null) {
+                                  img.Image resizedImage = img.copyResize(
+                                      originalImage,
+                                      width: 300,
+                                      height: 300);
+                                  Uint8List jpegImageBytes = Uint8List.fromList(
+                                      img.encodeJpg(resizedImage, quality: 85));
 
-                              await _userStore?.saveProfileImage(
-                                profileImage: jpegImageBytes,
+                                  await _userStore?.saveProfileImage(
+                                    profileImage: jpegImageBytes,
+                                  );
+                                }
+                              }
+
+                              if (_userStore!
+                                      .user!.profileImageUrl.isNotEmpty &&
+                                  _uiStore.profileImage == null) {
+                                await _userStore?.deleteProfileImage();
+                              }
+
+                              await _userStore?.updateUserInfo(
+                                userNickname: _uiStore.nickname,
                               );
-                            }
-                          }
 
-                          await _userStore?.updateUserInfo(
-                            userNickname: _nicknameController.text,
-                            pushToken: "test",
-                          );
+                              await _userStore?.refreshUserInfo();
 
-                          await _userStore?.refreshUserInfo();
-
-                          _showToast("프로필이 변경되었습니다.");
-                          try {} catch (error) {
-                            print(error);
-                          } finally {
-                            _uiStore.toggleIsUpdatingUserInfo();
-                          }
-                        },
-                  child: _uiStore.isUpdatingUserInfo
-                      ? LoadingSpinner()
-                      : AutoSizeText(
-                          "저장",
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                );
-              }),
+                              _showToast("프로필이 변경되었습니다.");
+                              try {} catch (error) {
+                                print(error);
+                              } finally {
+                                _uiStore.toggleIsUpdatingUserInfo();
+                              }
+                            },
+                      child: _uiStore.isUpdatingUserInfo
+                          ? LoadingSpinner()
+                          : AutoSizeText(
+                              "저장",
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                    );
+                  });
+                },
+              ),
             ),
           ],
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -214,7 +236,8 @@ class _BodyState extends State<Body> {
                               shape: BoxShape.circle,
                             ),
                             child: _uiStore.profileImage == null
-                                ? _userStore!.user!.profileImageUrl.isEmpty
+                                ? _userStore!.user!.profileImageUrl.isEmpty ||
+                                        _uiStore.isResetProfileImage
                                     ? Image.asset(
                                         "assets/images/default_profile_image.png",
                                         width: 120.sp,
@@ -277,15 +300,17 @@ class _BodyState extends State<Body> {
           ),
           SizedBox(height: 12.h),
           TextFormFieldWidget(
+            autoFocus: false,
             textController: _nicknameController,
             onChanged: (val) {
-              _nicknameController.text = val;
+              _uiStore.setNickname(val);
             },
             focusNode: _nicknameFocusNode,
             hintText: "닉네임을 입력해주세요",
             maxLength: 6,
             suffixActions: () {
-              _nicknameController.text = "";
+              _uiStore.resetNickname();
+              _nicknameController.clear();
             },
           ),
         ],
@@ -294,75 +319,71 @@ class _BodyState extends State<Body> {
   }
 
   Widget _buildBottomItems() {
-    return Flexible(
-      child: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(
-            horizontal: 20.w,
-            vertical: 30.h,
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: 20.w,
+        vertical: 30.h,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AutoSizeText(
+            "내가 참여중인 위버스페이스",
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+              color: AppColors.gray100,
+            ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AutoSizeText(
-                "내가 참여중인 위버스페이스",
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.gray100,
+          ...List.generate(_userStore!.wiberSpaceList.length, (index) {
+            WiberSpace space = _userStore!.wiberSpaceList[index];
+            return InkWell(
+              onTap: () {
+                _showSpaceDeleteConfirmDialog(space);
+              },
+              child: Container(
+                margin: EdgeInsets.only(top: 12.h),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 17.w,
+                  vertical: 16.h,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.gray15,
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    AutoSizeText(
+                      space.title,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.primaryBlack,
+                      ),
+                    ),
+                    Container(
+                      width: 19.5.w,
+                      height: 19.5.h,
+                      decoration: const BoxDecoration(
+                        color: AppColors.gray50,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                          child: FaIcon(
+                        FontAwesomeIcons.minus,
+                        size: 8.sp,
+                        color: AppColors.gray15,
+                      )),
+                    ),
+                  ],
                 ),
               ),
-              ...List.generate(_userStore!.wiberSpaceList.length, (index) {
-                WiberSpace space = _userStore!.wiberSpaceList[index];
-                return InkWell(
-                  onTap: () {
-                    _showSpaceDeleteConfirmDialog(space);
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(top: 12.h),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 17.w,
-                      vertical: 16.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.gray15,
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        AutoSizeText(
-                          space.title,
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.primaryBlack,
-                          ),
-                        ),
-                        Container(
-                          width: 19.5.w,
-                          height: 19.5.h,
-                          decoration: const BoxDecoration(
-                            color: AppColors.gray50,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                              child: FaIcon(
-                            FontAwesomeIcons.minus,
-                            size: 8.sp,
-                            color: AppColors.gray15,
-                          )),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              })
-            ],
-          ),
-        ),
+            );
+          })
+        ],
       ),
     );
   }
@@ -475,10 +496,15 @@ class _BodyState extends State<Body> {
             ),
             InkWell(
               onTap: () async {
-                var res = await _userStore!.deleteWiberSpace(spaceId: item.id);
+                dynamic res;
+
+                if (item.owner == _userStore!.user!.id) {
+                  res = await _userStore!.deleteWiberSpace(spaceId: item.id);
+                } else {
+                  res = await _userStore!.leaveWiberSpace(spaceId: item.id);
+                }
 
                 if (res != null) {
-                  await _userStore!.deleteWiberSpace(spaceId: item.id);
                   context.router.pop();
                   _showToast("${item.title} 스페이스가 삭제되었습니다.");
                   await _userStore!.getWiberSpaceList();

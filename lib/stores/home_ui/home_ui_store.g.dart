@@ -98,6 +98,38 @@ mixin _$HomeUIStore on _HomeUIStore, Store {
     });
   }
 
+  late final _$isCreatingSpaceAtom =
+      Atom(name: '_HomeUIStore.isCreatingSpace', context: context);
+
+  @override
+  bool get isCreatingSpace {
+    _$isCreatingSpaceAtom.reportRead();
+    return super.isCreatingSpace;
+  }
+
+  @override
+  set isCreatingSpace(bool value) {
+    _$isCreatingSpaceAtom.reportWrite(value, super.isCreatingSpace, () {
+      super.isCreatingSpace = value;
+    });
+  }
+
+  late final _$isEditingSpaceAtom =
+      Atom(name: '_HomeUIStore.isEditingSpace', context: context);
+
+  @override
+  bool get isEditingSpace {
+    _$isEditingSpaceAtom.reportRead();
+    return super.isEditingSpace;
+  }
+
+  @override
+  set isEditingSpace(bool value) {
+    _$isEditingSpaceAtom.reportWrite(value, super.isEditingSpace, () {
+      super.isEditingSpace = value;
+    });
+  }
+
   late final _$_HomeUIStoreActionController =
       ActionController(name: '_HomeUIStore', context: context);
 
@@ -164,6 +196,8 @@ selectedCategoryIndex: ${selectedCategoryIndex},
 wiberSpaceTitle: ${wiberSpaceTitle},
 selectedCategory: ${selectedCategory},
 editingCategoryName: ${editingCategoryName},
+isCreatingSpace: ${isCreatingSpace},
+isEditingSpace: ${isEditingSpace},
 canEditCategoryName: ${canEditCategoryName}
     ''';
   }

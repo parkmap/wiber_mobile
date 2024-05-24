@@ -48,19 +48,17 @@ class UserRepository {
   Future createUser({
     required String username,
     required String app_uuid,
-    required String push_token,
   }) async {
     return await _userApi.createUser(
       username: username,
       app_uuid: app_uuid,
-      push_token: push_token,
     );
   }
 
   Future updateUserInfo({
     required String userId,
     required String userNickname,
-    required String pushToken,
+    String? pushToken,
   }) async {
     return await _userApi.updateUserInfo(
       userId: userId,
@@ -103,6 +101,13 @@ class UserRepository {
     );
   }
 
+  Future deleteProfileImage() async {
+    return await _userApi.deleteProfileImage(
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
   Future getWiberSpaceList() async {
     return await _userApi.getWiberSpaceList(
       username: _sharedPrefsHelper.userId!,
@@ -140,6 +145,65 @@ class UserRepository {
       username: _sharedPrefsHelper.userId!,
       password: _sharedPrefsHelper.uuid!,
     );
+  }
+
+  Future leaveWiberSpace({
+    required String spaceId,
+  }) async {
+    return await _userApi.leaveWiberSpace(
+      spaceId: spaceId,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
+  Future createWiberSpaceInviteLink({
+    required String spaceId,
+  }) async {
+    return await _userApi.createWiberSpaceInviteLink(
+      spaceId: spaceId,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
+  Future kickUserFromWiberSpace({
+    required String spaceId,
+    required String exitId,
+  }) async {
+    return await _userApi.kickUserFromWiberSpace(
+      spaceId: spaceId,
+      exitId: exitId,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
+  Future changeOwnerOfWiberSpace({
+    required String spaceId,
+    required String userId,
+  }) async {
+    return await _userApi.changeOwnerOfWiberSpace(
+      spaceId: spaceId,
+      userId: userId,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+  }
+
+  Future enterWiberSpaceInvitation() async {
+    var res = await _userApi.enterWiberSpaceInvitation(
+      spaceId: _sharedPrefsHelper.tempSpaceId!,
+      shareId: _sharedPrefsHelper.tempShareId!,
+      username: _sharedPrefsHelper.userId!,
+      password: _sharedPrefsHelper.uuid!,
+    );
+
+    if (res != null && res != DioException) {
+      await _sharedPrefsHelper.removeTempSpaceId();
+      await _sharedPrefsHelper.removeTempShareId();
+    }
+    return res;
   }
 
   Future getCategoryList({required String spaceId}) async {
@@ -228,8 +292,8 @@ class UserRepository {
     required String bucketId,
     String? state,
     String? date,
-    required String title,
-    required String content,
+    String? title,
+    String? content,
   }) async {
     return await _userApi.updateBucket(
       spaceId: spaceId,

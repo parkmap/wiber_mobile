@@ -12,4 +12,6 @@ class Preferences {
   static const String uuid = "uuid";
   static const String otherUserInfo = "other_user_info";
   static const String selfInfo = "self_info";
+  static const String tempShareId = "temp_share_id";
+  static const String tempSpaceId = "temp_space_id";
 }
