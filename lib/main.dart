@@ -9,7 +9,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
-import 'package:wiber_mobile/data/network/constants/endpoints.dart';
 import 'package:worker_manager/worker_manager.dart';
 
 import 'injection.dart';
@@ -48,6 +47,7 @@ Future<void> main() async {
     nativeAppKey: '868f20dd68b14fe8357b0e7096d15c44',
     javaScriptAppKey: 'b50d10b74c4be8c22f39cfd0fd2cad67',
   );
+
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.remove("temp_space_id");
   prefs.remove("temp_share_id");
