@@ -25,12 +25,13 @@ class UserApi {
     required String app_uuid,
   }) async {
     try {
-      String? _fcmToken = await FirebaseMessaging.instance.getToken();
+      // String? _fcmToken = await FirebaseMessaging.instance.getToken();
 
       var data = {
         "username": username,
         "app_uuid": app_uuid,
-        "push_token": _fcmToken,
+        // "push_token": _fcmToken,
+        "push_token": "test",
       };
 
       var res = await _dioClient.post(Endpoints.auth, data: data);

@@ -559,6 +559,12 @@ class _BodyState extends State<Body> {
                                       _uiStore.setSelectedTabIndex(0);
                                       _uiStore.setSelectedCategoryIndex(-1);
 
+                                      await _userStore!.getBucketList(
+                                        spaceId: widget.item.id,
+                                        categoryId: "",
+                                        state: 0,
+                                      );
+
                                       _showToast("버킷 1개를 삭제했어요.");
                                     },
                                   ));

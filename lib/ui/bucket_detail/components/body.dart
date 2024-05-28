@@ -824,16 +824,11 @@ class _BodyState extends State<Body> {
             ),
             InkWell(
               onTap: () async {
-                _userStore!.deleteBucket(
+                await _userStore!.deleteBucket(
                   spaceId: widget.space.id,
                   bucketId: _uiStore.tempBucket!.id,
                 );
 
-                await _userStore!.getBucketList(
-                  spaceId: widget.item.id,
-                  categoryId: "",
-                  state: 0,
-                );
                 widget.onDelete();
               },
               child: Container(

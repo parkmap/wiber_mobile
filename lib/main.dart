@@ -66,7 +66,7 @@ Future<void> main() async {
   }, onError: (Object err) {
     print(err);
   });
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   await setPreferredOrientations();
   setupDi(Env.dev);
 

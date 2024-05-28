@@ -796,6 +796,12 @@ class _BodyState extends State<Body> {
                                         .popUntilRouteWithName("HomeRoute");
                                     _uiStore.isCreatingSpace = false;
                                     _showToast("같은 이름의 스페이스가 이미 존재합니다.");
+                                  } else if (res.data["message"] ==
+                                      "스페이스 생성 제한을 초과했습니다.") {
+                                    context.router
+                                        .popUntilRouteWithName("HomeRoute");
+                                    _uiStore.isCreatingSpace = false;
+                                    _showToast("스페이스 생성 제한을 초과했습니다.");
                                   } else {
                                     context.router
                                         .popUntilRouteWithName("HomeRoute");
@@ -823,6 +829,9 @@ class _BodyState extends State<Body> {
                               }
 
                               _uiStore.wiberSpaceTitle = "";
+
+                              _uiStore.isCreatingSpace = false;
+                              _uiStore.isEditingSpace = false;
                             } catch (err) {
                               print(err);
                               _uiStore.isCreatingSpace = false;
