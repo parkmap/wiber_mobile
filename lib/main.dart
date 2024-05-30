@@ -9,6 +9,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
+import 'package:wiber_mobile/firebase_options.dart';
 import 'package:worker_manager/worker_manager.dart';
 
 import 'injection.dart';
@@ -66,7 +67,9 @@ Future<void> main() async {
   }, onError: (Object err) {
     print(err);
   });
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await setPreferredOrientations();
   setupDi(Env.dev);
 

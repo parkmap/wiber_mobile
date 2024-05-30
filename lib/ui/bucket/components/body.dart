@@ -580,8 +580,6 @@ class _BodyState extends State<Body> {
                                         spaceId: widget.item.id,
                                         categoryId: bucket.category,
                                         bucketId: bucket.id,
-                                        title: bucket.title,
-                                        content: bucket.body,
                                         state:
                                             bucket.isCompleted ? "진행중" : "완료",
                                       );
