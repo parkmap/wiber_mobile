@@ -63,6 +63,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '981075863140',
     projectId: 'wiber-now',
     storageBucket: 'wiber-now.appspot.com',
-    iosBundleId: 'com.example.wiberMobile',
+    iosBundleId: 'com.wiber.now',
   );
 }

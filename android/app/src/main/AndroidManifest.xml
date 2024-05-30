@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.wiber_mobile">
+    package="com.wiber.now">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
 
    <application
-        android:label="wiber_mobile"
+        android:label="Wiber"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

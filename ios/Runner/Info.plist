@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Wiber Mobile</string>
+	<string>Wiber</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>wiber_mobile</string>
+	<string>Wiber</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -50,11 +50,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Wiber Mobile requires access to your camera to take photos.</string>
+	<string>Wiber requires access to your camera to take photos.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Wiber Mobile requires access to your microphone to record audio.</string>
+	<string>Wiber requires access to your microphone to record audio.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Wiber Mobile requires access to your photo library to upload photos.</string>
+	<string>Wiber requires access to your photo library to upload photos.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

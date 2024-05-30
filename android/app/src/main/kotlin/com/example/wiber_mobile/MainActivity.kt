@@ -1,4 +1,4 @@
-package com.example.wiber_mobile
+package com.com.wiber.now
 
 import io.flutter.embedding.android.FlutterActivity
 
