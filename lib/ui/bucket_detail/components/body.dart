@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:indexed/indexed.dart';
@@ -167,8 +168,8 @@ class _BodyState extends State<Body> {
                   await _userStore!.getBucketList(spaceId: widget.space.id);
                   context.router.pop();
                 },
-                child: Image.asset(
-                  'assets/icons/chevron_left_icon.png',
+                child: SvgPicture.asset(
+                  'assets/icons/chevron_left_icon.svg',
                   width: 20.w,
                   height: 15.h,
                 ),
@@ -177,8 +178,8 @@ class _BodyState extends State<Body> {
                 onTap: () {
                   _showDeleteBucketConfirmDialog();
                 },
-                child: Image.asset(
-                  'assets/icons/delete_icon.png',
+                child: SvgPicture.asset(
+                  'assets/icons/delete_icon.svg',
                   width: 22.w,
                   height: 22.h,
                 ),
@@ -222,8 +223,8 @@ class _BodyState extends State<Body> {
                   await _userStore!.getBucketList(spaceId: widget.space.id);
                   widget.onBack();
                 },
-                child: Image.asset(
-                  'assets/icons/chevron_left_icon.png',
+                child: SvgPicture.asset(
+                  'assets/icons/chevron_left_icon.svg',
                   width: 20.w,
                   height: 15.h,
                 ),
@@ -232,8 +233,8 @@ class _BodyState extends State<Body> {
                 onTap: () {
                   _showDeleteBucketConfirmDialog();
                 },
-                child: Image.asset(
-                  'assets/icons/delete_icon.png',
+                child: SvgPicture.asset(
+                  'assets/icons/delete_icon.svg',
                   width: 22.w,
                   height: 22.h,
                 ),
@@ -344,8 +345,8 @@ class _BodyState extends State<Body> {
                   ),
                 ),
                 SizedBox(width: 6.w),
-                Image.asset(
-                  "assets/icons/caret_down_icon.png",
+                SvgPicture.asset(
+                  "assets/icons/caret_down_icon.svg",
                   width: 8.w,
                   height: 6.h,
                   fit: BoxFit.fill,
@@ -430,8 +431,8 @@ class _BodyState extends State<Body> {
                     ),
                   ),
                   SizedBox(width: 6.w),
-                  Image.asset(
-                    "assets/icons/caret_down_icon.png",
+                  SvgPicture.asset(
+                    "assets/icons/caret_down_icon.svg",
                     width: 8.w,
                     height: 6.h,
                     fit: BoxFit.fill,
@@ -454,8 +455,8 @@ class _BodyState extends State<Body> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(
-            "assets/icons/message_icon.png",
+          SvgPicture.asset(
+            "assets/icons/message_icon.svg",
             width: 22.w,
             height: 20.h,
           ),
@@ -489,8 +490,8 @@ class _BodyState extends State<Body> {
         children: [
           Row(
             children: [
-              Image.asset(
-                "assets/icons/message_icon.png",
+              SvgPicture.asset(
+                "assets/icons/message_icon.svg",
                 width: 22.w,
                 height: 20.h,
               ),
@@ -568,8 +569,8 @@ class _BodyState extends State<Body> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(
-            "assets/icons/clock_icon.png",
+          SvgPicture.asset(
+            "assets/icons/clock_icon.svg",
             width: 22.w,
             height: 22.h,
           ),
@@ -599,8 +600,8 @@ class _BodyState extends State<Body> {
                   ),
                 ),
                 SizedBox(width: 6.w),
-                Image.asset(
-                  "assets/icons/x_icon.png",
+                SvgPicture.asset(
+                  "assets/icons/x_icon.svg",
                   width: 10.sp,
                   height: 10.sp,
                 ),
@@ -624,8 +625,8 @@ class _BodyState extends State<Body> {
         children: [
           Row(
             children: [
-              Image.asset(
-                "assets/icons/clock_icon.png",
+              SvgPicture.asset(
+                "assets/icons/clock_icon.svg",
                 width: 22.w,
                 height: 22.h,
               ),
@@ -683,8 +684,8 @@ class _BodyState extends State<Body> {
 
                       _uiStore.tempBucket = bucket;
                     },
-                    child: Image.asset(
-                      "assets/icons/x_icon.png",
+                    child: SvgPicture.asset(
+                      "assets/icons/x_icon.svg",
                       width: 10.sp,
                       height: 10.sp,
                     ),
@@ -733,8 +734,8 @@ class _BodyState extends State<Body> {
                   onTap: () {
                     context.router.pop();
                   },
-                  child: Image.asset(
-                    "assets/icons/x_icon.png",
+                  child: SvgPicture.asset(
+                    "assets/icons/x_icon.svg",
                     width: 15.sp,
                     height: 15.sp,
                   ),

@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -194,8 +195,8 @@ class _BodyState extends State<Body> {
                 onTap: () {
                   context.router.pop();
                 },
-                child: Image.asset(
-                  'assets/icons/chevron_left_icon.png',
+                child: SvgPicture.asset(
+                  'assets/icons/chevron_left_icon.svg',
                   width: 20.w,
                   height: 15.h,
                 ),
@@ -272,8 +273,8 @@ class _BodyState extends State<Body> {
                             ],
                           ),
                           child: Center(
-                            child: Image.asset(
-                              "assets/icons/camera_icon.png",
+                            child: SvgPicture.asset(
+                              "assets/icons/camera_icon.svg",
                               width: 21.sp,
                               height: 18.sp,
                             ),

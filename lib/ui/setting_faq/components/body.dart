@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +38,7 @@ class _BodyState extends State<Body> {
   List<Faq> faqList = [
     Faq(
       id: "0",
-      imageUrl: "assets/icons/setting_faq_link_icon.png",
+      imageUrl: "assets/icons/setting_faq_link_icon.svg",
       title: "상대방과의 연결을 끊고 싶어요",
       subTitle: "연결",
       contentText: "상대방과의 연결해제는 마이페이지에서 설정하실 수 있습니다.",
@@ -45,7 +46,7 @@ class _BodyState extends State<Body> {
     ),
     Faq(
       id: "1",
-      imageUrl: "assets/icons/setting_faq_light_icon.png",
+      imageUrl: "assets/icons/setting_faq_light_icon.svg",
       title: "제가 원하는 카테고리 추가하고 싶어요",
       subTitle: "카테고리",
       contentText: "상대방과의 연결해제는 마이페이지에서 설정하실 수 있습니다.",
@@ -53,7 +54,7 @@ class _BodyState extends State<Body> {
     ),
     Faq(
       id: "2",
-      imageUrl: "assets/icons/setting_faq_message_icon.png",
+      imageUrl: "assets/icons/setting_faq_message_icon.svg",
       title: "초대코드로 앱을 실행해도 연동이 안돼요",
       subTitle: "카테고리",
       contentText: "상대방과의 연결해제는 마이페이지에서 설정하실 수 있습니다.",
@@ -127,7 +128,7 @@ class _BodyState extends State<Body> {
                   (index) {
                     Faq item = faqList[index];
                     return _buildItems(
-                      image: Image.asset(
+                      image: SvgPicture.asset(
                         item.imageUrl,
                         width: 20.w,
                         height: 20.h,
@@ -165,8 +166,8 @@ class _BodyState extends State<Body> {
                   onTap: () {
                     context.router.pop();
                   },
-                  child: Image.asset(
-                    'assets/icons/chevron_left_icon.png',
+                  child: SvgPicture.asset(
+                    'assets/icons/chevron_left_icon.svg',
                     width: 20.w,
                     height: 15.h,
                   ),

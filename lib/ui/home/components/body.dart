@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:indexed/indexed.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_share.dart';
@@ -155,8 +156,8 @@ class _BodyState extends State<Body> {
             children: [
               InkWell(
                 onTap: () {},
-                child: Image.asset(
-                  'assets/icons/notification_icon.png',
+                child: SvgPicture.asset(
+                  'assets/icons/notification_icon.svg',
                   width: 18.12.w,
                   height: 19.5.h,
                 ),
@@ -166,8 +167,8 @@ class _BodyState extends State<Body> {
                 onTap: () {
                   context.router.push(const SettingRoute());
                 },
-                child: Image.asset(
-                  'assets/icons/profile_icon.png',
+                child: SvgPicture.asset(
+                  'assets/icons/profile_icon.svg',
                   width: 22.w,
                   height: 22.h,
                 ),
@@ -339,8 +340,8 @@ class _BodyState extends State<Body> {
                           horizontal: 10.sp,
                           vertical: 3.5.sp,
                         ),
-                        child: Image.asset(
-                          "assets/icons/vertical_icon.png",
+                        child: SvgPicture.asset(
+                          "assets/icons/vertical_icon.svg",
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -422,8 +423,8 @@ class _BodyState extends State<Body> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      "assets/icons/list_icon.png",
+                    SvgPicture.asset(
+                      "assets/icons/list_icon.svg",
                       width: 15.w,
                       height: 17.5.h,
                     ),
@@ -640,8 +641,8 @@ class _BodyState extends State<Body> {
                   onTap: () {
                     context.router.pop();
                   },
-                  child: Image.asset(
-                    "assets/icons/x_icon.png",
+                  child: SvgPicture.asset(
+                    "assets/icons/x_icon.svg",
                     width: 24.sp,
                     height: 24.sp,
                   ),
@@ -708,8 +709,8 @@ class _BodyState extends State<Body> {
                           width: 14.55.w,
                           height: 12.h,
                           margin: EdgeInsets.only(left: 8.w),
-                          child: Image.asset(
-                            "assets/icons/crown_icon.png",
+                          child: SvgPicture.asset(
+                            "assets/icons/crown_icon.svg",
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -1021,8 +1022,8 @@ class _BodyState extends State<Body> {
                   onTap: () {
                     context.router.pop();
                   },
-                  child: Image.asset(
-                    "assets/icons/x_icon.png",
+                  child: SvgPicture.asset(
+                    "assets/icons/x_icon.svg",
                     width: 24.sp,
                     height: 24.sp,
                   ),
@@ -1064,8 +1065,8 @@ class _BodyState extends State<Body> {
                     onTap: () {
                       _copyToClipBoard(link);
                     },
-                    child: Image.asset(
-                      "assets/icons/clipboard_icon.png",
+                    child: SvgPicture.asset(
+                      "assets/icons/clipboard_icon.svg",
                       width: 19.2.sp,
                       height: 19.2.sp,
                     ),
@@ -1191,8 +1192,8 @@ class _BodyState extends State<Body> {
                     onTap: () {
                       context.router.pop();
                     },
-                    child: Image.asset(
-                      "assets/icons/link_share_close_icon.png",
+                    child: SvgPicture.asset(
+                      "assets/icons/link_share_close_icon.svg",
                       width: 30.sp,
                       height: 30.sp,
                     ),

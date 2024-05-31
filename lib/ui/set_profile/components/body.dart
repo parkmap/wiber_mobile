@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:wiber_mobile/constants/colors.dart';
@@ -143,8 +144,8 @@ class _BodyState extends State<Body> {
                                       ],
                                     ),
                                     child: Center(
-                                      child: Image.asset(
-                                        "assets/icons/camera_icon.png",
+                                      child: SvgPicture.asset(
+                                        "assets/icons/camera_icon.svg",
                                         width: 21.sp,
                                         height: 18.sp,
                                       ),

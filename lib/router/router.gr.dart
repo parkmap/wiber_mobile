@@ -12,111 +12,42 @@ import 'package:auto_route/auto_route.dart' as _i13;
 import 'package:flutter/material.dart' as _i14;
 import 'package:wiber_mobile/models/bucket/bucket.dart' as _i16;
 import 'package:wiber_mobile/models/wiber_space/wiber_space.dart' as _i15;
-import 'package:wiber_mobile/ui/bucket/bucket_screen.dart' as _i8;
-import 'package:wiber_mobile/ui/bucket_detail/bucket_detail_screen.dart'
-    as _i12;
+import 'package:wiber_mobile/ui/bucket/bucket_screen.dart' as _i1;
+import 'package:wiber_mobile/ui/bucket_detail/bucket_detail_screen.dart' as _i2;
 import 'package:wiber_mobile/ui/bucket_participants/bucket_participants_screen.dart'
-    as _i5;
-import 'package:wiber_mobile/ui/home/home_screen.dart' as _i1;
-import 'package:wiber_mobile/ui/initial/initial_screen.dart' as _i4;
+    as _i3;
+import 'package:wiber_mobile/ui/home/home_screen.dart' as _i4;
+import 'package:wiber_mobile/ui/initial/initial_screen.dart' as _i5;
 import 'package:wiber_mobile/ui/set_nickname/set_nickname_screen.dart' as _i10;
-import 'package:wiber_mobile/ui/set_profile/set_profile_screen.dart' as _i6;
-import 'package:wiber_mobile/ui/setting/setting_screen.dart' as _i9;
+import 'package:wiber_mobile/ui/set_profile/set_profile_screen.dart' as _i11;
+import 'package:wiber_mobile/ui/setting/setting_screen.dart' as _i6;
 import 'package:wiber_mobile/ui/setting_announce/setting_announce_screen.dart'
-    as _i11;
-import 'package:wiber_mobile/ui/setting_faq/setting_faq_screen.dart' as _i3;
-import 'package:wiber_mobile/ui/setting_wiber_space/setting_wiber_space_screen.dart'
     as _i7;
-import 'package:wiber_mobile/ui/splash/splash_screen.dart' as _i2;
+import 'package:wiber_mobile/ui/setting_faq/setting_faq_screen.dart' as _i8;
+import 'package:wiber_mobile/ui/setting_wiber_space/setting_wiber_space_screen.dart'
+    as _i9;
+import 'package:wiber_mobile/ui/splash/splash_screen.dart' as _i12;
 
 abstract class $AppRouter extends _i13.RootStackRouter {
   $AppRouter({super.navigatorKey});
 
   @override
   final Map<String, _i13.PageFactory> pagesMap = {
-    HomeRoute.name: (routeData) {
-      return _i13.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i1.HomeScreen(),
-      );
-    },
-    SplashRoute.name: (routeData) {
-      return _i13.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i2.SplashScreen(),
-      );
-    },
-    SettingFaqRoute.name: (routeData) {
-      return _i13.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i3.SettingFaqScreen(),
-      );
-    },
-    InitialRoute.name: (routeData) {
-      return _i13.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i4.InitialScreen(),
-      );
-    },
-    BucketParticipantsRoute.name: (routeData) {
-      final args = routeData.argsAs<BucketParticipantsRouteArgs>();
-      return _i13.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i5.BucketParticipantsScreen(
-          key: args.key,
-          item: args.item,
-        ),
-      );
-    },
-    SetProfileRoute.name: (routeData) {
-      final args = routeData.argsAs<SetProfileRouteArgs>();
-      return _i13.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i6.SetProfileScreen(
-          nickname: args.nickname,
-          key: args.key,
-        ),
-      );
-    },
-    SettingWiberSpaceRoute.name: (routeData) {
-      return _i13.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i7.SettingWiberSpaceScreen(),
-      );
-    },
     BucketRoute.name: (routeData) {
       final args = routeData.argsAs<BucketRouteArgs>();
       return _i13.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i8.BucketScreen(
+        child: _i1.BucketScreen(
           key: args.key,
           item: args.item,
         ),
-      );
-    },
-    SettingRoute.name: (routeData) {
-      return _i13.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i9.SettingScreen(),
-      );
-    },
-    SetNicknameRoute.name: (routeData) {
-      return _i13.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i10.SetNicknameScreen(),
-      );
-    },
-    SettingAnnounceRoute.name: (routeData) {
-      return _i13.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i11.SettingAnnounceScreen(),
       );
     },
     BucketDetailRoute.name: (routeData) {
       final args = routeData.argsAs<BucketDetailRouteArgs>();
       return _i13.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i12.BucketDetailScreen(
+        child: _i2.BucketDetailScreen(
           key: args.key,
           space: args.space,
           item: args.item,
@@ -125,158 +56,79 @@ abstract class $AppRouter extends _i13.RootStackRouter {
         ),
       );
     },
+    BucketParticipantsRoute.name: (routeData) {
+      final args = routeData.argsAs<BucketParticipantsRouteArgs>();
+      return _i13.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i3.BucketParticipantsScreen(
+          key: args.key,
+          item: args.item,
+        ),
+      );
+    },
+    HomeRoute.name: (routeData) {
+      return _i13.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i4.HomeScreen(),
+      );
+    },
+    InitialRoute.name: (routeData) {
+      return _i13.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i5.InitialScreen(),
+      );
+    },
+    SettingRoute.name: (routeData) {
+      return _i13.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i6.SettingScreen(),
+      );
+    },
+    SettingAnnounceRoute.name: (routeData) {
+      return _i13.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i7.SettingAnnounceScreen(),
+      );
+    },
+    SettingFaqRoute.name: (routeData) {
+      return _i13.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i8.SettingFaqScreen(),
+      );
+    },
+    SettingWiberSpaceRoute.name: (routeData) {
+      return _i13.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i9.SettingWiberSpaceScreen(),
+      );
+    },
+    SetNicknameRoute.name: (routeData) {
+      return _i13.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i10.SetNicknameScreen(),
+      );
+    },
+    SetProfileRoute.name: (routeData) {
+      final args = routeData.argsAs<SetProfileRouteArgs>();
+      return _i13.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i11.SetProfileScreen(
+          nickname: args.nickname,
+          key: args.key,
+        ),
+      );
+    },
+    SplashRoute.name: (routeData) {
+      return _i13.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i12.SplashScreen(),
+      );
+    },
   };
 }
 
 /// generated route for
-/// [_i1.HomeScreen]
-class HomeRoute extends _i13.PageRouteInfo<void> {
-  const HomeRoute({List<_i13.PageRouteInfo>? children})
-      : super(
-          HomeRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'HomeRoute';
-
-  static const _i13.PageInfo<void> page = _i13.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i2.SplashScreen]
-class SplashRoute extends _i13.PageRouteInfo<void> {
-  const SplashRoute({List<_i13.PageRouteInfo>? children})
-      : super(
-          SplashRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'SplashRoute';
-
-  static const _i13.PageInfo<void> page = _i13.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i3.SettingFaqScreen]
-class SettingFaqRoute extends _i13.PageRouteInfo<void> {
-  const SettingFaqRoute({List<_i13.PageRouteInfo>? children})
-      : super(
-          SettingFaqRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'SettingFaqRoute';
-
-  static const _i13.PageInfo<void> page = _i13.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i4.InitialScreen]
-class InitialRoute extends _i13.PageRouteInfo<void> {
-  const InitialRoute({List<_i13.PageRouteInfo>? children})
-      : super(
-          InitialRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'InitialRoute';
-
-  static const _i13.PageInfo<void> page = _i13.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i5.BucketParticipantsScreen]
-class BucketParticipantsRoute
-    extends _i13.PageRouteInfo<BucketParticipantsRouteArgs> {
-  BucketParticipantsRoute({
-    _i14.Key? key,
-    required _i15.WiberSpace item,
-    List<_i13.PageRouteInfo>? children,
-  }) : super(
-          BucketParticipantsRoute.name,
-          args: BucketParticipantsRouteArgs(
-            key: key,
-            item: item,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'BucketParticipantsRoute';
-
-  static const _i13.PageInfo<BucketParticipantsRouteArgs> page =
-      _i13.PageInfo<BucketParticipantsRouteArgs>(name);
-}
-
-class BucketParticipantsRouteArgs {
-  const BucketParticipantsRouteArgs({
-    this.key,
-    required this.item,
-  });
-
-  final _i14.Key? key;
-
-  final _i15.WiberSpace item;
-
-  @override
-  String toString() {
-    return 'BucketParticipantsRouteArgs{key: $key, item: $item}';
-  }
-}
-
-/// generated route for
-/// [_i6.SetProfileScreen]
-class SetProfileRoute extends _i13.PageRouteInfo<SetProfileRouteArgs> {
-  SetProfileRoute({
-    required String nickname,
-    _i14.Key? key,
-    List<_i13.PageRouteInfo>? children,
-  }) : super(
-          SetProfileRoute.name,
-          args: SetProfileRouteArgs(
-            nickname: nickname,
-            key: key,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'SetProfileRoute';
-
-  static const _i13.PageInfo<SetProfileRouteArgs> page =
-      _i13.PageInfo<SetProfileRouteArgs>(name);
-}
-
-class SetProfileRouteArgs {
-  const SetProfileRouteArgs({
-    required this.nickname,
-    this.key,
-  });
-
-  final String nickname;
-
-  final _i14.Key? key;
-
-  @override
-  String toString() {
-    return 'SetProfileRouteArgs{nickname: $nickname, key: $key}';
-  }
-}
-
-/// generated route for
-/// [_i7.SettingWiberSpaceScreen]
-class SettingWiberSpaceRoute extends _i13.PageRouteInfo<void> {
-  const SettingWiberSpaceRoute({List<_i13.PageRouteInfo>? children})
-      : super(
-          SettingWiberSpaceRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'SettingWiberSpaceRoute';
-
-  static const _i13.PageInfo<void> page = _i13.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i8.BucketScreen]
+/// [_i1.BucketScreen]
 class BucketRoute extends _i13.PageRouteInfo<BucketRouteArgs> {
   BucketRoute({
     _i14.Key? key,
@@ -314,49 +166,7 @@ class BucketRouteArgs {
 }
 
 /// generated route for
-/// [_i9.SettingScreen]
-class SettingRoute extends _i13.PageRouteInfo<void> {
-  const SettingRoute({List<_i13.PageRouteInfo>? children})
-      : super(
-          SettingRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'SettingRoute';
-
-  static const _i13.PageInfo<void> page = _i13.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i10.SetNicknameScreen]
-class SetNicknameRoute extends _i13.PageRouteInfo<void> {
-  const SetNicknameRoute({List<_i13.PageRouteInfo>? children})
-      : super(
-          SetNicknameRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'SetNicknameRoute';
-
-  static const _i13.PageInfo<void> page = _i13.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i11.SettingAnnounceScreen]
-class SettingAnnounceRoute extends _i13.PageRouteInfo<void> {
-  const SettingAnnounceRoute({List<_i13.PageRouteInfo>? children})
-      : super(
-          SettingAnnounceRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'SettingAnnounceRoute';
-
-  static const _i13.PageInfo<void> page = _i13.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i12.BucketDetailScreen]
+/// [_i2.BucketDetailScreen]
 class BucketDetailRoute extends _i13.PageRouteInfo<BucketDetailRouteArgs> {
   BucketDetailRoute({
     _i14.Key? key,
@@ -406,4 +216,193 @@ class BucketDetailRouteArgs {
   String toString() {
     return 'BucketDetailRouteArgs{key: $key, space: $space, item: $item, onDelete: $onDelete, onBack: $onBack}';
   }
+}
+
+/// generated route for
+/// [_i3.BucketParticipantsScreen]
+class BucketParticipantsRoute
+    extends _i13.PageRouteInfo<BucketParticipantsRouteArgs> {
+  BucketParticipantsRoute({
+    _i14.Key? key,
+    required _i15.WiberSpace item,
+    List<_i13.PageRouteInfo>? children,
+  }) : super(
+          BucketParticipantsRoute.name,
+          args: BucketParticipantsRouteArgs(
+            key: key,
+            item: item,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'BucketParticipantsRoute';
+
+  static const _i13.PageInfo<BucketParticipantsRouteArgs> page =
+      _i13.PageInfo<BucketParticipantsRouteArgs>(name);
+}
+
+class BucketParticipantsRouteArgs {
+  const BucketParticipantsRouteArgs({
+    this.key,
+    required this.item,
+  });
+
+  final _i14.Key? key;
+
+  final _i15.WiberSpace item;
+
+  @override
+  String toString() {
+    return 'BucketParticipantsRouteArgs{key: $key, item: $item}';
+  }
+}
+
+/// generated route for
+/// [_i4.HomeScreen]
+class HomeRoute extends _i13.PageRouteInfo<void> {
+  const HomeRoute({List<_i13.PageRouteInfo>? children})
+      : super(
+          HomeRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'HomeRoute';
+
+  static const _i13.PageInfo<void> page = _i13.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i5.InitialScreen]
+class InitialRoute extends _i13.PageRouteInfo<void> {
+  const InitialRoute({List<_i13.PageRouteInfo>? children})
+      : super(
+          InitialRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'InitialRoute';
+
+  static const _i13.PageInfo<void> page = _i13.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i6.SettingScreen]
+class SettingRoute extends _i13.PageRouteInfo<void> {
+  const SettingRoute({List<_i13.PageRouteInfo>? children})
+      : super(
+          SettingRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SettingRoute';
+
+  static const _i13.PageInfo<void> page = _i13.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i7.SettingAnnounceScreen]
+class SettingAnnounceRoute extends _i13.PageRouteInfo<void> {
+  const SettingAnnounceRoute({List<_i13.PageRouteInfo>? children})
+      : super(
+          SettingAnnounceRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SettingAnnounceRoute';
+
+  static const _i13.PageInfo<void> page = _i13.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i8.SettingFaqScreen]
+class SettingFaqRoute extends _i13.PageRouteInfo<void> {
+  const SettingFaqRoute({List<_i13.PageRouteInfo>? children})
+      : super(
+          SettingFaqRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SettingFaqRoute';
+
+  static const _i13.PageInfo<void> page = _i13.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i9.SettingWiberSpaceScreen]
+class SettingWiberSpaceRoute extends _i13.PageRouteInfo<void> {
+  const SettingWiberSpaceRoute({List<_i13.PageRouteInfo>? children})
+      : super(
+          SettingWiberSpaceRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SettingWiberSpaceRoute';
+
+  static const _i13.PageInfo<void> page = _i13.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i10.SetNicknameScreen]
+class SetNicknameRoute extends _i13.PageRouteInfo<void> {
+  const SetNicknameRoute({List<_i13.PageRouteInfo>? children})
+      : super(
+          SetNicknameRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SetNicknameRoute';
+
+  static const _i13.PageInfo<void> page = _i13.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i11.SetProfileScreen]
+class SetProfileRoute extends _i13.PageRouteInfo<SetProfileRouteArgs> {
+  SetProfileRoute({
+    required String nickname,
+    _i14.Key? key,
+    List<_i13.PageRouteInfo>? children,
+  }) : super(
+          SetProfileRoute.name,
+          args: SetProfileRouteArgs(
+            nickname: nickname,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'SetProfileRoute';
+
+  static const _i13.PageInfo<SetProfileRouteArgs> page =
+      _i13.PageInfo<SetProfileRouteArgs>(name);
+}
+
+class SetProfileRouteArgs {
+  const SetProfileRouteArgs({
+    required this.nickname,
+    this.key,
+  });
+
+  final String nickname;
+
+  final _i14.Key? key;
+
+  @override
+  String toString() {
+    return 'SetProfileRouteArgs{nickname: $nickname, key: $key}';
+  }
+}
+
+/// generated route for
+/// [_i12.SplashScreen]
+class SplashRoute extends _i13.PageRouteInfo<void> {
+  const SplashRoute({List<_i13.PageRouteInfo>? children})
+      : super(
+          SplashRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SplashRoute';
+
+  static const _i13.PageInfo<void> page = _i13.PageInfo<void>(name);
 }

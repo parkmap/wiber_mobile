@@ -2,6 +2,7 @@ import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../constants/colors.dart';
 
@@ -134,8 +135,8 @@ class TextFormFieldWidget extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 10.h),
               child: InkWell(
                 onTap: suffixActions as void Function(),
-                child: Image.asset(
-                  'assets/icons/close_icon.png',
+                child: SvgPicture.asset(
+                  'assets/icons/close_icon.svg',
                   width: 20.sp,
                   height: 20.sp,
                 ),

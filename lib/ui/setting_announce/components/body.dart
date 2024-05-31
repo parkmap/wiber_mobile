@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -108,8 +109,8 @@ class _BodyState extends State<Body> {
                   onTap: () {
                     context.router.pop();
                   },
-                  child: Image.asset(
-                    'assets/icons/chevron_left_icon.png',
+                  child: SvgPicture.asset(
+                    'assets/icons/chevron_left_icon.svg',
                     width: 20.w,
                     height: 15.h,
                   ),
@@ -150,8 +151,8 @@ class _BodyState extends State<Body> {
           children: [
             Padding(
               padding: EdgeInsets.only(top: 3.h),
-              child: Image.asset(
-                "assets/icons/setting_announce_item_icon.png",
+              child: SvgPicture.asset(
+                "assets/icons/setting_announce_item_icon.svg",
                 width: 18.w,
                 height: 16.h,
               ),
@@ -184,8 +185,8 @@ class _BodyState extends State<Body> {
                       ),
                     ],
                   ),
-                  Image.asset(
-                    "assets/icons/chevron_right_icon.png",
+                  SvgPicture.asset(
+                    "assets/icons/chevron_right_icon.svg",
                     width: 10.w,
                     height: 12.h,
                   ),

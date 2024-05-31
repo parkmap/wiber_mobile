@@ -58,8 +58,8 @@ class _CustomAppBarWithBackButtonState
           context.router.pop(widget.data);
         },
         iconSize: 26.sp,
-        icon: Image.asset(
-          'assets/icons/back_icon.png',
+        icon: SvgPicture.asset(
+          'assets/icons/back_icon.svg',
         ),
       ),
       title: widget.titleWidget == null && widget.title != null

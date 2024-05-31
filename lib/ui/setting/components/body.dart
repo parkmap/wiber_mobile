@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:wiber_mobile/constants/colors.dart';
@@ -55,11 +56,11 @@ class _BodyState extends State<Body> {
                 ),
                 _buildListItem(
                   title: "공지사항",
-                  imageUrl: "assets/icons/setting_announce_icon.png",
+                  imageUrl: "assets/icons/setting_announce_icon.svg",
                   imageWidth: 20.w,
                   imageHeight: 20.h,
-                  trailing: Image.asset(
-                    'assets/icons/setting_item_chevron_right_icon.png',
+                  trailing: SvgPicture.asset(
+                    'assets/icons/setting_item_chevron_right_icon.svg',
                     width: 10.w,
                     height: 12.h,
                   ),
@@ -69,11 +70,11 @@ class _BodyState extends State<Body> {
                 ),
                 _buildListItem(
                   title: "자주묻는질문",
-                  imageUrl: "assets/icons/setting_faq_icon.png",
+                  imageUrl: "assets/icons/setting_faq_icon.svg",
                   imageWidth: 20.w,
                   imageHeight: 20.h,
-                  trailing: Image.asset(
-                    'assets/icons/setting_item_chevron_right_icon.png',
+                  trailing: SvgPicture.asset(
+                    'assets/icons/setting_item_chevron_right_icon.svg',
                     width: 10.w,
                     height: 12.h,
                   ),
@@ -83,11 +84,11 @@ class _BodyState extends State<Body> {
                 ),
                 _buildListItem(
                   title: "고객센터",
-                  imageUrl: "assets/icons/setting_call_icon.png",
+                  imageUrl: "assets/icons/setting_call_icon.svg",
                   imageWidth: 20.w,
                   imageHeight: 20.h,
-                  trailing: Image.asset(
-                    'assets/icons/setting_item_chevron_right_icon.png',
+                  trailing: SvgPicture.asset(
+                    'assets/icons/setting_item_chevron_right_icon.svg',
                     width: 10.w,
                     height: 12.h,
                   ),
@@ -97,7 +98,7 @@ class _BodyState extends State<Body> {
                 ),
                 _buildListItem(
                   title: "버전정보",
-                  imageUrl: "assets/icons/setting_phone_icon.png",
+                  imageUrl: "assets/icons/setting_phone_icon.svg",
                   imageWidth: 15.w,
                   imageHeight: 20.h,
                   trailing: AutoSizeText(
@@ -119,11 +120,11 @@ class _BodyState extends State<Body> {
                 SizedBox(height: 8.h),
                 _buildListItem(
                   title: "로그아웃",
-                  imageUrl: "assets/icons/setting_logout_icon.png",
+                  imageUrl: "assets/icons/setting_logout_icon.svg",
                   imageWidth: 20.w,
                   imageHeight: 20.h,
-                  trailing: Image.asset(
-                    'assets/icons/setting_item_chevron_right_icon.png',
+                  trailing: SvgPicture.asset(
+                    'assets/icons/setting_item_chevron_right_icon.svg',
                     width: 10.w,
                     height: 12.h,
                   ),
@@ -156,8 +157,8 @@ class _BodyState extends State<Body> {
                 onTap: () {
                   context.router.pop();
                 },
-                child: Image.asset(
-                  'assets/icons/chevron_left_icon.png',
+                child: SvgPicture.asset(
+                  'assets/icons/chevron_left_icon.svg',
                   width: 20.w,
                   height: 15.h,
                 ),
@@ -175,8 +176,8 @@ class _BodyState extends State<Body> {
                       onTap: () {
                         context.router.push(const SettingWiberSpaceRoute());
                       },
-                      child: Image.asset(
-                        'assets/icons/setting_icon.png',
+                      child: SvgPicture.asset(
+                        'assets/icons/setting_icon.svg',
                         width: 20.w,
                         height: 19.h,
                       ),
@@ -222,8 +223,8 @@ class _BodyState extends State<Body> {
                   ),
                 ),
                 SizedBox(width: 11.w),
-                Image.asset(
-                  'assets/icons/chevron_right_icon.png',
+                SvgPicture.asset(
+                  'assets/icons/chevron_right_icon.svg',
                   width: 10.w,
                   height: 12.h,
                 ),
@@ -242,8 +243,8 @@ class _BodyState extends State<Body> {
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Row(children: [
-                Image.asset(
-                  "assets/icons/setting_people_icon.png",
+                SvgPicture.asset(
+                  "assets/icons/setting_people_icon.svg",
                   width: 18.w,
                   height: 18.h,
                 ),
@@ -288,7 +289,7 @@ class _BodyState extends State<Body> {
               children: [
                 SizedBox(
                   width: 20.w,
-                  child: Image.asset(
+                  child: SvgPicture.asset(
                     imageUrl,
                     width: imageWidth,
                     height: imageHeight,
@@ -352,8 +353,8 @@ class _BodyState extends State<Body> {
                     onTap: () {
                       context.router.pop();
                     },
-                    child: Image.asset(
-                      "assets/icons/x_icon.png",
+                    child: SvgPicture.asset(
+                      "assets/icons/x_icon.svg",
                       width: 24.sp,
                       height: 24.sp,
                     ),
@@ -396,8 +397,8 @@ class _BodyState extends State<Body> {
                         onTap: () {
                           _copyToClipBoard("이메일@gmail.com");
                         },
-                        child: Image.asset(
-                          "assets/icons/clipboard_icon.png",
+                        child: SvgPicture.asset(
+                          "assets/icons/clipboard_icon.svg",
                           width: 19.2.sp,
                           height: 19.2.sp,
                         ),

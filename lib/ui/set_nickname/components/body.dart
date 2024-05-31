@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:wiber_mobile/constants/colors.dart';
 import 'package:wiber_mobile/router/router.gr.dart';
 import 'package:wiber_mobile/stores/set_nickname/set_nickname_store.dart';
@@ -69,8 +70,8 @@ class _BodyState extends State<Body> {
                             ),
                           ),
                           SizedBox(width: 4.w),
-                          Image.asset(
-                            "assets/icons/set_nickname_icon.png",
+                          SvgPicture.asset(
+                            "assets/icons/set_nickname_icon.svg",
                             width: 24.sp,
                             height: 24.sp,
                           ),
