@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -125,29 +124,32 @@ class _BodyState extends State<Body> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              InkWell(
-                onTap: () {
-                  context.router.pop();
-                },
-                child: SvgPicture.asset(
-                  'assets/icons/chevron_left_icon.svg',
-                  width: 20.w,
-                  height: 15.h,
-                ),
+          InkWell(
+            onTap: () {
+              context.router.pop();
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 2.h),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'assets/icons/chevron_left_icon.svg',
+                    width: 20.w,
+                    height: 15.h,
+                  ),
+                  SizedBox(width: 12.w),
+                  AutoSizeText(
+                    widget.item.title,
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.primaryBlack,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(width: 12.w),
-              AutoSizeText(
-                widget.item.title,
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.primaryBlack,
-                ),
-              ),
-            ],
+            ),
           ),
           Row(
             children: [
@@ -674,10 +676,15 @@ class _BodyState extends State<Body> {
             onTap: () {
               _showSortingListBottomSheet();
             },
-            child: SvgPicture.asset(
-              "assets/icons/horizontal_icon.svg",
-              width: 24.w,
-              height: 3.h,
+            child: SizedBox(
+              width: 30.w,
+              height: 30.h,
+              child: SvgPicture.asset(
+                "assets/icons/horizontal_icon.svg",
+                width: 24.w,
+                height: 3.h,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
         ],
@@ -805,85 +812,94 @@ class _BodyState extends State<Body> {
                     ],
                   ),
                 ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.h),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(children: [
-                      SvgPicture.asset(
-                        "assets/icons/message_icon.svg",
-                        width: 24.w,
-                        height: 22.h,
-                      ),
-                      SizedBox(width: 15.w),
-                      SvgPicture.asset(
-                        "assets/icons/clock_icon.svg",
-                        width: 22.w,
-                        height: 22.h,
-                      ),
-                    ]),
-                    GestureDetector(
-                      onTap: _uiStore.newBucketName.isEmpty
-                          ? null
-                          : () async {
-                              if (_uiStore.createNewBucketPhase <= 1) {
-                                _uiStore.setCreateNewBucketPhase(
-                                    _uiStore.createNewBucketPhase + 1);
-                              }
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          "assets/icons/message_icon.svg",
+                          width: 24.w,
+                          height: 22.h,
+                        ),
+                        SizedBox(width: 15.w),
+                        SvgPicture.asset(
+                          "assets/icons/clock_icon.svg",
+                          width: 22.w,
+                          height: 22.h,
+                        ),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: _uiStore.newBucketName.isEmpty
+                        ? null
+                        : () async {
+                            if (_uiStore.createNewBucketPhase <= 1) {
+                              _uiStore.setCreateNewBucketPhase(
+                                  _uiStore.createNewBucketPhase + 1);
+                            }
 
-                              if (_uiStore.createNewBucketPhase == 1) {
-                                _namefocusNode.unfocus();
-                                _descriptionfocusNode.requestFocus();
-                              }
+                            if (_uiStore.createNewBucketPhase == 1) {
+                              _namefocusNode.unfocus();
+                              _descriptionfocusNode.requestFocus();
+                            }
 
-                              if (_uiStore.createNewBucketPhase == 2) {
-                                _descriptionfocusNode.unfocus();
-                                _showBottomDateFieldSheet();
-                              }
+                            if (_uiStore.createNewBucketPhase == 2) {
+                              _descriptionfocusNode.unfocus();
+                              _showBottomDateFieldSheet();
+                            }
 
-                              if (_uiStore.createNewBucketPhase == 3) {
-                                var res = await _userStore!.createBucket(
-                                  spaceId: widget.item.id,
-                                  categoryId: _uiStore.selectedCategoryIndex >=
-                                          0
-                                      ? _userStore!
-                                          .categories[
-                                              _uiStore.selectedCategoryIndex]
-                                          .id
-                                      : "",
-                                  title: _uiStore.newBucketName,
-                                  content: _uiStore.newBucketDescription,
-                                  date: _uiStore.newBucketEndDate,
-                                  state: "",
-                                );
+                            if (_uiStore.createNewBucketPhase == 3) {
+                              var res = await _userStore!.createBucket(
+                                spaceId: widget.item.id,
+                                categoryId: _uiStore.selectedCategoryIndex >= 0
+                                    ? _userStore!
+                                        .categories[
+                                            _uiStore.selectedCategoryIndex]
+                                        .id
+                                    : "",
+                                title: _uiStore.newBucketName,
+                                content: _uiStore.newBucketDescription,
+                                date: _uiStore.newBucketEndDate,
+                                state: "",
+                              );
 
-                                if (res != null) {
-                                  if (res is DioError) {
-                                    context.router.pop();
-                                    _showToast(res.error.toString());
-                                  } else if (res.data["message"] ==
-                                      "같은 이름의 버킷이 이미 존재합니다.") {
-                                    context.router.pop();
-                                    _showToast("같은 이름의 버킷이 이미 존재합니다.");
-                                  } else {
-                                    await _userStore!.getBucketList(
-                                      spaceId: widget.item.id,
-                                      categoryId:
-                                          _uiStore.selectedCategoryIndex >= 0
-                                              ? _userStore!
-                                                  .categories[_uiStore
-                                                      .selectedCategoryIndex]
-                                                  .id
-                                              : "",
-                                      state: _uiStore.selectedTabIndex,
-                                    );
+                              if (res != null) {
+                                if (res is DioError) {
+                                  context.router.pop();
+                                  _showToast(res.error.toString());
+                                } else if (res.data["message"] ==
+                                    "같은 이름의 버킷이 이미 존재합니다.") {
+                                  context.router.pop();
+                                  _showToast("같은 이름의 버킷이 이미 존재합니다.");
+                                } else {
+                                  await _userStore!.getBucketList(
+                                    spaceId: widget.item.id,
+                                    categoryId:
+                                        _uiStore.selectedCategoryIndex >= 0
+                                            ? _userStore!
+                                                .categories[_uiStore
+                                                    .selectedCategoryIndex]
+                                                .id
+                                            : "",
+                                    state: _uiStore.selectedTabIndex,
+                                  );
 
-                                    context.router.pop();
-                                  }
+                                  context.router.pop();
                                 }
                               }
-                            },
+                            }
+                          },
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: 10.h,
+                        bottom: 10.h,
+                        left: 40.w,
+                      ),
                       child: AutoSizeText(
                         "저장",
                         textAlign: TextAlign.right,
@@ -900,8 +916,8 @@ class _BodyState extends State<Body> {
                               ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           );

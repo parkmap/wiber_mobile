@@ -153,8 +153,6 @@ class _BodyState extends State<Body> {
   Widget _buildNormalTopBar() {
     return Padding(
       padding: EdgeInsets.only(
-        top: 14.h,
-        bottom: 14.h,
         left: 20.w,
         right: 20.w,
       ),
@@ -163,25 +161,41 @@ class _BodyState extends State<Body> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              InkWell(
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () async {
                   await _userStore!.getBucketList(spaceId: widget.space.id);
                   context.router.pop();
                 },
-                child: SvgPicture.asset(
-                  'assets/icons/chevron_left_icon.svg',
-                  width: 20.w,
-                  height: 15.h,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: 14.h,
+                    bottom: 14.h,
+                    right: 30.w,
+                  ),
+                  child: SvgPicture.asset(
+                    'assets/icons/chevron_left_icon.svg',
+                    width: 20.w,
+                    height: 15.h,
+                  ),
                 ),
               ),
-              InkWell(
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   _showDeleteBucketConfirmDialog();
                 },
-                child: SvgPicture.asset(
-                  'assets/icons/delete_icon.svg',
-                  width: 22.w,
-                  height: 22.h,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: 14.h,
+                    bottom: 14.h,
+                    left: 30.w,
+                  ),
+                  child: SvgPicture.asset(
+                    'assets/icons/delete_icon.svg',
+                    width: 22.w,
+                    height: 22.h,
+                  ),
                 ),
               ),
             ],
@@ -194,8 +208,6 @@ class _BodyState extends State<Body> {
   Widget _buildEditTopBar() {
     return Padding(
       padding: EdgeInsets.only(
-        top: 14.h,
-        bottom: 14.h,
         left: 20.w,
         right: 20.w,
       ),
@@ -204,7 +216,8 @@ class _BodyState extends State<Body> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              InkWell(
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () async {
                   await _userStore!.updateBucket(
                     spaceId: widget.space.id,
@@ -223,20 +236,35 @@ class _BodyState extends State<Body> {
                   await _userStore!.getBucketList(spaceId: widget.space.id);
                   widget.onBack();
                 },
-                child: SvgPicture.asset(
-                  'assets/icons/chevron_left_icon.svg',
-                  width: 20.w,
-                  height: 15.h,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: 14.h,
+                    bottom: 14.h,
+                    right: 30.w,
+                  ),
+                  child: SvgPicture.asset(
+                    'assets/icons/chevron_left_icon.svg',
+                    width: 20.w,
+                    height: 15.h,
+                  ),
                 ),
               ),
-              InkWell(
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   _showDeleteBucketConfirmDialog();
                 },
-                child: SvgPicture.asset(
-                  'assets/icons/delete_icon.svg',
-                  width: 22.w,
-                  height: 22.h,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: 14.h,
+                    bottom: 14.h,
+                    left: 30.w,
+                  ),
+                  child: SvgPicture.asset(
+                    'assets/icons/delete_icon.svg',
+                    width: 22.w,
+                    height: 22.h,
+                  ),
                 ),
               ),
             ],

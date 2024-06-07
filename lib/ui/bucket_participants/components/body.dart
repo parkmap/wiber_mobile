@@ -126,8 +126,6 @@ class _BodyState extends State<Body> {
   Widget _buildTopbar() {
     return Padding(
       padding: EdgeInsets.only(
-        top: 14.h,
-        bottom: 14.h,
         left: 24.w,
         right: 12.w,
       ),
@@ -138,10 +136,17 @@ class _BodyState extends State<Body> {
             onTap: () {
               context.router.pop();
             },
-            child: SvgPicture.asset(
-              'assets/icons/chevron_left_icon.svg',
-              width: 20.w,
-              height: 15.h,
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: 14.h,
+                bottom: 14.h,
+                right: 8.w,
+              ),
+              child: SvgPicture.asset(
+                'assets/icons/chevron_left_icon.svg',
+                width: 20.w,
+                height: 15.h,
+              ),
             ),
           ),
           AutoSizeText(
@@ -156,11 +161,18 @@ class _BodyState extends State<Body> {
             onTap: () {
               _showSpaceDeleteConfirmDialog();
             },
-            child: SvgPicture.asset(
-              'assets/icons/setting_logout_icon.svg',
-              width: 20.w,
-              height: 20.h,
-              color: AppColors.gray50,
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: 14.h,
+                bottom: 14.h,
+                left: 8.w,
+              ),
+              child: SvgPicture.asset(
+                'assets/icons/setting_logout_icon.svg',
+                width: 20.w,
+                height: 20.h,
+                color: AppColors.gray50,
+              ),
             ),
           ),
         ],

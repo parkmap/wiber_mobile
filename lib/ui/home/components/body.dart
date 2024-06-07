@@ -734,7 +734,7 @@ class _BodyState extends State<Body> {
         padding: EdgeInsets.only(
           left: 20.w,
           right: 28.w,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 16.h,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 8.h,
           top: 20.h,
         ),
         decoration: BoxDecoration(
@@ -773,7 +773,8 @@ class _BodyState extends State<Body> {
               builder: (context) {
                 return SizedBox(
                   width: double.infinity,
-                  child: InkWell(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: _uiStore.wiberSpaceTitle.isEmpty ||
                             _uiStore.isCreatingSpace ||
                             _uiStore.isEditingSpace
@@ -847,13 +848,20 @@ class _BodyState extends State<Body> {
                               height: 20.sp,
                             ),
                           )
-                        : AutoSizeText(
-                            item == null ? "생성" : "수정",
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.primary1,
+                        : Padding(
+                            padding: EdgeInsets.only(
+                              top: 8.h,
+                              bottom: 8.h,
+                              left: 20.w,
+                            ),
+                            child: AutoSizeText(
+                              item == null ? "생성" : "수정",
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.primary1,
+                              ),
                             ),
                           ),
                   ),
