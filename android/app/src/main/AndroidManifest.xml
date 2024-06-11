@@ -44,6 +44,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" />
+                
+                <data android:host="action" android:scheme="wibernow" />
             </intent-filter>
 
             <!-- 카카오톡 설정 -->
