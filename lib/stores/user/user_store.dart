@@ -219,16 +219,7 @@ abstract class _UserStore with Store {
                                   24) {
                             return data;
                           } else {
-                            var userInfo =
-                                await _userRepository.getUserInfo(userId: user);
-                            User userData = User(
-                                id: user,
-                                nickname: userInfo.data['username'],
-                                profileImageUrl: userInfo.data['image'] ?? '',
-                                refreshedAt: DateTime.now().toString());
-
-                            await _userRepository.saveOtherUserInfo(userData);
-                            return userData;
+                            return await userInfo(user);
                           }
                         }).toList(),
                         eagerError: true)
@@ -265,16 +256,7 @@ abstract class _UserStore with Store {
                                   24) {
                             return data;
                           } else {
-                            var userInfo =
-                                await _userRepository.getUserInfo(userId: user);
-                            User userData = User(
-                                id: user,
-                                nickname: userInfo.data['username'],
-                                profileImageUrl: userInfo.data['image'] ?? '',
-                                refreshedAt: DateTime.now().toString());
-
-                            await _userRepository.saveOtherUserInfo(userData);
-                            return userData;
+                            return await userInfo(user);
                           }
                         }).toList(),
                         eagerError: true)
@@ -301,6 +283,27 @@ abstract class _UserStore with Store {
       isLoadingWiberspace = false;
     } catch (err) {
       print(err);
+    }
+  }
+
+  Future<User> userInfo(user) async {
+    try {
+      var userInfo = await _userRepository.getUserInfo(userId: user);
+      User userData = User(
+          id: user,
+          nickname: userInfo.data['username'],
+          profileImageUrl: userInfo.data['image'] ?? '',
+          refreshedAt: DateTime.now().toString());
+
+      await _userRepository.saveOtherUserInfo(userData);
+      return userData;
+    } catch (err) {
+      return User(
+        id: user,
+        nickname: '탈퇴한 사용자',
+        profileImageUrl: '',
+        refreshedAt: DateTime.now().toString(),
+      );
     }
   }
 
