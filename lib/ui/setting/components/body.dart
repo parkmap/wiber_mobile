@@ -385,7 +385,7 @@ class _BodyState extends State<Body> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     AutoSizeText(
-                      "이메일@gmail.com",
+                      "wiber.now@gmail.com",
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w400,
@@ -395,7 +395,7 @@ class _BodyState extends State<Body> {
                     GestureDetector(
                       child: InkWell(
                         onTap: () {
-                          _copyToClipBoard("이메일@gmail.com");
+                          _copyToClipBoard("wiber.now@gmail.com");
                         },
                         child: SvgPicture.asset(
                           "assets/icons/clipboard_icon.svg",

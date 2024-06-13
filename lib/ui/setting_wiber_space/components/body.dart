@@ -126,9 +126,10 @@ class _BodyState extends State<Body> {
 
                                 if (originalImage != null) {
                                   img.Image resizedImage = img.copyResize(
-                                      originalImage,
-                                      width: 300,
-                                      height: 300);
+                                    originalImage,
+                                    width: 300,
+                                    height: 300,
+                                  );
                                   Uint8List jpegImageBytes = Uint8List.fromList(
                                       img.encodeJpg(resizedImage, quality: 85));
 
@@ -140,7 +141,8 @@ class _BodyState extends State<Body> {
 
                               if (_userStore!
                                       .user!.profileImageUrl.isNotEmpty &&
-                                  _uiStore.profileImage == null) {
+                                  _uiStore.profileImage == null &&
+                                  _uiStore.isResetProfileImage) {
                                 await _userStore?.deleteProfileImage();
                               }
 

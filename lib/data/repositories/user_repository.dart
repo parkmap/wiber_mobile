@@ -319,4 +319,12 @@ class UserRepository {
       password: _sharedPrefsHelper.uuid!,
     );
   }
+
+  Future getFaq() async {
+    return await _userApi.getFaq();
+  }
+
+  Future getNotice() async {
+    return await _userApi.getNotice();
+  }
 }

@@ -48,6 +48,18 @@ abstract class _UserStore with Store {
   @observable
   User? user;
 
+  @observable
+  List<dynamic> faqList = [];
+
+  @observable
+  List<dynamic> noticeList = [];
+
+  @observable
+  bool isLoadingFaq = false;
+
+  @observable
+  bool isLoadingNotice = false;
+
   // getters:-------------------------------------------------------------------
 
   // constructor:---------------------------------------------------------------
@@ -598,6 +610,34 @@ abstract class _UserStore with Store {
 
       return res;
     } catch (err) {
+      print(err);
+    }
+  }
+
+  @action
+  Future getFaq() async {
+    try {
+      isLoadingFaq = true;
+      var res = await _userRepository.getFaq();
+
+      faqList = res;
+      isLoadingFaq = false;
+    } catch (err) {
+      isLoadingFaq = false;
+      print(err);
+    }
+  }
+
+  @action
+  Future getNotice() async {
+    try {
+      isLoadingNotice = true;
+      var res = await _userRepository.getNotice();
+
+      noticeList = res;
+      isLoadingNotice = false;
+    } catch (err) {
+      isLoadingNotice = false;
       print(err);
     }
   }

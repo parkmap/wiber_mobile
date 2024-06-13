@@ -857,4 +857,34 @@ class UserApi {
       }
     }
   }
+
+  Future getFaq() async {
+    try {
+      var res = await _dio.get(
+        Endpoints.faq,
+      );
+
+      return res;
+    } catch (error) {
+      print(
+        error.toString(),
+      );
+      rethrow;
+    }
+  }
+
+  Future getNotice() async {
+    try {
+      var res = await _dio.get(
+        Endpoints.notice,
+      );
+
+      return res;
+    } catch (error) {
+      print(
+        error.toString(),
+      );
+      rethrow;
+    }
+  }
 }

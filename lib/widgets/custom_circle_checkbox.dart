@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:wiber_mobile/constants/colors.dart';
 
 class CustomCircleCheckbox extends StatefulWidget {
@@ -30,8 +31,8 @@ class _CustomCircleCheckboxState extends State<CustomCircleCheckbox> {
   @override
   Widget build(BuildContext context) {
     return widget.isChecked
-        ? Image.asset(
-            "assets/images/checked_image.png",
+        ? SvgPicture.asset(
+            "assets/images/checked_image.svg",
             width: 22.w,
             height: 22.h,
           )
