@@ -55,7 +55,9 @@ Future<void> main() async {
 
   uriLinkStream.listen((Uri? uri) async {
     if (uri == null) return;
-    String url = uri.queryParameters["share"] ?? "-";
+
+    String url = uri.queryParameters["share"] ?? "";
+    if (!url.contains("-")) return;
 
     String spaceId = url.split("-")[0];
     String shareId = url.split("-")[1];
