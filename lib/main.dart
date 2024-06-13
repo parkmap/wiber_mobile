@@ -55,12 +55,10 @@ Future<void> main() async {
 
   uriLinkStream.listen((Uri? uri) async {
     if (uri == null) return;
+    String url = uri.queryParameters["share"] ?? "-";
 
-    String url = uri.path;
-    String splitUrl = url.split("share=")[1];
-
-    String spaceId = splitUrl.split("-")[0];
-    String shareId = splitUrl.split("-")[1];
+    String spaceId = url.split("-")[0];
+    String shareId = url.split("-")[1];
 
     prefs.setString("temp_space_id", spaceId);
     prefs.setString("temp_share_id", shareId);
