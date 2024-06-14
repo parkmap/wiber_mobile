@@ -32,7 +32,7 @@ class Body extends StatefulWidget {
   State<Body> createState() => _BodyState();
 }
 
-class _BodyState extends State<Body> {
+class _BodyState extends State<Body> with WidgetsBindingObserver {
   UserStore? _userStore;
   HomeUIStore _uiStore = HomeUIStore();
   FToast fToast = FToast();
@@ -41,6 +41,14 @@ class _BodyState extends State<Body> {
   void initState() {
     super.initState();
     _uiStore = HomeUIStore();
+    fToast.init(context);
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
@@ -52,37 +60,59 @@ class _BodyState extends State<Body> {
     if (_userStore != userStore) {
       _userStore = userStore;
       await userStore.getUserInfo();
+    }
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final tempSpaceId = prefs.getString("temp_space_id") ?? "";
+    final tempShareId = prefs.getString("temp_share_id") ?? "";
 
-      if (prefs.getString("temp_space_id") != null &&
-          prefs.getString("temp_space_id") != "" &&
-          prefs.getString("temp_share_id") != null &&
-          prefs.getString("temp_share_id") != "") {
-        var res = await userStore.enterWiberSpaceInvitation();
-        await userStore.getWiberSpaceList();
-
-        if (res != null) {
-          if (res is DioError) {
-            _showToast(res.error.toString());
-          } else {
-            context.router.push(BucketRoute(
-                item: userStore.wiberSpaceList
-                    .where(
-                        (space) => space.id == prefs.getString("temp_space_id"))
-                    .first));
-            prefs.remove("temp_space_id");
-            prefs.remove("temp_share_id");
-          }
-        } else {
-          await userStore.getWiberSpaceList();
+    if (tempSpaceId != "" && tempShareId != "") {
+      var res = await userStore.enterWiberSpaceInvitation();
+      await userStore.getWiberSpaceList();
+      if (res != null && mounted) {
+        if (res is DioException) {
+          _showToast(res.error.toString());
+          return;
         }
-      } else {
-        await userStore.getWiberSpaceList();
+        context.router.push(BucketRoute(
+            item: userStore.wiberSpaceList
+                .where((space) => space.id == tempSpaceId)
+                .first));
+        prefs.remove("temp_space_id");
+        prefs.remove("temp_share_id");
+        return;
       }
     }
 
-    fToast.init(context);
+    await userStore.getWiberSpaceList();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        // App is in foreground
+        debugPrint("App is in the foreground");
+        didChangeDependencies();
+        break;
+      case AppLifecycleState.inactive:
+        // App is in an inactive state and is not receiving user input
+        debugPrint("App is inactive");
+        break;
+      case AppLifecycleState.paused:
+        // App is in background
+        debugPrint("App is in the background");
+        break;
+      case AppLifecycleState.detached:
+        // App is detached
+        debugPrint("App is detached");
+        break;
+      case AppLifecycleState.hidden:
+        // App is hidden
+        debugPrint("App is hidden");
+        break;
+    }
   }
 
   @override
