@@ -13,7 +13,6 @@ import 'package:indexed/indexed.dart';
 import 'package:intl/intl.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:wiber_mobile/constants/colors.dart';
 import 'package:wiber_mobile/models/category/category.dart';
 import 'package:wiber_mobile/models/wiber_space/wiber_space.dart';
@@ -1240,12 +1239,6 @@ class _BodyState extends State<Body> {
   }
 
   void _showInviteLinkShareBottomSheet(String link) {
-    // native share
-    Share.share(link);
-
-    return;
-
-    // TODO: remove below code
     showModalBottomSheet(
       context: context,
       enableDrag: false,
