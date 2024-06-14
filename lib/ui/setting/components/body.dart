@@ -155,7 +155,7 @@ class _BodyState extends State<Body> {
             children: [
               InkWell(
                 onTap: () {
-                  context.router.pop();
+                  context.router.popUntilRoot();
                 },
                 child: SvgPicture.asset(
                   'assets/icons/chevron_left_icon.svg',
