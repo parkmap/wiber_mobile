@@ -60,6 +60,7 @@ class _BodyState extends State<Body> with WidgetsBindingObserver {
     if (_userStore != userStore) {
       _userStore = userStore;
       await userStore.getUserInfo();
+      await userStore.getWiberSpaceList();
     }
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -83,8 +84,6 @@ class _BodyState extends State<Body> with WidgetsBindingObserver {
         return;
       }
     }
-
-    await userStore.getWiberSpaceList();
   }
 
   @override

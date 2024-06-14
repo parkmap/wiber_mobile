@@ -151,6 +151,7 @@ class _BodyState extends State<Body> {
                               );
 
                               await _userStore?.refreshUserInfo();
+                              context.router.popUntilRouteWithName("HomeRoute");
 
                               _showToast("프로필이 변경되었습니다.");
                               try {} catch (error) {
@@ -509,6 +510,7 @@ class _BodyState extends State<Body> {
 
                 if (res != null) {
                   context.router.pop();
+                  context.router.popUntilRouteWithName("HomeRoute");
                   _showToast("${item.title} 스페이스가 삭제되었습니다.");
                   await _userStore!.getWiberSpaceList();
                 }
